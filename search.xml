@@ -1,19 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title></title>
-    <url>/2021/07/12/Hexo/create/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>Hexo 常规操作</title>
-    <url>/2021/07/12/Hexo/hexo/</url>
-    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">新建菜单，就是顶部的首页，归档这些</span><br><span class="line"></span><br><span class="line">hexo new page &quot;xxx&quot;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Hello World</title>
     <url>/2021/07/12/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
@@ -30,5 +17,44 @@
 
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>Hexo 常规操作</title>
+    <url>/2021/07/12/Hexo/hexo/</url>
+    <content><![CDATA[<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">新建菜单，就是顶部的首页，归档这些</span><br><span class="line"></span><br><span class="line">hexo new page &quot;xxx&quot;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>一招解决 Hexo 中 markdown 图片无法显示问题</title>
+    <url>/2021/07/13/Hexo/imageQuestion/</url>
+    <content><![CDATA[<h4 id="问题本质："><a href="#问题本质：" class="headerlink" title="问题本质："></a>问题本质：</h4><p>hexo 默认无法自动处理文章插入本地图片，需要通过扩展插件支持。</p>
+<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><ul>
+<li><p>在 <code>hexo</code> 根目录 <code>_config.yml</code> 配置中将 <code>post_asset_folder:false</code> 选项设置成 true<br>  <img src="/2021/07/13/Hexo/imageQuestion/image-20210713001409082.png" alt="image-20210713001409082"></p>
+<p>这个选项设置成 true 意思是打包时候，会生成静态目录文件夹</p>
+<p>  我们在执行</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hexo new xxx</span><br></pre></td></tr></table></figure>
+<p>  时候也会在 _post 目录下生成和文件同名的文件夹，这个文件夹里面可以存放图片</p>
+<p>  <img src="/2021/07/13/Hexo/imageQuestion/image-20210713002106528.png" alt="image-20210713002106528"></p>
+</li>
+<li><p>在 <code>hexo</code> 根目录下执行</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install https://github.com/CodeFalling/hexo-asset-image --save</span><br></pre></td></tr></table></figure>
+
+<p>建议用 cmpn</p>
+<p>这个包可以修改图片引用路径，如果没用这个包打包时候，会根据时间日期生成目录</p>
+</li>
+<li><p>我们在编写 md 文件时候，推荐使用 Typora 工具，该工具有个功能，在复制图片时候，可以自动生成一个图片文件夹，这里我们设置为当前文件名</p>
+<p><img src="/2021/07/13/Hexo/imageQuestion/image-20210713002250944.png" alt="image-20210713002250944"></p>
+</li>
+</ul>
+<p>大功告成，此后可以愉快的插入图片了</p>
+]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
   </entry>
 </search>
