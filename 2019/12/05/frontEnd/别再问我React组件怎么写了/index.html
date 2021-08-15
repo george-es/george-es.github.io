@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","version":"8.6.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="React 是一个 Javascript 库, 主要用于构建 UI 的, 因此抛开组件去谈React是没有灵魂的，React 的核心就是围绕组件展开的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="别再问我 React 组件怎么写了">
+<meta property="og:url" content="http://example.com/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/index.html">
+<meta property="og:site_name" content="George_ES">
+<meta property="og:description" content="React 是一个 Javascript 库, 主要用于构建 UI 的, 因此抛开组件去谈React是没有灵魂的，React 的核心就是围绕组件展开的。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/image-20210716221604377.png">
+<meta property="og:image" content="http://example.com/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/image-20210715141852795.png">
+<meta property="og:image" content="http://example.com/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/image-20210715151326931.png">
+<meta property="og:image" content="http://example.com/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/image-20210714011757190.png">
+<meta property="og:image" content="http://example.com/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/image-20210715160127501.png">
+<meta property="og:image" content="http://example.com/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/image-20210715172151551.png">
+<meta property="og:image" content="http://example.com/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/image-20210715173440613.png">
+<meta property="og:image" content="http://example.com/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/image-20210715203120668.png">
+<meta property="og:image" content="http://example.com/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/image-20210718122853064.png">
+<meta property="article:published_time" content="2019-12-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-08T07:18:48.510Z">
+<meta property="article:author" content="ES">
+<meta property="article:tag" content="react">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/image-20210716221604377.png">
+
+
+<link rel="canonical" href="http://example.com/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/","path":"2019/12/05/frontEnd/别再问我React组件怎么写了/","title":"别再问我 React 组件怎么写了"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>别再问我 React 组件怎么写了 | George_ES</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"> <!-- 添加看板娘-->
+  </noscript>
+    <script src="/live2d-widget/autoload.js"></script>
+  
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">George_ES</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">少女情怀总是诗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">4</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">48</span></a></li>
+        <li class="menu-item menu-item-knowledge"><a href="/knowledge" rel="section"><i class="fas fa-meteor fa-fw"></i>知识星球</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">28</span></a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>程序猿生</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E5%88%92%E5%88%86"><span class="nav-number">1.</span> <span class="nav-text">组件划分</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E7%BB%84%E4%BB%B6"><span class="nav-number">1.1.</span> <span class="nav-text">基础组件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E7%BB%84%E4%BB%B6"><span class="nav-number">1.2.</span> <span class="nav-text">业务组件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8C%BA%E5%9D%97"><span class="nav-number">1.3.</span> <span class="nav-text">区块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A1%B5%E9%9D%A2"><span class="nav-number">1.4.</span> <span class="nav-text">页面</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E5%87%86%E5%88%99"><span class="nav-number">2.</span> <span class="nav-text">设计准则</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3-SRP%EF%BC%88%E9%81%BF%E5%85%8D%E4%BA%86%E5%8A%9F%E8%83%BD%E7%9A%84%E9%87%8D%E5%A4%8D%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">单一职责 SRP（避免了功能的重复）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%84%E5%90%88"><span class="nav-number">2.2.</span> <span class="nav-text">组合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%8D%E7%94%A8"><span class="nav-number">2.3.</span> <span class="nav-text">复用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E5%A4%8D%E7%94%A8"><span class="nav-number">2.3.1.</span> <span class="nav-text">项目中的复用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A4%8D%E7%94%A8%E7%AC%AC%E4%B8%89%E6%96%B9%E5%BA%93"><span class="nav-number">2.3.2.</span> <span class="nav-text">复用第三方库</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%81%E8%A3%85"><span class="nav-number">2.4.</span> <span class="nav-text">封装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E6%B2%BB"><span class="nav-number">2.5.</span> <span class="nav-text">分治</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E7%9A%84%E7%B2%92%E5%BA%A6%E5%A6%82%E4%BD%95%E6%8E%A7%E5%88%B6"><span class="nav-number">2.6.</span> <span class="nav-text">组件的粒度如何控制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%AF%E7%BB%84%E4%BB%B6"><span class="nav-number">2.7.</span> <span class="nav-text">纯组件</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BA%AF%E5%87%BD%E6%95%B0"><span class="nav-number">2.7.1.</span> <span class="nav-text">纯函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90"><span class="nav-number">2.7.2.</span> <span class="nav-text">例子</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ES"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">ES</p>
+  <div class="site-description" itemprop="description">90后程序猿</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+          </div>
+        </div>
+      </div>
+      
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap" id="tag-cloud">
+          <h3 class="widget-title">标签云</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas height="250" id="resCanvas" style="width=70%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Comet/" rel="tag">Comet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RTK/" rel="tag">RTK</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RegExp/" rel="tag">RegExp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/" rel="tag">css</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/" rel="tag">github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hooks/" rel="tag">hooks</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jsx/" rel="tag">jsx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/" rel="tag">network</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/" rel="tag">npm</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/object/" rel="tag">object</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/promise/" rel="tag">promise</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react/" rel="tag">react</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redux/" rel="tag">redux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rest/" rel="tag">rest</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/token/" rel="tag">token</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/translation/" rel="tag">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typeScript/" rel="tag">typeScript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/" rel="tag">webpack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/websocket/" rel="tag">websocket</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yarn/" rel="tag">yarn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%93%E5%AD%98/" rel="tag">缓存</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AE%E8%AF%A2/" rel="tag">轮询</a><span class="tag-list-count">1</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/george-es" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="ES">
+      <meta itemprop="description" content="90后程序猿">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="George_ES">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          别再问我 React 组件怎么写了
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-12-05 00:00:00" itemprop="dateCreated datePublished" datetime="2019-12-05T00:00:00+08:00">2019-12-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>9.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>15 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/image-20210716221604377.png" alt="image-20210716221604377"></p>
+<p>React 是一个 Javascript 库, 主要用于构建 UI 的, 因此抛开<strong>组件去谈React是没有灵魂的</strong>，React 的核心就是围绕组件展开的。</p>
+<span id="more"></span>
+
+<h3 id="组件划分"><a href="#组件划分" class="headerlink" title="组件划分"></a>组件划分</h3><p><img src="/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/image-20210715141852795.png" alt="image-20210715141852795"></p>
+<p>当我们拿到一张设计稿时可以这样去拆解，按功能，按模块，按领域，依依划分。</p>
+<p>大家不用太纠结怎么拆，在这里你只用大概知道，这次开发会涉及那些组件，那些组件能够组合。</p>
+<p>在前端领域中，DOM 中<strong>节点</strong>是最小单位，节点上面是<strong>元素</strong>，而 React 带来了组件，一个<strong>组件</strong>是由多个元素组成。因此组件是由一个一个元素组合而成的，而这就是组件设计中的<strong>最小颗粒度</strong>。</p>
+<p>组件在设计上具备可枚举性和通用性，因此<strong>组件可以分为基础组件和业务组件</strong>，例如 antd 组件库就是典型的基础组件。</p>
+<h4 id="基础组件"><a href="#基础组件" class="headerlink" title="基础组件"></a>基础组件</h4><p><strong>基础组件</strong>颗力度小，强调的是通用性，可以理解为纯组件，一般由多个元素拼凑而成。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">const Button = (props) =&gt; (&lt;button onClick=&#123;props.handleClick&#125;&gt;按钮&lt;/button&gt;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>刚刚还提到另外一个组件，没错，它就是<strong>业务组件</strong>！</p>
+<h4 id="业务组件"><a href="#业务组件" class="headerlink" title="业务组件"></a>业务组件</h4><p>在理解业务组件前，要理解什么是业务，业务指的是项目中的具体实现，譬如说，学生管理系统这个项目，学生成绩查询就是具体的业务，而多个业务凑在一起就形成了项目。</p>
+<p>理解了业务，业务代码就很好理解了，为了实现某个业务功能的代码就是业务代码，学生成绩查询可能包括搜索，筛选等业务功能。</p>
+<p>同理，业务组件就是实现业务功能的组件。</p>
+<p>业务组件更强调的是垂直业务而言的，会有特定的交互逻辑和数据处理逻辑，也可以理解为根据业务的需求，将<strong>单个</strong>基础组件进行功能的扩展。注意，这里强调的是<strong>单个</strong>，整合多个基础组件，这里面依旧不包含<strong>事件处理、状态管理、数据请求等逻辑</strong>。</p>
+<p>举个例子：</p>
+<p>按钮组件，它是个基础组件，在赋予业务能力时，它就变成了搜索按钮，跳转到具体url按钮，删除按钮，<strong>将基础组件赋予一定定向的能力后，它就成了业务组件。</strong></p>
+<p>没错了，业务组件是一类具有<strong>定向能力</strong>（我也不知道为什么会想到这个词，感觉蛮贴切的）的组件。</p>
+<p>所以，基础组件具有<strong>通用性</strong>，而业务组件具有<strong>定向性</strong>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">const GoHome = (props) =&gt; &#123;</span><br><span class="line">	const goUrl = () =&gt; &#123;&#125;</span><br><span class="line">	return &lt;Button handleClick=&#123;goUrl&#125; /&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>GoHome 组件只有一个功能，那就是 goHome</p>
+<p><img src="/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/image-20210715151326931.png" alt="image-20210715151326931"></p>
+<p>基础组件是业务组件的抽象，而业务组件是基础组件的具体。</p>
+<p>组件和组件间的组合在一起是什么呢？没错了，那就是<strong>区块</strong></p>
+<h4 id="区块"><a href="#区块" class="headerlink" title="区块"></a>区块</h4><p>组件与组件是可以自由组合的，形式大体分两种，组合，嵌套。</p>
+<p>区块更多的是承担<strong>组件间的逻辑</strong>，它就像一个中转站，可以让组件 A，组件 B 之间的数据自由交换。在区块中，会有更少的 UI，取而代之的是更多的逻辑和状态。像<strong>事件处理、状态管理、数据请求</strong>都在这处理。</p>
+<p>区块的一大标志——<strong>不对外暴露接口属性，也就是没有 props</strong>。这带来的好处是区块与前端项目无依赖关系，对区块定制是通过修改项目中的区块代码来实现的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">// 假设有两个业务组件，一个是输入框，一个是 goUrl 按钮</span><br><span class="line">const Block = () =&gt; &#123;</span><br><span class="line">	const [state, setState] = useState(&#x27;&#x27;)</span><br><span class="line">	return (</span><br><span class="line">		&lt;&gt;</span><br><span class="line">			&lt;Input onChange=&#123;setState&#125; /&gt;</span><br><span class="line">			&lt;GoUrl url=&#123;state&#125;/&gt;</span><br><span class="line">		&lt;/&gt;</span><br><span class="line">	)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 区块的使用</span><br><span class="line">const Page = () =&gt; &#123;</span><br><span class="line">	return (</span><br><span class="line">		&lt;Block /&gt;</span><br><span class="line">	)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>区块网上又是什么呢？没错了，就是<strong>页面</strong>。</p>
+<h4 id="页面"><a href="#页面" class="headerlink" title="页面"></a>页面</h4><p>页面是当前路由下的最高层，它是由多个区块组合而成的，它是浏览器窗口中所有功能的集合，而一个应用是由多个页面拼凑而成的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">const Page = () =&gt; &#123;</span><br><span class="line">	return (</span><br><span class="line">		&lt;&gt;</span><br><span class="line">			&lt;Block /&gt;</span><br><span class="line">			&lt;Block1 /&gt;</span><br><span class="line">			&lt;Block2 /&gt;</span><br><span class="line">		&lt;/&gt;</span><br><span class="line">	)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>页面没啥功能，就是区块的承载者。</p>
+<p>这里小结一下，<strong>前端应用，有多个路由，每个路由对应一个页面，一个页面又由多个区块组成，每个区块又由多个业务组件构成，业务组件又是由基础组件演变而来的。</strong></p>
+<p>一个或多个页面则组成了**应用(Application)<strong>。开发应用的组织模式，就是</strong>前端项目(Project)**。前端项目可以这样划分</p>
+<p><img src="/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/image-20210714011757190.png" alt="image-20210714011757190"></p>
+<p>我们还可以总结一点，基础组件具备的是通用性，更加强调 UI，而到了页面层，更少去处理 UI，更多的是逻辑状态。</p>
+<p><img src="/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/image-20210715160127501.png" alt="image-20210715160127501"></p>
+<p>我们在开发组件时候可以想想，目前做的这个组件在那一层呢？</p>
+<h3 id="设计准则"><a href="#设计准则" class="headerlink" title="设计准则"></a>设计准则</h3><p>为组件的设计制定了 8 个准则</p>
+<h4 id="单一职责-SRP（避免了功能的重复）"><a href="#单一职责-SRP（避免了功能的重复）" class="headerlink" title="单一职责 SRP（避免了功能的重复）"></a>单一职责 SRP（避免了功能的重复）</h4><blockquote>
+<p>当组件只有一个改变原因时，它就符合单一职责原则。</p>
+</blockquote>
+<p>在编写 React 组件时，首先要考虑的就是<strong>单一职责原则</strong>，它要求组件的改变有且只有一个原因。怎么理解呢？也就是说，在开发业务组件时，要清晰知道，这个功能是干嘛的，譬如搜索功能和编辑功能，虽然他们都是由 button 这个基础组件衍变的业务组件，但是不能将这两个功能写在一个组件中，而要拆分成两个业务组件。</p>
+<p>举个例子</p>
+<ul>
+<li>搜索按钮<ul>
+<li>它的触发原则是，输入框内容的改变</li>
+<li>内容的改变，导致了向服务器发送 url</li>
+<li>获取到了数据</li>
+</ul>
+</li>
+</ul>
+<p>单一职责原则不仅仅用在组件的设计上，也可以用在功能的设计上，譬如，获取天气预报这个功能。</p>
+<p>天气预报的需要从后端获取数据，然后再展示在页面上，我们就可以把它拆分成获取数据 + 数据展示，而不要把这两个功能写在一个组件中，将多个功能放在一起的，称之为<strong>组合</strong>，这是 React 的另一个核心功能。</p>
+<h4 id="组合"><a href="#组合" class="headerlink" title="组合"></a>组合</h4><blockquote>
+<p>组件是将多个组件联合在一起，创建出功能更强大组件的一种方式，它就是上述区块的概念。</p>
+</blockquote>
+<p>组合的目的是实现组件间数据的通讯，它是在一个组件中，实现了多个功能的整合，这时候有小伙伴说了，它不是违背了单一职责原则么？确实如此。</p>
+<p>单一职责描述的是如何将需求拆分成一个一个独立的功能，组件描述的是如何将这些功能整合在一起，就像一辆汽车，单一职责描述的是轮胎是负责接触地面的，发动机是负责驱动的，方向盘是负责转向的，而组合就是将这些东西拼凑在一起，构成了汽车。</p>
+<p>组合有可复用的特点</p>
+<p>譬如说，天猫的搜索功能，它的业务逻辑，搜索接口都是一样的，搜索按钮和输入框<strong>组合</strong>成了一个区块，但是在多个页面会用到，这就是可复用性。</p>
+<p><img src="/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/image-20210715172151551.png" alt="image-20210715172151551"></p>
+<h4 id="复用"><a href="#复用" class="headerlink" title="复用"></a>复用</h4><blockquote>
+<p>可重复的组件，一次编写，多次使用。</p>
+</blockquote>
+<p>不要把组合和复用混为一谈，他们的应用场景不一样，组合虽然具有可复用的特性，但是具备可复用特性的并不都是组合，基础组件，业务组件都可以复用，但是他们并不是组合而成的。因此<strong>组合的一定可复用，可复用的不一样是组合</strong>。</p>
+<p><img src="/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/image-20210715173440613.png" alt="image-20210715173440613"></p>
+<h5 id="项目中的复用"><a href="#项目中的复用" class="headerlink" title="项目中的复用"></a>项目中的复用</h5><blockquote>
+<p>复用并不是毫无成本的，只有一个组件符合单一原则并且具有合理封装时，它才是可复用的</p>
+</blockquote>
+<p>因此，复用一个组件实际上意味着复用其职责。只有单一职责的组件或者功能才是最容易复用的。</p>
+<p>所以，基础组件和业务组件的复用性最高。</p>
+<h5 id="复用第三方库"><a href="#复用第三方库" class="headerlink" title="复用第三方库"></a>复用第三方库</h5><p>像 react-router，redux，这些就是非常优秀的第三方库，开箱即用。</p>
+<h4 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h4><blockquote>
+<p>封装组件提供 props 控制其行为而不是暴露其内部结构。</p>
+</blockquote>
+<p>耦合是决定组件之间依赖程度的特性，根据组件之间的依赖程度，可分成松耦合和紧耦合。</p>
+<ul>
+<li>当组件 A 对组件 B 影响不大时，就发生松耦合</li>
+<li>当组件 A 对组件 B 相互之间都有影响，且高度依赖时，就发生紧耦合</li>
+</ul>
+<p>松耦合是我们设计应用结构和组件之间关系的目标。</p>
+<p><strong>松耦合</strong>会带来以下好处：</p>
+<ul>
+<li>可以在不影响应用其它部分的情况下对某一块进行修改。、</li>
+<li>任何组件都可以替换为另一种实现</li>
+<li>在整个应用程序中实现组件复用，从而避免重复代码</li>
+<li>独立组件更容易测试，增加了测试覆盖率</li>
+</ul>
+<p>相反，紧耦合的系统会失去上面描述的好处。主要缺点是很难修改高度依赖于其他组件的组件。即使是一处修改，也可能导致一系列的依赖组件需要修改。</p>
+<p>松耦合的实现方式 —— 封装</p>
+<p>那么该如何封装组件呢？</p>
+<p>这里提出了<strong>高内聚，低耦合</strong>的设计思想</p>
+<ul>
+<li>高内聚：指<strong>将逻辑紧密相关的内容放在一个组件内</strong></li>
+<li>低耦合：指不同组件之间的依赖关系要尽量弱化，也就是每个组件要尽量独立，一个组件不应该掌握着其他组件的细节，而是要尽量做到对其他组件了解很少，甚至是一无所知。A 组件里的功能绝对不能写在 B 组件里</li>
+</ul>
+<p>封装一个组件可以从两个维度去思考</p>
+<ul>
+<li><p>隐藏内部细节</p>
+<p><strong>这是反面教材</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">const Child = (props) =&gt; &#123;</span><br><span class="line">	const updateNumber = (val) =&gt; &#123;props.parents(val)&#125;</span><br><span class="line">	return (</span><br><span class="line">		&lt;button onClick=&#123;</span><br><span class="line">			() =&gt; updateNumber(+1)</span><br><span class="line">		&#125;&gt;</span><br><span class="line">    	Increase</span><br><span class="line">    &lt;/button&gt;</span><br><span class="line">	)</span><br><span class="line">&#125;</span><br><span class="line">const App = () =&gt; &#123;</span><br><span class="line">	const [state, setState] = useState()</span><br><span class="line">	return (</span><br><span class="line">		&lt;&gt;</span><br><span class="line">			&lt;div&gt;&#123;state&#125;&lt;/div&gt;</span><br><span class="line">			&lt;Child parants=&#123;setState&#125;/&gt;</span><br><span class="line">		&lt;/&gt;</span><br><span class="line">	)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样设计就非常不合理，App 中的 state 更新方法放在了 Child 组件中，从一个角度看，Child 可以通过这个方法修改任意的值，这样会对 App 组件造成严重的破坏，另一个角度而已，他们的耦合性高，复用性差。</p>
+<p><strong>修复</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">const Child = (props) =&gt; &#123;</span><br><span class="line">	return (</span><br><span class="line">		&lt;button onClick=&#123;() =&gt; props.parants(1)&#125;&gt;</span><br><span class="line">    	Increase</span><br><span class="line">    &lt;/button&gt;</span><br><span class="line">	)</span><br><span class="line">&#125;</span><br><span class="line">const App = () =&gt; &#123;</span><br><span class="line">	const [state, setState] = useState()</span><br><span class="line">	return (</span><br><span class="line">		&lt;&gt;</span><br><span class="line">			&lt;div&gt;&#123;state&#125;&lt;/div&gt;</span><br><span class="line">			&lt;Child parants=&#123;(val) =&gt; setState(val)&#125;/&gt;</span><br><span class="line">		&lt;/&gt;</span><br><span class="line">	)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>修改后，Child 组件只对外暴露值</p>
+<p>因此我们可以得出一个结论，<strong>要提升组件复用性，组件间通讯，尽量传基本数据类型</strong>。</p>
+</li>
+<li><p>状态管理，正确使用 state 和 props</p>
+<ul>
+<li><p>state 是用于维护当前组件的状态</p>
+<p>在 React 更新机制中，state 每次改变都会触发重渲染(re-render)，带来不必要的性能损耗，同时 state 中管理太多状态也会造成状态冗余。所以我们应尽量维持组件 stateless 化。在将状态塞进 state 之前都先思考一件事，这个状态真的适合放进 state 吗？“</p>
+<p>那些状态适合用 state 管理呢？—— <strong>可能会改变 UI 的 flag</strong>。例如一个绑定了 UI 动效的 <code>className</code>，或者一个 JS 动画的判断条件 <code>isButtonDisabled</code>。适合放进 state 的状态通常只会有三种数据类型 <code>Number</code>、<code>String</code> 以及最常出现的 <code>Boolean</code>。  </p>
+<ul>
+<li>这是一个弹窗组件，此时，该组件的显隐（show）就适合用 state 去管理，因为显隐状态是自己维护的。</li>
+<li>表单内容的变化，如果每次变化都要通过 props 通知父组件，又触发一系列的 re-render，这样做很影响性能，因此放在 state 中，当 submit 时再告知父组件，这才是明智之举。</li>
+</ul>
+</li>
+<li><p>props 是外部组件的状态</p>
+<p>props 更多是定义默认值，它主要是丰富当前 state，props 的数据是不可变数据，因此多用 props，可以提升组件的复用性，降低耦合度</p>
+</li>
+</ul>
+</li>
+<li><p>通讯</p>
+<p>组件开发过程中，尽量保持组件状态的纯净性，始终使用不可变数据的思想进行状态变更，避免在组件逻辑中直接对原数据使用 <code>pop</code>，<code>push</code>，<code>slice</code>，<code>reverse</code> 等会改变原数据的方法，这样会造成数据传递中产生难以观测的改变，后续不便于追踪和管理组件更新。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// good</span><br><span class="line">const data = [...this.props.data]</span><br><span class="line">const new = data.pop()</span><br><span class="line">// not good</span><br><span class="line">const new = this.props.data.pop()</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="分治"><a href="#分治" class="headerlink" title="分治"></a>分治</h4><blockquote>
+<p>我的理解是分开各自管理</p>
+</blockquote>
+<p>上面，我们提出了区块的概念，区块由多个业务组件的组合，在区块中，我们可以处理<strong>事件、状态、请求</strong>，业务组件少，还无所谓，试想一下，如果有100个业务组件，都放在一个区块中，这个区块的承载也太重了，随着业务组件的增加会降低维护性和复用性。</p>
+<p>打个比方，现在有两个不同业务模型的组件，ComA 和 ComB，它们的呈现方式都是渲染列表，只不过两者的业务逻辑不同罢了，通常组合的方式为直接在业务组件中处理好逻辑再往下传递，负责展示的列表组件只负责展示，没有任何逻辑处理。思路是对的，不过，当业务组件非常多时，每个业务模型都有自己的业务逻辑，全部放在业务组件中处理，就会造成信息冗余。</p>
+<p>解决这个问题的方法就是将区块中的业务组件包裹一层组件，而这个组件就叫做<strong>容器组件</strong></p>
+<p>容器组件只负责当前组件的业务逻辑的处理和数据的获取，不负责 UI 的渲染，UI 的渲染和部分业务逻辑交给原本的业务组件。</p>
+<p><img src="/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/image-20210715203120668.png" alt="image-20210715203120668"></p>
+<p>以后其中一个业务规则有变动时，也可以灵活变动相应的列表组件，而无需拓展公用组件，也无需在父组件中寻找列表处理的逻辑在哪儿。</p>
+<p>最常用的就是 react-redux 中的 connect</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">// ListComponent</span><br><span class="line">const ListComponent = () = &gt; &#123;&#125;</span><br><span class="line"></span><br><span class="line">// ListContainer</span><br><span class="line">import React, &#123; useEffect &#125; from &#x27;react&#x27;</span><br><span class="line">import &#123; connect &#125; from &#x27;react-redux&#x27;</span><br><span class="line"></span><br><span class="line">const ListContainer = (&#123;list, getLists&#125;) =&gt; &#123;</span><br><span class="line">	// 处理业务逻辑 </span><br><span class="line">	useEffect(() =&gt; &#123;</span><br><span class="line">		getLists()</span><br><span class="line">	&#125;, [])</span><br><span class="line">	return (</span><br><span class="line">		&lt;ListComponent data=&#123;list&#125;/&gt;</span><br><span class="line">	)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const mapState = state =&gt; (&#123;</span><br><span class="line">  list: state.getIn([&#x27;lists&#x27;]),</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">const mapDispatch = &#123;</span><br><span class="line">  getLists,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export default connect(mapState, mapDispatch)(ListContainer)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import List from &#x27;./ListContainer&#x27;const App = () =&gt; &#123;	return (		&lt;List /&gt;	)&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="组件的粒度如何控制"><a href="#组件的粒度如何控制" class="headerlink" title="组件的粒度如何控制"></a>组件的粒度如何控制</h4><p>业务代码中组件抽取的粒度一直是一个比较纠结的问题，粒度太粗项目中可能会存在太多的重复代码，粒度太细会影响后续可扩展性，大部分情况下只能根据实际业务情况进行评估。但是这其中还是有一些经验可以参考：</p>
+<ul>
+<li>组件树的组合不宜过深，通常控制在 3 至 5 层之间比较理想，过深的组件层级容易造成组件通讯的负担。</li>
+<li>有几种东西一般可以被提取为可复用的组件：基础控件、公共样式，以及拥有稳定业务逻辑的组件。</li>
+</ul>
+<h4 id="纯组件"><a href="#纯组件" class="headerlink" title="纯组件"></a>纯组件</h4><blockquote>
+<p>理解纯函数，就很好理解纯组件了，纯组件是指那些有相同输入，必定有相同输出的<strong>组件</strong></p>
+</blockquote>
+<h5 id="纯函数"><a href="#纯函数" class="headerlink" title="纯函数"></a>纯函数</h5><p>在理解纯组件前，我们先了解下纯函数</p>
+<blockquote>
+<p>在函数编程中，对于给定相同的输入，纯函数总是返回相同的输出，而且不会对外界产生副作用。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function add(a, b) &#123;	return a + b&#125;add(1, 2) // 3</span><br></pre></td></tr></table></figure>
+
+<p>这个函数，只要给定了两个数字，函数总会返回相同的结果.</p>
+<p>下面我们修改下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">let isTrue = falsefunction add(a, b) &#123;	if (isTrue) &#123;		return null	&#125;	isTrue = true	return a + b &#125;add(1, 2) // 3add(1, 2) // null</span><br></pre></td></tr></table></figure>
+
+<p>上面的就不是纯函数了，因为第一次执行该函数时，修改了 isTrue 全局变量的状态，这就对外产生了副作用，从而对第二次的值产生了影响。</p>
+<p>纯函数是没有副作用且不依赖全局状态，只要相同的输入，就一定会有相同的输出，因此纯函数的结果是可预测的，确定的，可以复用的，且易于测试。</p>
+<p>纯函数带来的最大好处就是<strong>复用性</strong>和<strong>维护性</strong>。</p>
+<p>React 提供的是一套 javascript 组件库，在组件设计上应该更多的思考<strong>复用性</strong>，因此可以将纯函数的思想引入组件设计中，就形成了纯组件。</p>
+<p>React 对外只有一个数据来源 props，当 props 相同，渲染出来的组件也相同时，我们称为纯组件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function Message(&#123; text &#125;) &#123;    return &lt;div className=&quot;message&quot;&gt;&#123;text&#125;&lt;/div&gt;;&#125;&lt;Message text=&quot;Hello World!&quot; /&gt;// =&gt; &lt;div class=&quot;message&quot;&gt;Hello World&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<p>纯组件是我们追求的目标，但现实会告诉你，要确保所有的组件是纯组件是不可能的，当你设计一个 <code>Input</code> 组件时，必须会对外产生交互，它会根据用户输入值进行渲染。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const InputField = () =&gt; &#123;	const [value, setValue] = useState(&#x27;&#x27;)	const handleChange = (&#123;target: &#123; v &#125;&#125;) =&gt; &#123;		setValue(v)	&#125;	return (		&lt;div&gt;			&lt;span&gt;				You input: &#123;value&#125;			&lt;/span&gt;			&lt;input				type=&#x27;text&#x27;				value=&#123;value&#125;				onChange=&#123;handleChange&#125;			/&gt;		&lt;/div&gt;	)&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在开发过程中，你会遇到非常多的非纯组件，例如<strong>网络请求，使用全局状态，本地存储等</strong>，所以在开发过程中，你需要区分纯组件和非纯组件，并对组件进行<strong>提纯</strong>。</p>
+<p><img src="/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/image-20210718122853064.png" alt="image-20210718122853064"></p>
+<p>非纯代码显式的表明了它有副作用，或者是依赖全局状态。在隔离状态下，不纯代码对系统其它部分的不可预测的影响较小。</p>
+<p>在 React 中不要使用全局变量，如果需要，请放在 Redex 中。</p>
+<h5 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h5><ul>
+<li><p>从全局变量中提取纯组件</p>
+<p>举一个被全局变量污染的例子</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const App = (&#123; children &#125;) =&gt; &#123;	const header = globalConfig.headName ? &lt;h1&gt;&#123;globalConfig.headName&#125;&lt;/h1&gt; : null	return (		&lt;&gt;			&#123;header&#125;			&#123;children&#125;		&lt;/&gt;	)&#125;</span><br></pre></td></tr></table></figure>
+
+<p>它这个组件受 globalConfig 控制，耦合度高，不是纯组件</p>
+<p>下面我们通过 props 进行改造</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const App = (&#123; children, headName &#125;) =&gt; &#123;	const header = headName ? &lt;h1&gt;&#123;headName&#125;&lt;/h1&gt; : null	return (		&lt;&gt;			&#123;header&#125;			&#123;children&#125;		&lt;/&gt;	)&#125;App.defaultProps = &#123;	headName: globalConfig.headName&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过 props 该组件就变成了纯组件了，globalConfig.headName 只是默认值，App 组件复用性大大提高。</p>
+</li>
+<li><p>提取网页请求中的纯组件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">// 这里只是核心代码，其余代码自行补充const WaterFetch = () =&gt; &#123;	const [data, setData] = useState(&#123;		quality: 0,		volume: 0,	&#125;)	useEffect(() =&gt; &#123;		axios.get(&#x27;http://www.test.com/api&#x27;).then((res) =&gt; &#123;			const &#123;data: &#123; quality, volume &#125;&#125; = res.data			setData(&#123;				quality,				volume,			&#125;)		&#125;)	&#125;, [])	return (		&lt;Info quality=&#123;quality&#125; volume=&#123;volume&#125; /&gt;	)&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述代码，我们把网络请求放到了组件内部，很明显它不是纯组件，因为相同的输入会产生不同的输出，组件渲染依赖于服务端的返回结果，虽然请求这一步，我们是无法消除的，但是我们通过 redux 可以改变处理请求的位置。</p>
+<p>redux 的方法有很多，具体就不一一赘述，这里我们只讲思路</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const WaterFetch = (&#123;waterData: &#123;quality, volume&#125;, getData&#125;) =&gt; &#123;	useEffect(() =&gt; &#123;		getData() // 异步请求，放在 redux 中	&#125;, [])	return (		&lt;Info quality=&#123;quality&#125; volume=&#123;volume&#125; /&gt;	)&#125;connect(state =&gt; &#123;	waterData: state.waterData&#125;, &#123;	getData: action.getData&#125;)(WaterFetch)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/772938">https://developer.aliyun.com/article/772938</a></p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章推荐</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\06\01\frontEnd\JSX原理\" rel="bookmark">JSX 原理</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2021\02\26\frontEnd\React组件的生命周期\" rel="bookmark">聊一聊，React 组件的生命周期</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\06\01\frontEnd\create-react-app修改webpack(配置项)方法\" rel="bookmark">create-react-app修改webpack(配置项)方法</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2021\04\28\frontEnd\react逻辑复用\" rel="bookmark">React 逻辑复用</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\09\26\frontEnd\从底层原理学习react-redux\" rel="bookmark">从底层原理学习 react-redux</a></div>
+    </li>
+  </ul>
+
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>ES
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/" title="别再问我 React 组件怎么写了">http://example.com/2019/12/05/frontEnd/别再问我React组件怎么写了/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/react/" rel="tag"><i class="fa fa-tag"></i> react</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/12/03/frontEnd/%E8%AF%B4%E8%AF%B4%E4%BD%A0%E5%AF%B9props%E5%92%8Cstate%E7%9A%84%E7%90%86%E8%A7%A3/" rel="prev" title="说说你对 props 和 state 的理解">
+                  <i class="fa fa-chevron-left"></i> 说说你对 props 和 state 的理解
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/03/05/github/npm%E5%92%8Cyarn/" rel="next" title="npm 和 yarn 那些事">
+                  npm 和 yarn 那些事 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ES</span>
+</div>
+<div class="busuanzi-count">
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

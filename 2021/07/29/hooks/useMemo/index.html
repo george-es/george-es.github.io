@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","version":"8.6.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="React 逐步使用 hooks 开发了，这是 React 原生的钩子函数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一天一个hooks - useMemo">
+<meta property="og:url" content="http://example.com/2021/07/29/hooks/useMemo/index.html">
+<meta property="og:site_name" content="George_ES">
+<meta property="og:description" content="React 逐步使用 hooks 开发了，这是 React 原生的钩子函数">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/07/29/hooks/useMemo/image-20210729215900044.png">
+<meta property="article:published_time" content="2021-07-28T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-08T07:18:48.520Z">
+<meta property="article:author" content="ES">
+<meta property="article:tag" content="react">
+<meta property="article:tag" content="hooks">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/07/29/hooks/useMemo/image-20210729215900044.png">
+
+
+<link rel="canonical" href="http://example.com/2021/07/29/hooks/useMemo/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2021/07/29/hooks/useMemo/","path":"2021/07/29/hooks/useMemo/","title":"一天一个hooks - useMemo"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>一天一个hooks - useMemo | George_ES</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"> <!-- 添加看板娘-->
+  </noscript>
+    <script src="/live2d-widget/autoload.js"></script>
+  
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">George_ES</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">少女情怀总是诗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">4</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">48</span></a></li>
+        <li class="menu-item menu-item-knowledge"><a href="/knowledge" rel="section"><i class="fas fa-meteor fa-fw"></i>知识星球</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">28</span></a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>程序猿生</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E9%80%94"><span class="nav-number">1.</span> <span class="nav-text">用途</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%90%86%E8%A7%A3"><span class="nav-number">2.</span> <span class="nav-text">理解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BA%90%E7%A0%81"><span class="nav-number">3.</span> <span class="nav-text">源码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%82%E8%BD%BD%E9%98%B6%E6%AE%B5"><span class="nav-number">3.1.</span> <span class="nav-text">挂载阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0%E9%98%B6%E6%AE%B5"><span class="nav-number">3.2.</span> <span class="nav-text">更新阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E9%98%B6%E6%AE%B5"><span class="nav-number">3.3.</span> <span class="nav-text">渲染阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#areHookInputsEqual"><span class="nav-number">3.4.</span> <span class="nav-text">areHookInputsEqual</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8"><span class="nav-number">4.</span> <span class="nav-text">应用</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ES"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">ES</p>
+  <div class="site-description" itemprop="description">90后程序猿</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+          </div>
+        </div>
+      </div>
+      
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap" id="tag-cloud">
+          <h3 class="widget-title">标签云</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas height="250" id="resCanvas" style="width=70%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Comet/" rel="tag">Comet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RTK/" rel="tag">RTK</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RegExp/" rel="tag">RegExp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/" rel="tag">css</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/" rel="tag">github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hooks/" rel="tag">hooks</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jsx/" rel="tag">jsx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/" rel="tag">network</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/" rel="tag">npm</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/object/" rel="tag">object</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/promise/" rel="tag">promise</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react/" rel="tag">react</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redux/" rel="tag">redux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rest/" rel="tag">rest</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/token/" rel="tag">token</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/translation/" rel="tag">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typeScript/" rel="tag">typeScript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/" rel="tag">webpack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/websocket/" rel="tag">websocket</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yarn/" rel="tag">yarn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%93%E5%AD%98/" rel="tag">缓存</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AE%E8%AF%A2/" rel="tag">轮询</a><span class="tag-list-count">1</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/george-es" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/29/hooks/useMemo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="ES">
+      <meta itemprop="description" content="90后程序猿">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="George_ES">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          一天一个hooks - useMemo
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-07-29 00:00:00" itemprop="dateCreated datePublished" datetime="2021-07-29T00:00:00+08:00">2021-07-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="/2021/07/29/hooks/useMemo/image-20210729215900044.png" alt="image-20210729215900044"></p>
+<blockquote>
+<p>React 逐步使用 hooks 开发了，这是 React 原生的钩子函数</p>
+</blockquote>
+<span id="more"></span>
+
+
+
+<h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><p>该钩子做性能优化的，相当于 <code>shouldComponentUpdate</code>，防止相同组件重复渲染，只有在依赖列表 <code>deps</code> 发生变化时候，才会进行渲染，它可以确保依赖的值未发生改变的时候，不触发值改变。</p>
+<p>第二参数含义：</p>
+<ul>
+<li>不传数组，每次更新都会重新计算</li>
+<li>空数组，只会计算一次</li>
+<li>依赖对应的值，当对应的值发生变化时，才会重新计算</li>
+</ul>
+<h3 id="理解"><a href="#理解" class="headerlink" title="理解"></a>理解</h3><p><code>useMemo</code> 这个钩子是做性能优化的，我们在写类组件时候，每次性能优化，都会涉及到 <code>shouldComponentUpdate</code> 钩子，如果每次都写，不好维护，现在这个钩子，它的第二个参数，里面放着依赖列表，只有当依赖列表中的值发生了变化，才会渲染。</p>
+<p>我们知道 <code>React</code> 的渲染逻辑是父组件 -&gt; 子组件，没做性能优化前，父组件发生了渲染，就算子组件值没变化，也会进行渲染，这样就造成了额外的开销，通过 <code>useMemo</code> 钩子，我们可以给定子组件渲染的依赖列表，防止过度渲染。</p>
+<p>我们从源码中可以发现，在 <code>useMemo</code> 钩子中，会执行 <code>nextCreate</code> 函数，该函数返回了一个值，这里的值可不是我们理解的基本数据类型，如果是个计算函数，值可能是基本数据类型，如果是个渲染函数，值可能是一个组件，一开始看时候总和 <code>useCallback</code> 搞晕，说他们的区别在于 <code>useMemo</code> 返回的是值，<code>useCallback</code> 返回的是回调函数，<code>useCallback</code> 的回调函数是指，<code>useCallback</code> 钩子内部是不会执行 <code>nextCreate</code> 函数的，也可以这样理解 <code>useMemo</code> 相当于 <code>apply</code>，<code>useCallback</code> 相当于 bind。</p>
+<p>一般来说 <code>useMemo</code> 优化针对于当前组件高开销的计算，也就是说它常用于返回一个基本类型</p>
+<p><strong><code>useMemo</code> 计算结果是 <code>return</code> 回来的值, 主要用于 缓存计算结果的值 ，应用场景如： 需要计算的状态</strong></p>
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><h4 id="挂载阶段"><a href="#挂载阶段" class="headerlink" title="挂载阶段"></a>挂载阶段</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">const HooksDispatcherOnMount: Dispatcher = &#123;</span><br><span class="line">  ...</span><br><span class="line">  useMemo: mountMemo,</span><br><span class="line"> 	...</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">function mountMemo&lt;T&gt;(</span><br><span class="line">  nextCreate: () =&gt; T, // 执行函数</span><br><span class="line">  deps: Array&lt;mixed&gt; | void | null, // 监听变化</span><br><span class="line">): T &#123;</span><br><span class="line">  // 创建一个新的Hook实例</span><br><span class="line">  const hook = mountWorkInProgressHook();</span><br><span class="line">  const nextDeps = deps === undefined ? null : deps;</span><br><span class="line">  // 计算传入 useMemo 回调函数的值</span><br><span class="line">  const nextValue = nextCreate();</span><br><span class="line">  hook.memoizedState = [nextValue, nextDeps];</span><br><span class="line">  return nextValue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个阶段做了以下事情</p>
+<ul>
+<li>创建一个新的 <code>Hook</code> 实例</li>
+<li>计算传入 <code>useMemo</code> 回调函数的值</li>
+<li>将计算结果以及结果的依赖记录到 <code>Hook</code> 实例对象的 <code>memoizedState</code> 属性</li>
+<li>返回回调函数的值</li>
+</ul>
+<h4 id="更新阶段"><a href="#更新阶段" class="headerlink" title="更新阶段"></a>更新阶段</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">const HooksDispatcherOnUpdate: Dispatcher = &#123;</span><br><span class="line">  ...</span><br><span class="line">  useMemo: updateMemo,</span><br><span class="line"> 	...</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">function updateMemo&lt;T&gt;(</span><br><span class="line">  nextCreate: () =&gt; T,</span><br><span class="line">  deps: Array&lt;mixed&gt; | void | null,</span><br><span class="line">): T &#123;</span><br><span class="line">  // 获取Mount阶段创建的Hook实例</span><br><span class="line">  const hook = updateWorkInProgressHook();</span><br><span class="line">  const nextDeps = deps === undefined ? null : deps;</span><br><span class="line">  const prevState = hook.memoizedState;</span><br><span class="line">  if (prevState !== null) &#123;</span><br><span class="line">    // Assume these are defined. If they&#x27;re not, areHookInputsEqual will warn.</span><br><span class="line">    if (nextDeps !== null) &#123;</span><br><span class="line">      const prevDeps: Array&lt;mixed&gt; | null = prevState[1];</span><br><span class="line">      // 比较前后两次依赖是否相同</span><br><span class="line">      if (areHookInputsEqual(nextDeps, prevDeps)) &#123;</span><br><span class="line">        // 两次依赖的值相同，直接返回上一次的计算的结果</span><br><span class="line">        return prevState[0];</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  // 再次进行计算，并记录结果，返回新的结果</span><br><span class="line">  const nextValue = nextCreate();</span><br><span class="line">  hook.memoizedState = [nextValue, nextDeps];</span><br><span class="line">  return nextValue;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这一阶段和上面的挂载阶段不太一样</p>
+<ul>
+<li><p>获取 <code>mount</code> 阶段创建的 <code>Hook</code> 实例</p>
+</li>
+<li><p>比较两次依赖的值是否相同</p>
+</li>
+<li><p>如果两次依赖的值相同，直接返回上一次的计算的结果</p>
+</li>
+<li><p>如果两次依赖的值不相同，则再次进行计算，并记录结果，返回新的结果。</p>
+</li>
+</ul>
+<h4 id="渲染阶段"><a href="#渲染阶段" class="headerlink" title="渲染阶段"></a>渲染阶段</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">const HooksDispatcherOnRerender: Dispatcher = &#123;</span><br><span class="line">  ...</span><br><span class="line">  useMemo: updateMemo,</span><br><span class="line">  ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>Rerender阶段中的逻辑与Update阶段一样。</p>
+<h4 id="areHookInputsEqual"><a href="#areHookInputsEqual" class="headerlink" title="areHookInputsEqual"></a>areHookInputsEqual</h4><p>这里用到了一个对比函数 <code>areHookInputsEqual</code>，它的实现也很简单，看似很长，说白了就是一个 <code>is</code> 函数，该函数作用就是比较两个值是否相等。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">function areHookInputsEqual(</span><br><span class="line">  nextDeps: Array&lt;mixed&gt;,</span><br><span class="line">  prevDeps: Array&lt;mixed&gt; | null,</span><br><span class="line">) &#123;</span><br><span class="line">  if (__DEV__) &#123;</span><br><span class="line">    if (ignorePreviousDependencies) &#123;</span><br><span class="line">      // Only true when this component is being hot reloaded.</span><br><span class="line">      return false;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (prevDeps === null) &#123;</span><br><span class="line">    if (__DEV__) &#123;</span><br><span class="line">      console.error(</span><br><span class="line">        &#x27;%s received a final argument during this render, but not during &#x27; +</span><br><span class="line">          &#x27;the previous render. Even though the final argument is optional, &#x27; +</span><br><span class="line">          &#x27;its type cannot change between renders.&#x27;,</span><br><span class="line">        currentHookNameInDev,</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">    return false;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (__DEV__) &#123;</span><br><span class="line">    // Don&#x27;t bother comparing lengths in prod because these arrays should be</span><br><span class="line">    // passed inline.</span><br><span class="line">    if (nextDeps.length !== prevDeps.length) &#123;</span><br><span class="line">      console.error(</span><br><span class="line">        &#x27;The final argument passed to %s changed size between renders. The &#x27; +</span><br><span class="line">          &#x27;order and size of this array must remain constant.\n\n&#x27; +</span><br><span class="line">          &#x27;Previous: %s\n&#x27; +</span><br><span class="line">          &#x27;Incoming: %s&#x27;,</span><br><span class="line">        currentHookNameInDev,</span><br><span class="line">        `[$&#123;prevDeps.join(&#x27;, &#x27;)&#125;]`,</span><br><span class="line">        `[$&#123;nextDeps.join(&#x27;, &#x27;)&#125;]`,</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  // 依次比较前后两个依赖中的值</span><br><span class="line">  for (let i = 0; i &lt; prevDeps.length &amp;&amp; i &lt; nextDeps.length; i++) &#123;</span><br><span class="line">    if (is(nextDeps[i], prevDeps[i])) &#123;</span><br><span class="line">      continue;</span><br><span class="line">    &#125;</span><br><span class="line">    return false;</span><br><span class="line">  &#125;</span><br><span class="line">  return true;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个 <code>is</code> 函数，如果支持 Object.is 的情况下直接调用，否则 React 自己实现了一个 is 函数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">function is(x: any, y: any) &#123;</span><br><span class="line">  return (</span><br><span class="line">    (x === y &amp;&amp; (x !== 0 || 1 / x === 1 / y)) || (x !== x &amp;&amp; y !== y) // eslint-disable-line no-self-compare</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const objectIs: (x: any, y: any) =&gt; boolean =</span><br><span class="line">  typeof Object.is === &#x27;function&#x27; ? Object.is : is;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><p><strong>返回是基本数据类型值</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// count 发生变化时，sum 的值会改变</span><br><span class="line">const sum = useMemo(() =&gt; &#123;</span><br><span class="line">  return count + 1;</span><br><span class="line">&#125;, [count]);</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>返回一个组件</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// </span><br><span class="line">const Child = useMemo((&#123; clickChild, count &#125;) =&gt; &#123;</span><br><span class="line">    console.log(&#x27;Child render &gt;&gt;&#x27; + count)</span><br><span class="line">    return &lt;button onClick=&#123;clickChild&#125;&gt;clickChild&lt;/button&gt;</span><br><span class="line">&#125;, [count])</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章推荐</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2021\07\30\hooks\useCallback\" rel="bookmark">一天一个hooks - useCallback</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2021\07\28\hooks\useBoolean\" rel="bookmark">一天一个hooks - useBoolean</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2021\07\28\hooks\useToggle\" rel="bookmark">一天一个hooks - useToggle</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2021\07\28\hooks\useUrlState\" rel="bookmark">一天一个hooks - useUrlState</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\06\01\frontEnd\JSX原理\" rel="bookmark">JSX 原理</a></div>
+    </li>
+  </ul>
+
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>ES
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2021/07/29/hooks/useMemo/" title="一天一个hooks - useMemo">http://example.com/2021/07/29/hooks/useMemo/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/react/" rel="tag"><i class="fa fa-tag"></i> react</a>
+              <a href="/tags/hooks/" rel="tag"><i class="fa fa-tag"></i> hooks</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/07/28/hooks/useBoolean/" rel="prev" title="一天一个hooks - useBoolean">
+                  <i class="fa fa-chevron-left"></i> 一天一个hooks - useBoolean
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/07/30/hooks/useCallback/" rel="next" title="一天一个hooks - useCallback">
+                  一天一个hooks - useCallback <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ES</span>
+</div>
+<div class="busuanzi-count">
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

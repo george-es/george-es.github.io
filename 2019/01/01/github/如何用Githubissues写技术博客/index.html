@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","version":"8.6.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="工作也好几年了，辗转于各大平台写博客，最后还是 Github 是我的最爱">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何用 Github issues 写技术博客？">
+<meta property="og:url" content="http://example.com/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/index.html">
+<meta property="og:site_name" content="George_ES">
+<meta property="og:description" content="工作也好几年了，辗转于各大平台写博客，最后还是 Github 是我的最爱">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/image-20210719161213300.png">
+<meta property="og:image" content="http://example.com/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/81579083-48b3ff00-93de-11ea-9152-bc956ac01918.png">
+<meta property="og:image" content="http://example.com/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/81632927-091cff80-943e-11ea-978a-205c07d9b20c.png">
+<meta property="og:image" content="http://example.com/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/81585146-52d9fb80-93e6-11ea-9536-1f31e7bc4d22.png">
+<meta property="og:image" content="http://example.com/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/81585188-61281780-93e6-11ea-9df0-a7d6b3c9de13.png">
+<meta property="og:image" content="http://example.com/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/81630270-bb9d9400-9437-11ea-96f7-9b0d44987846.png">
+<meta property="og:image" content="http://example.com/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/81630881-49c64a00-9439-11ea-873a-38dc93678434.png">
+<meta property="og:image" content="http://example.com/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/81633008-3ec1e880-943e-11ea-9d90-21e6929dc15c.png">
+<meta property="og:image" content="http://example.com/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/81633170-ad9f4180-943e-11ea-8a7c-299ec30ae9af.png">
+<meta property="og:image" content="http://example.com/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/81633213-cdcf0080-943e-11ea-9441-a96df8fa3874.png">
+<meta property="og:image" content="http://example.com/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/81633590-adec0c80-943f-11ea-98b2-38b268430c80.png">
+<meta property="og:image" content="http://example.com/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/81633646-ccea9e80-943f-11ea-9d88-b48b52cb1313.png">
+<meta property="og:image" content="http://example.com/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/81634772-366bac80-9442-11ea-97a6-3d4f98b84551.png">
+<meta property="article:published_time" content="2018-12-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-07-19T13:36:51.514Z">
+<meta property="article:author" content="ES">
+<meta property="article:tag" content="github">
+<meta property="article:tag" content="blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/image-20210719161213300.png">
+
+
+<link rel="canonical" href="http://example.com/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/","path":"2019/01/01/github/如何用Githubissues写技术博客/","title":"如何用 Github issues 写技术博客？"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>如何用 Github issues 写技术博客？ | George_ES</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"> <!-- 添加看板娘-->
+  </noscript>
+    <script src="/live2d-widget/autoload.js"></script>
+  
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">George_ES</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">少女情怀总是诗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">4</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">48</span></a></li>
+        <li class="menu-item menu-item-knowledge"><a href="/knowledge" rel="section"><i class="fas fa-meteor fa-fw"></i>知识星球</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">28</span></a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>程序猿生</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E5%9C%A8-Github-%E4%B8%8A%E5%88%9B%E5%BB%BA-Blog-%E9%A1%B9%E7%9B%AE%E4%BB%93%E5%BA%93"><span class="nav-number">1.</span> <span class="nav-text">1、在 Github 上创建 Blog 项目仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E5%88%9B%E5%BB%BA-Projects"><span class="nav-number">2.</span> <span class="nav-text">2、创建 Projects</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%E3%80%81%E5%88%9B%E5%BB%BA-Labels"><span class="nav-number">3.</span> <span class="nav-text">3、创建 Labels</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%E3%80%81%E5%88%9B%E5%BB%BA-issues"><span class="nav-number">4.</span> <span class="nav-text">4、创建 issues</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5%E3%80%81%E5%9C%A8-Projects-%E4%B8%8A%E5%BB%BA%E7%AB%8B%E5%85%B3%E8%81%94"><span class="nav-number">5.</span> <span class="nav-text">5、在 Projects 上建立关联</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6%E3%80%81%E5%9C%A8-README-%E4%B8%AD%E5%91%88%E7%8E%B0"><span class="nav-number">6.</span> <span class="nav-text">6、在 README 中呈现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%81%E7%AE%80%E5%8D%9A%E5%AE%A2"><span class="nav-number">7.</span> <span class="nav-text">极简博客</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ES"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">ES</p>
+  <div class="site-description" itemprop="description">90后程序猿</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+          </div>
+        </div>
+      </div>
+      
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap" id="tag-cloud">
+          <h3 class="widget-title">标签云</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas height="250" id="resCanvas" style="width=70%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Comet/" rel="tag">Comet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RTK/" rel="tag">RTK</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RegExp/" rel="tag">RegExp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/" rel="tag">css</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/" rel="tag">github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hooks/" rel="tag">hooks</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jsx/" rel="tag">jsx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/" rel="tag">network</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/" rel="tag">npm</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/object/" rel="tag">object</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/promise/" rel="tag">promise</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react/" rel="tag">react</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redux/" rel="tag">redux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rest/" rel="tag">rest</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/token/" rel="tag">token</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/translation/" rel="tag">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typeScript/" rel="tag">typeScript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/" rel="tag">webpack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/websocket/" rel="tag">websocket</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yarn/" rel="tag">yarn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%93%E5%AD%98/" rel="tag">缓存</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AE%E8%AF%A2/" rel="tag">轮询</a><span class="tag-list-count">1</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/george-es" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="ES">
+      <meta itemprop="description" content="90后程序猿">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="George_ES">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何用 Github issues 写技术博客？
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-01-01 00:00:00" itemprop="dateCreated datePublished" datetime="2019-01-01T00:00:00+08:00">2019-01-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/github/" itemprop="url" rel="index"><span itemprop="name">github</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>635</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>1 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/image-20210719161213300.png" alt="image-20210719161213300"></p>
+<p>工作也好几年了，辗转于各大平台写博客，最后还是 Github 是我的最爱</p>
+<span id="more"></span>
+
+<p>要通过 issues 写技术博客，需要以下几个步骤</p>
+<h3 id="1、在-Github-上创建-Blog-项目仓库"><a href="#1、在-Github-上创建-Blog-项目仓库" class="headerlink" title="1、在 Github 上创建 Blog 项目仓库"></a>1、在 Github 上创建 Blog 项目仓库</h3><p>这步就不多说了，有 Github 账号的应该都会创建吧<br><img src="/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/81579083-48b3ff00-93de-11ea-9152-bc956ac01918.png" alt="image"></p>
+<h3 id="2、创建-Projects"><a href="#2、创建-Projects" class="headerlink" title="2、创建 Projects"></a>2、创建 Projects</h3><p>Projects 可以理解为一个一个组，写好的 issues 可以存放到相应的组中<br><img src="/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/81632927-091cff80-943e-11ea-978a-205c07d9b20c.png" alt="image"></p>
+<h3 id="3、创建-Labels"><a href="#3、创建-Labels" class="headerlink" title="3、创建 Labels"></a>3、创建 Labels</h3><p>在项目的 issues 下有个 Labels 功能，通过它，你可以创建相应的 Labels，Labels 可以理解为 Blog 中的一个个标签，通过标签，可以搜索分类你的内容.<br><img src="/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/81585146-52d9fb80-93e6-11ea-9536-1f31e7bc4d22.png" alt="image"><br><img src="/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/81585188-61281780-93e6-11ea-9df0-a7d6b3c9de13.png" alt="image"></p>
+<h3 id="4、创建-issues"><a href="#4、创建-issues" class="headerlink" title="4、创建 issues"></a>4、创建 issues</h3><p>issues 就是我们博客的内容了，new issues 开启我们的博客编写页面<br><img src="/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/81630270-bb9d9400-9437-11ea-96f7-9b0d44987846.png" alt="image"></p>
+<p>在 issues 里，可以做相应配置，选择一个project，提交后这个issue就会分类到这个project下面<br><img src="/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/81630881-49c64a00-9439-11ea-873a-38dc93678434.png" alt="image"></p>
+<h3 id="5、在-Projects-上建立关联"><a href="#5、在-Projects-上建立关联" class="headerlink" title="5、在 Projects 上建立关联"></a>5、在 Projects 上建立关联</h3><p>进入需要关联的 Projects 后，创建子分组，例如我这里创建一个 Blog<br><img src="/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/81633008-3ec1e880-943e-11ea-9d90-21e6929dc15c.png" alt="image"></p>
+<p>然后点击 add card 在里面可以找到刚刚编写的 issues<br><img src="/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/81633170-ad9f4180-943e-11ea-8a7c-299ec30ae9af.png" alt="image"></p>
+<p>最后将 issues 拖入到子分组中<br><img src="/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/81633213-cdcf0080-943e-11ea-9441-a96df8fa3874.png" alt="image"></p>
+<p>以上就完成了博客的开发功能了</p>
+<h3 id="6、在-README-中呈现"><a href="#6、在-README-中呈现" class="headerlink" title="6、在 README 中呈现"></a>6、在 README 中呈现</h3><p>博客编写好了，在 README 上配置相应的入口，这样就完成了呢<br><img src="/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/81633590-adec0c80-943f-11ea-98b2-38b268430c80.png" alt="image"></p>
+<p>这样我们就可以在主页上快速找到 Blog 了<br><img src="/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/81633646-ccea9e80-943f-11ea-9d88-b48b52cb1313.png" alt="image"></p>
+<h3 id="极简博客"><a href="#极简博客" class="headerlink" title="极简博客"></a>极简博客</h3><p>说了半天，有的小伙伴觉得，这样也太复杂了吧，又点这又点那，还要配置关联 projects，那么有没有像其他平台一样，分类 + 文章呢？ of course，安排！<br>最快速的方法就是在 issues 编写，然后在首页 README 中建立相应连接即可<br><img src="/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/81634772-366bac80-9442-11ea-97a6-3d4f98b84551.png" alt="image"></p>
+
+    </div>
+
+    
+    
+    
+      
+
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>ES
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2019/01/01/github/%E5%A6%82%E4%BD%95%E7%94%A8Githubissues%E5%86%99%E6%8A%80%E6%9C%AF%E5%8D%9A%E5%AE%A2/" title="如何用 Github issues 写技术博客？">http://example.com/2019/01/01/github/如何用Githubissues写技术博客/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/github/" rel="tag"><i class="fa fa-tag"></i> github</a>
+              <a href="/tags/blog/" rel="tag"><i class="fa fa-tag"></i> blog</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/03/01/github/git%E5%BF%85%E4%BF%AE%E8%AF%BE1/" rel="next" title="git 必修课">
+                  git 必修课 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ES</span>
+</div>
+<div class="busuanzi-count">
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

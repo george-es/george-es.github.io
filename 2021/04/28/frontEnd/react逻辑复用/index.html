@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","version":"8.6.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="React 中逻辑状态复用（共享一些维护 state 的逻辑）的方式有个 HOC，Hooks，render props那么什么是逻辑状态复用呢？封装一个公共函数不也能够实现逻辑状态复用么？没错，问题就出在共享一些维护 state 的逻辑，普通的逻辑的和维护 state 的逻辑的区别就是，维护一个 state 的逻辑，当 state 发生变化时，用到这个 state 的组件是要重新渲染的，显然用普">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React 逻辑复用">
+<meta property="og:url" content="http://example.com/2021/04/28/frontEnd/react%E9%80%BB%E8%BE%91%E5%A4%8D%E7%94%A8/index.html">
+<meta property="og:site_name" content="George_ES">
+<meta property="og:description" content="React 中逻辑状态复用（共享一些维护 state 的逻辑）的方式有个 HOC，Hooks，render props那么什么是逻辑状态复用呢？封装一个公共函数不也能够实现逻辑状态复用么？没错，问题就出在共享一些维护 state 的逻辑，普通的逻辑的和维护 state 的逻辑的区别就是，维护一个 state 的逻辑，当 state 发生变化时，用到这个 state 的组件是要重新渲染的，显然用普">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/04/28/frontEnd/react%E9%80%BB%E8%BE%91%E5%A4%8D%E7%94%A8/image-20210727202635729.png">
+<meta property="article:published_time" content="2021-04-27T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-08T07:18:48.509Z">
+<meta property="article:author" content="ES">
+<meta property="article:tag" content="react">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/04/28/frontEnd/react%E9%80%BB%E8%BE%91%E5%A4%8D%E7%94%A8/image-20210727202635729.png">
+
+
+<link rel="canonical" href="http://example.com/2021/04/28/frontEnd/react%E9%80%BB%E8%BE%91%E5%A4%8D%E7%94%A8/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2021/04/28/frontEnd/react%E9%80%BB%E8%BE%91%E5%A4%8D%E7%94%A8/","path":"2021/04/28/frontEnd/react逻辑复用/","title":"React 逻辑复用"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>React 逻辑复用 | George_ES</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"> <!-- 添加看板娘-->
+  </noscript>
+    <script src="/live2d-widget/autoload.js"></script>
+  
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">George_ES</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">少女情怀总是诗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">4</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">48</span></a></li>
+        <li class="menu-item menu-item-knowledge"><a href="/knowledge" rel="section"><i class="fas fa-meteor fa-fw"></i>知识星球</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">28</span></a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>程序猿生</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Hooks"><span class="nav-number">1.</span> <span class="nav-text">Hooks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Render-props"><span class="nav-number">2.</span> <span class="nav-text">Render props</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HOC"><span class="nav-number">3.</span> <span class="nav-text">HOC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hooks-%E8%83%BD%E6%9B%BF%E4%BB%A3-HOC%EF%BC%8Crender-props%E4%B9%88%EF%BC%9F"><span class="nav-number">4.</span> <span class="nav-text">Hooks 能替代 HOC，render props么？</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ES"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">ES</p>
+  <div class="site-description" itemprop="description">90后程序猿</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+          </div>
+        </div>
+      </div>
+      
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap" id="tag-cloud">
+          <h3 class="widget-title">标签云</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas height="250" id="resCanvas" style="width=70%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Comet/" rel="tag">Comet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RTK/" rel="tag">RTK</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RegExp/" rel="tag">RegExp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/" rel="tag">css</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/" rel="tag">github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hooks/" rel="tag">hooks</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jsx/" rel="tag">jsx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/" rel="tag">network</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/" rel="tag">npm</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/object/" rel="tag">object</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/promise/" rel="tag">promise</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react/" rel="tag">react</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redux/" rel="tag">redux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rest/" rel="tag">rest</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/token/" rel="tag">token</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/translation/" rel="tag">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typeScript/" rel="tag">typeScript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/" rel="tag">webpack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/websocket/" rel="tag">websocket</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yarn/" rel="tag">yarn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%93%E5%AD%98/" rel="tag">缓存</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AE%E8%AF%A2/" rel="tag">轮询</a><span class="tag-list-count">1</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/george-es" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/04/28/frontEnd/react%E9%80%BB%E8%BE%91%E5%A4%8D%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="ES">
+      <meta itemprop="description" content="90后程序猿">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="George_ES">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          React 逻辑复用
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-04-28 00:00:00" itemprop="dateCreated datePublished" datetime="2021-04-28T00:00:00+08:00">2021-04-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="/2021/04/28/frontEnd/react%E9%80%BB%E8%BE%91%E5%A4%8D%E7%94%A8/image-20210727202635729.png" alt="image-20210727202635729"></p>
+<p>React 中逻辑状态复用（共享一些维护 state 的逻辑）的方式有个 HOC，Hooks，render props<br>那么什么是逻辑状态复用呢？封装一个公共函数不也能够实现逻辑状态复用么？<br>没错，问题就出在<strong>共享一些维护 state 的逻辑</strong>，普通的逻辑的和维护 state 的逻辑的区别就是，维护一个 state 的逻辑，当 <strong>state 发生变化时，用到这个 state 的组件是要重新渲染的</strong>，显然用普通的函数做不了这个事情。</p>
+<span id="more"></span>
+
+<p>维护 state 逻辑的方式有两种</p>
+<ul>
+<li>一个状态组件维护 state 的逻辑</li>
+<li>一个非组件维护 state 的逻辑</li>
+</ul>
+<p>其实一个状态组件本身就是在维护一个 state，当用户操作它所渲染的 UI 的时候，state 发生响应的变化。组件的逻辑负责维护 state 的变化。</p>
+<p>那么非组件指什么呢？<br>我理解是没有渲染出 UI 的，只是一个状态，时不时获取最新状态罢了</p>
+<ul>
+<li>比如说我维护一个user的登录状态，这个登录状态需要发送请求给后台去拿。那么这个登录状态就会有3个值｛fetching，online，offline｝，而且可能会从fetching到online，或者从fetching到offline，就是会变化的。</li>
+<li>比如说我需要记录用户鼠标的位置（x，y坐标），这个是随用户移动鼠标而变化的。</li>
+<li>比如说我做一个定时器，每隔一段时间切换一下我维护的一个state。</li>
+</ul>
+<p>之所以分为这两类，是因为我们不能用 hooks 来共享状态组件。这是因为我们用hooks的时候是需要用它的返回值的，这个返回值通常是这个 hooks 所维护的 state 或者 state 的计算值，那么这个 hooks 就不可能返回一个 dom 元素了，也就是 hooks 不能包含组件。</p>
+<p>这样听起来好像又回到了上面那个问题，既然 hooks 返回的不是组件是个值，那我们用普通函数也可以实现呀，还是那句话，<strong>普通函数状态的改变无法触发页面的更新</strong><br>下面举个栗子说明 hooks，HOC，Render props 在共享状态上的不同<br>A，B，C 需要共享状态 S</p>
+<h3 id="Hooks"><a href="#Hooks" class="headerlink" title="Hooks"></a>Hooks</h3><p>hooks 是通过<strong>自定义 hooks</strong> 把 S 封装成 useS，在 A，B，C 中使用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">const useS = () =&gt; &#123;</span><br><span class="line">    const [state, setState] = useState(&#x27;someValue&#x27;)</span><br><span class="line">    useEffect(() =&gt; &#123;</span><br><span class="line">        ...some code...</span><br><span class="line">        setState(&#x27;anotherValue&#x27;)</span><br><span class="line">    &#125;)</span><br><span class="line">    return state;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const A = () =&gt; &#123;</span><br><span class="line">    const s = useS();</span><br><span class="line">    return (</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">            &lt;div&gt;&#123;s&#125;&lt;/div&gt;</span><br><span class="line">            &lt;div&gt;A&lt;/div&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    )</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Render-props"><a href="#Render-props" class="headerlink" title="Render props"></a>Render props</h3><p>什么是 render props 呢？<br>通俗来讲</p>
+<ul>
+<li>首先它本质上是一个prop，是用来父子组件之间传递数据用的</li>
+<li>其次这个prop传递的值是一个函数</li>
+<li>最后它取名render props，是因为它通常是用来render(渲染)某个元素或组件<br>这就是 render props</li>
+</ul>
+<p>下面实现一个 render props</p>
+<p>这个子组件传递了一个叫 <code>render</code> 的prop，这个prop的值是一个函数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;DataProvider render=&#123;data =&gt; (</span><br><span class="line">  &lt;h1&gt;Hello &#123;data.target&#125;&lt;/h1&gt;</span><br><span class="line">)&#125;/&gt;</span><br></pre></td></tr></table></figure>
+<p>再实现 DataProvider</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class DataProvider extends React.Component &#123;</span><br><span class="line">    state = &#123;</span><br><span class="line">        data: &#123;</span><br><span class="line">            target: &#x27;World&#x27;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    render() &#123;</span><br><span class="line">        return this.props.render(this.state)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>所以最终渲染结果是 <code>&lt;h1&gt;Hello World&lt;/h1&gt;</code> </p>
+<p>我们有必要那么大费周章的写组件再封装吗？直接把<code>h1</code>元素写在<code>DataProvider</code>组件里不也可以吗？答案是为了复用性</p>
+<p>假如下次我们希望<code>DataProvider</code>组件渲染的结果就是<code>&lt;span&gt;Hello World&lt;/span&gt;</code>呢？难道又去修改<code>DataProvider</code>组件吗？有了render props，我们就可以动态地决定<code>DataProvider</code>组件内部要渲染的元素，同时这个元素还可以使用到<code>DataProvider</code>组件内部的数据。</p>
+<p><strong>言归正传，刚刚补习了下 render props 的概念</strong>，在这里</p>
+<p>Render props 是把 S 封装成一个 component，同时这个 component 留了一个 props 用来接收需要渲染的组件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">const S = (&#123;render&#125;) =&gt; &#123;</span><br><span class="line">	onst [state, setState] = useState(&#x27;someValue&#x27;)</span><br><span class="line">    useEffect(() =&gt; &#123;</span><br><span class="line">        ...some code...</span><br><span class="line">        setState(&#x27;anotherValue&#x27;)</span><br><span class="line">    &#125;)</span><br><span class="line">    return render(state)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这是个组件，里面维护自己的逻辑状态，此时返回一个 render</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">const A = (&#123;s&#125;) =&gt; &#123;</span><br><span class="line">    return (</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">            &lt;div&gt;&#123;s&#125;&lt;/div&gt;</span><br><span class="line">            &lt;div&gt;A&lt;/div&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line">const App = () =&gt; &#123;</span><br><span class="line">    return &lt;S render = &#123;(s) =&gt; &lt;A s=&#123;s&#125; /&gt;&#125; /&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到 render props 相对于hooks有明显的区别，它在被调用的时候需要知道两个 component。Render props 的两种写法的区别就是第一种是调用的时候 render 设置为一个函数，返回值为 component 实例。第二种是 render 设置为 component 本身。</p>
+<h3 id="HOC"><a href="#HOC" class="headerlink" title="HOC"></a>HOC</h3><p>HOC 就是把 S 封装成一个函数 withS，这个函数返回一个新的 component。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">const withS =(WrappedComponent) =&gt; &#123;</span><br><span class="line">    return () =&gt; &#123;</span><br><span class="line">        const [state, setState] = useState(&#x27;someValue&#x27;)</span><br><span class="line">        useEffect(() =&gt; &#123;</span><br><span class="line">            ...some code...</span><br><span class="line">            setState(&#x27;anotherValue&#x27;)</span><br><span class="line">        &#125;)</span><br><span class="line">        return &lt;WrappedComponent s=&#123;state&#125; /&gt;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">const A = (&#123;s&#125;) =&gt; &#123;</span><br><span class="line">    return (</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">            &lt;div&gt;&#123;s&#125;&lt;/div&gt;</span><br><span class="line">            &lt;div&gt;A&lt;/div&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br><span class="line">const AWithS = withS(A);</span><br><span class="line">const App = () =&gt; &#123; return &lt;AWithS /&gt;; &#125;</span><br></pre></td></tr></table></figure>
+
+<p> 对比一下 HOC 和 render props，你会发现其实 HOC 返回的 component 使用的技术和 render props 很相似，只不过 render props 的例子中需要 render 的component 来自 props，而 HOC 中需要 render 的 component 来自 HOC 的参数。</p>
+<p>HOC不光是有共享维护state的逻辑的能力，还可以做一切封装能做的事情，比如说偷偷改下上层component传过来的props的值。</p>
+<h3 id="Hooks-能替代-HOC，render-props么？"><a href="#Hooks-能替代-HOC，render-props么？" class="headerlink" title="Hooks 能替代 HOC，render props么？"></a>Hooks 能替代 HOC，render props么？</h3><p>hooks是无法实现共享状态组件逻辑的，当然就无法在这方面代替HOC和render props。而共享非组件逻辑的功能，基本都可以用hooks来替代，而且最好用hooks来实现，因为我们看到了，hooks的逻辑最直接，最容易理解。当然第一原则仍然是根据业务实事求是，就是概念上该是什么就是什么，如果概念上就是HOC，那么就用HOC。实事求是是为了代码的更好维护。</p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章推荐</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\06\01\frontEnd\JSX原理\" rel="bookmark">JSX 原理</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2021\02\26\frontEnd\React组件的生命周期\" rel="bookmark">聊一聊，React 组件的生命周期</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\06\01\frontEnd\create-react-app修改webpack(配置项)方法\" rel="bookmark">create-react-app修改webpack(配置项)方法</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\09\26\frontEnd\从底层原理学习react-redux\" rel="bookmark">从底层原理学习 react-redux</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\12\03\frontEnd\说说你对props和state的理解\" rel="bookmark">说说你对 props 和 state 的理解</a></div>
+    </li>
+  </ul>
+
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>ES
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2021/04/28/frontEnd/react%E9%80%BB%E8%BE%91%E5%A4%8D%E7%94%A8/" title="React 逻辑复用">http://example.com/2021/04/28/frontEnd/react逻辑复用/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/react/" rel="tag"><i class="fa fa-tag"></i> react</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/04/13/frontEnd/%E9%A1%B5%E9%9D%A2%E4%B8%8A%E9%9A%90%E8%97%8F%E5%85%83%E7%B4%A0%E7%9A%84%E6%96%B9%E6%B3%95%E6%9C%89%E9%82%A3%E4%BA%9B/" rel="prev" title="页面上隐藏元素的方法有那些">
+                  <i class="fa fa-chevron-left"></i> 页面上隐藏元素的方法有那些
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/05/18/network/websocket/" rel="next" title="即时通讯技术 —— webSocket">
+                  即时通讯技术 —— webSocket <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ES</span>
+</div>
+<div class="busuanzi-count">
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

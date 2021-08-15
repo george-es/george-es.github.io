@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","version":"8.6.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta property="og:type" content="article">
+<meta property="og:title" content="从底层原理学习 react-redux">
+<meta property="og:url" content="http://example.com/2020/09/26/frontEnd/%E4%BB%8E%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%AD%A6%E4%B9%A0react-redux/index.html">
+<meta property="og:site_name" content="George_ES">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2020/09/26/frontEnd/%E4%BB%8E%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%AD%A6%E4%B9%A0react-redux/image-20210727212540567.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/29953244/103887429-fc13f580-511d-11eb-979d-66657c0530dc.png">
+<meta property="article:published_time" content="2020-09-25T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-15T06:45:28.026Z">
+<meta property="article:author" content="ES">
+<meta property="article:tag" content="react">
+<meta property="article:tag" content="redux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2020/09/26/frontEnd/%E4%BB%8E%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%AD%A6%E4%B9%A0react-redux/image-20210727212540567.png">
+
+
+<link rel="canonical" href="http://example.com/2020/09/26/frontEnd/%E4%BB%8E%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%AD%A6%E4%B9%A0react-redux/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2020/09/26/frontEnd/%E4%BB%8E%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%AD%A6%E4%B9%A0react-redux/","path":"2020/09/26/frontEnd/从底层原理学习react-redux/","title":"从底层原理学习 react-redux"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>从底层原理学习 react-redux | George_ES</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"> <!-- 添加看板娘-->
+  </noscript>
+    <script src="/live2d-widget/autoload.js"></script>
+  
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">George_ES</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">少女情怀总是诗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">4</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">48</span></a></li>
+        <li class="menu-item menu-item-knowledge"><a href="/knowledge" rel="section"><i class="fas fa-meteor fa-fw"></i>知识星球</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">28</span></a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>程序猿生</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#redux-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">redux 是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redux-%E7%9A%84%E6%A0%B8%E5%BF%83%E6%80%9D%E6%83%B3%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">redux 的核心思想是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redux-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">3.</span> <span class="nav-text">redux 核心概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E5%A4%A7%E5%8E%9F%E5%88%99"><span class="nav-number">4.</span> <span class="nav-text">三大原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">5.</span> <span class="nav-text">核心概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#store"><span class="nav-number">5.1.</span> <span class="nav-text">store</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reducer"><span class="nav-number">5.2.</span> <span class="nav-text">reducer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#subscribe"><span class="nav-number">5.3.</span> <span class="nav-text">subscribe</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redux-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">6.</span> <span class="nav-text">redux 的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#combineReducers-reducers-%E2%80%94%E2%80%94-reducer-%E6%8B%86%E5%88%86"><span class="nav-number">7.</span> <span class="nav-text">combineReducers(reducers) —— reducer 拆分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redux-%E6%95%B0%E6%8D%AE%E6%B5%81"><span class="nav-number">8.</span> <span class="nav-text">redux 数据流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redux-%E5%92%8C-react-redux-%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">9.</span> <span class="nav-text">redux 和 react-redux 有什么区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#react-redux-%E5%8E%9F%E7%90%86"><span class="nav-number">10.</span> <span class="nav-text">react-redux 原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Provider-%E5%8E%9F%E7%90%86"><span class="nav-number">11.</span> <span class="nav-text">Provider 原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">12.</span> <span class="nav-text">使用</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ES"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">ES</p>
+  <div class="site-description" itemprop="description">90后程序猿</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+          </div>
+        </div>
+      </div>
+      
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap" id="tag-cloud">
+          <h3 class="widget-title">标签云</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas height="250" id="resCanvas" style="width=70%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Comet/" rel="tag">Comet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RTK/" rel="tag">RTK</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RegExp/" rel="tag">RegExp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/" rel="tag">css</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/" rel="tag">github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hooks/" rel="tag">hooks</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jsx/" rel="tag">jsx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/" rel="tag">network</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/" rel="tag">npm</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/object/" rel="tag">object</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/promise/" rel="tag">promise</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react/" rel="tag">react</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redux/" rel="tag">redux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rest/" rel="tag">rest</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/token/" rel="tag">token</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/translation/" rel="tag">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typeScript/" rel="tag">typeScript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/" rel="tag">webpack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/websocket/" rel="tag">websocket</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yarn/" rel="tag">yarn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%93%E5%AD%98/" rel="tag">缓存</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AE%E8%AF%A2/" rel="tag">轮询</a><span class="tag-list-count">1</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/george-es" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/09/26/frontEnd/%E4%BB%8E%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%AD%A6%E4%B9%A0react-redux/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="ES">
+      <meta itemprop="description" content="90后程序猿">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="George_ES">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          从底层原理学习 react-redux
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-09-26 00:00:00" itemprop="dateCreated datePublished" datetime="2020-09-26T00:00:00+08:00">2020-09-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>7.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>13 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="/2020/09/26/frontEnd/%E4%BB%8E%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%AD%A6%E4%B9%A0react-redux/image-20210727212540567.png" alt="image-20210727212540567"></p>
+<span id="more"></span>
+<h2 id="redux-是什么？"><a href="#redux-是什么？" class="headerlink" title="redux 是什么？"></a>redux 是什么？</h2><ul>
+<li>redux 是一个架构（Flux 架构的一种变种）它不关注你到底用什么库，你可以把它应用到 React 和 Vue，甚至跟 jQuery 结合都没有问题。</li>
+<li><strong>它解决了复杂的数据通信问题</strong>，它适用于<strong>多交互，多数据源</strong>的场景</li>
+<li>也就是说遇到简单数据通讯，像父传子，子穿父等是不需要 redux 的</li>
+</ul>
+<h2 id="redux-的核心思想是什么？"><a href="#redux-的核心思想是什么？" class="headerlink" title="redux 的核心思想是什么？"></a>redux 的核心思想是什么？</h2><ul>
+<li>数据驱动视图，它是一个状态机，视图与状态是一一对应的</li>
+<li>所有状态都保存在一个对象（state）中</li>
+<li>如何通过 action 来更新 state 这就是核心思想</li>
+</ul>
+<h2 id="redux-核心概念"><a href="#redux-核心概念" class="headerlink" title="redux 核心概念"></a>redux 核心概念</h2><ul>
+<li><p>state 就是一个用对象来描述的数据源，存储着所有的数据，任何代码都不能改变它</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">const data = &#123;</span><br><span class="line">	a: 1,</span><br><span class="line">	b: 2,</span><br><span class="line">	c: 3</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>action 就是一个行为指示器，也是一个对象，它描述了数据（state）改变的逻辑</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123; type: &#x27;ADD_TODO&#x27;, index: 1&#125;</span><br><span class="line">&#123; type: &#x27;DELETE_TODO&#x27;, text: &#x27;go&#x27;&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>reducer 是一个纯函数，用于将 state 和 action 串起来，它接收 state 和 action，并返回新的 state，刚开始可能只有一个 reducer，随着项目的扩张，你可以</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">function filter(state = &#x27;SHOW_ALL&#x27;, action) &#123;</span><br><span class="line">	if(action.type === &#x27;SET&#x27;) &#123;</span><br><span class="line">		return action.index</span><br><span class="line">	&#125;</span><br><span class="line">	return state</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>也就是说 action 是描述发生了什么，和使用 reducers 来根据 action 更新 state 的用法。 </p>
+<h2 id="三大原则"><a href="#三大原则" class="headerlink" title="三大原则"></a>三大原则</h2><ul>
+<li>单一数据源：<strong>整个应用的 state 被储存在一颗 object tree 中，并且这个 object tree 只存在于唯一一个 store 中。</strong></li>
+<li>State 是只读的：<strong>唯一改变 state 的方法就是触发 action，action 是一个用于描述已发生事件的普通对象。</strong></li>
+<li>使用纯函数修改：<strong>为了描述 action 如何改变 state tree ，你需要编写 reducers。</strong></li>
+</ul>
+<h2 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h2><h3 id="store"><a href="#store" class="headerlink" title="store"></a>store</h3><p>职责</p>
+<ul>
+<li>维持应用的 state</li>
+<li>提供 getState() 方法获取 state</li>
+<li>提供 dispatch(action) 方法更新 state</li>
+<li>通过 subscribe(listener) 注册监听器</li>
+<li>通过 subscribe(listener) 返回的函数注销监听器</li>
+</ul>
+<p>reduce 提供一个 api 用来创建 store —— createStore()，它接收 2 个参数，第一个参数是 reducer，第二个参数是可选的，用于设置 state 的初始状态，<strong>整个 redux 应用只有一个单一的 store</strong></p>
+<p>手动实现一个 createStore()</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">const createStore = (reducer, state) =&gt; &#123;</span><br><span class="line">	const getState = () =&gt; state || &#123;&#125;</span><br><span class="line">	const listeners = []</span><br><span class="line">	const dispatch = (action) =&gt; &#123;</span><br><span class="line">		state = reducer(state, action)</span><br><span class="line">		listeners.forEach(listener =&gt; listener())</span><br><span class="line">	&#125;</span><br><span class="line">	const subscribe = (listener) =&gt; &#123;</span><br><span class="line">		listeners.push(listener)</span><br><span class="line">		return () =&gt; &#123;</span><br><span class="line">			listeners = listeners.filter(l =&gt; l !== listener)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	dispatch(&#123;&#125;)</span><br><span class="line">	return &#123;</span><br><span class="line">		getState,</span><br><span class="line">		dispatch</span><br><span class="line">		subscribe</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="reducer"><a href="#reducer" class="headerlink" title="reducer"></a>reducer</h3><p><em>了解完 store 后，我们看看里面的 reducer 是什么？</em></p>
+<p>reducer 其实是一个函数，它接收两个参数，state 和 action，返回 state</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">const newReducer = (state, action) =&gt; &#123;</span><br><span class="line">	switch(action.type) &#123;</span><br><span class="line">		case &#x27;SET_TITLE&#x27;:</span><br><span class="line">			return &#123;</span><br><span class="line">				...state,</span><br><span class="line">				title: action.title</span><br><span class="line">			&#125;</span><br><span class="line">		default: </span><br><span class="line">			return state</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="subscribe"><a href="#subscribe" class="headerlink" title="subscribe"></a>subscribe</h3><p>这个函数是用于订阅数据变化后执行的函数，返回一个函数，用于取消订阅</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">const unsubscribe = store.subscribe(() =&gt; console.log(‘数据变化了’))</span><br><span class="line">unsubscribe() // 取消订阅</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="redux-的使用"><a href="#redux-的使用" class="headerlink" title="redux 的使用"></a>redux 的使用</h2><blockquote>
+<p>yarn add redux</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">// 创建状态变化逻辑 reducer</span><br><span class="line">const reducer = (initState, action) =&gt; &#123;</span><br><span class="line">    switch (action.type) &#123;</span><br><span class="line">        case &#x27;ADD_A&#x27;:</span><br><span class="line">            return &#123;</span><br><span class="line">                ...initState,</span><br><span class="line">                a: action.a</span><br><span class="line">            &#125;</span><br><span class="line">        case &#x27;ADD_B&#x27;:</span><br><span class="line">            return &#123;</span><br><span class="line">                ...initState,</span><br><span class="line">                b: action.b</span><br><span class="line">            &#125;</span><br><span class="line">        default:</span><br><span class="line">            return &#123;</span><br><span class="line">                ...initState</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 创建数据源 state</span><br><span class="line">const state = &#123;</span><br><span class="line">    a: 1,</span><br><span class="line">    b: 2</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 创建 redux 应用 store</span><br><span class="line">const store = createStore(reducer, state)</span><br><span class="line"></span><br><span class="line">// run</span><br><span class="line">console.log(store.getState()) // &#123; a: 1, b: 2 &#125;</span><br><span class="line">store.dispatch(&#123; type: &#x27;ADD_A&#x27;, a: 5 &#125;) // 修改</span><br><span class="line">console.log(store.getState()) // &#123; a: 5, b: 2 &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="combineReducers-reducers-——-reducer-拆分"><a href="#combineReducers-reducers-——-reducer-拆分" class="headerlink" title="combineReducers(reducers) —— reducer 拆分"></a>combineReducers(reducers) —— reducer 拆分</h2><p>为了方便管理，我们需要对 reducer  函数进行拆分，拆分后的每一块独立负责管理 state 的一部分。</p>
+<p>combineReducers 辅助函数的作用是，把一个由多个不同 reducer 函数作为 value 的 object，合并成一个最终的 reducer 函数，然后就可以对这个 reducer 调用 createStore。</p>
+<p>合并后的 reducer 可以调用各个子 reducer，并把它们的结果合并成一个 state 对象。state 对象的结构由传入的多个 reducer 的 key 决定。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	reducer1: ...</span><br><span class="line">	reducer2: ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>返回值：</strong>一个调用 reducers 对象里所有 reducer 的 reducer，并且构造一个与 reducers 对象结构相同的 state <strong>对象</strong>。</p>
+<p>每个传入 combineReducers 的 reducer 都需满足以下规则</p>
+<ul>
+<li>所有未匹配到的 action，必须把它接收到的第一个参数也就是那个 state 原封不动返回。</li>
+<li>永远不能返回 undefined，否则会抛出异常</li>
+<li>如果传入的 state 就是 undefined，一定要返回对应 reducer 的初始 state，根据上一条规则，初始 state 禁止使用 undefined。使用 ES6 的默认参数值语法来设置初始 state 很容易，但你也可以手动检查第一个参数是否为 undefined。</li>
+</ul>
+<p>用法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">// todo.js</span><br><span class="line">export default function todos(state = [], action) &#123;</span><br><span class="line">	switch(action.type) &#123;</span><br><span class="line">		case &#x27;ADD_TODO&#x27;:</span><br><span class="line">			return state.concat([action.text])</span><br><span class="line">		default:</span><br><span class="line">			return state</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// counter.js</span><br><span class="line">export default function counter(state = 0, action) &#123;</span><br><span class="line">	 switch (action.type) &#123;</span><br><span class="line">          case &#x27;INCREMENT&#x27;:</span><br><span class="line">            return state + 1</span><br><span class="line">          case &#x27;DECREMENT&#x27;:</span><br><span class="line">            return state - 1</span><br><span class="line">          default:</span><br><span class="line">            return state</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// index.js</span><br><span class="line">const reducer = combineReducers(&#123;</span><br><span class="line">  todos,</span><br><span class="line">  counter</span><br><span class="line">&#125;)</span><br><span class="line">const store = createStore(reducer)</span><br><span class="line">console.log(store.getState()) // &#123; counter: 0, todos: [] &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>combineReducers 实现原理</strong></p>
+<p>combineReducers 接收所有的 reducer，合并成最终的 reducers 函数，那我们可以写一个框架</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">const rootReducer = combineReducers(&#123;</span><br><span class="line">	reducer1,</span><br><span class="line">	reducer2,</span><br><span class="line">	reducer3,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+
+<p>核心代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">const combineReducers = (obj) =&gt; &#123;</span><br><span class="line"> 	var finalState = &#123;&#125;;</span><br><span class="line"> 	function reducer(state, action) &#123;</span><br><span class="line"> 		//reducer 具体逻辑</span><br><span class="line"> 	 	for (var p in obj) &#123;</span><br><span class="line">         //根据 key 属性值调用 function(state.属性名，action)</span><br><span class="line">         finalState[p] = obj[p](state[p], action);</span><br><span class="line">        &#125;</span><br><span class="line">        //返回state</span><br><span class="line"> 		return finalState</span><br><span class="line"> 	&#125;</span><br><span class="line"> 	//返回最终的 reducer</span><br><span class="line">	return reducers</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="redux-数据流"><a href="#redux-数据流" class="headerlink" title="redux 数据流"></a>redux 数据流</h2><p><strong>严格的单向数据流</strong>是 Redux 架构的设计核心。</p>
+<p>单向数据流优缺点：</p>
+<ul>
+<li><p>优点：所有状态变化都可以被记录、跟踪，状态变化通过手动调用触发，源头易追溯。</p>
+</li>
+<li><p>缺点：会有很多类似的样板代码，代码量会相应的上升。</p>
+</li>
+</ul>
+<p>双向数据流优缺点</p>
+<ul>
+<li>优点：在操作表单时使用<code>v-model</code>方便简单，可以省略繁琐或重复的<code>onChange</code>事件去处理每个表单数据的变化（减少代码量）。</li>
+<li>缺点：属于暗箱操作，无法很好的追踪双向绑定的数据的变化。</li>
+</ul>
+<p><img src="https://user-images.githubusercontent.com/29953244/103887429-fc13f580-511d-11eb-979d-66657c0530dc.png" alt="image"></p>
+<p>在 react 中，一个状态可能被多个组件依赖或者影响，在此，没有一套应用状态管理方案，只能够通过状态提升实现，层级少还没问题，层级多，那就会变的非常复杂。</p>
+<p>后来，学习了 context，我们知道，可以把共享状态放到父组件的 context 上，这个父组件下所有的组件都可以从 context 中直接获取到状态而不需要一层层地进行传递了。但是直接从 context 里面存放、获取数据增强了组件的耦合性；并且所有组件都可以修改 context 里面的状态就像谁都可以修改共享状态一样，导致程序运行的不可预料。</p>
+<h2 id="redux-和-react-redux-有什么区别？"><a href="#redux-和-react-redux-有什么区别？" class="headerlink" title="redux 和 react-redux 有什么区别？"></a>redux 和 react-redux 有什么区别？</h2><p>Redux 和 React-redux 并不是同一个东西。React-redux 就是把 Redux 这种架构模式和 React.js 结合起来的一个库，就是 Redux 架构在 React.js 中的体现。</p>
+<h2 id="react-redux-原理"><a href="#react-redux-原理" class="headerlink" title="react-redux 原理"></a>react-redux 原理</h2><p>react-redux 实际上就是 context 和 redux 的组合，通过高阶函数模式封装了 <code>connect 函数</code>和 <code>Provider 容器组件</code>，context 的特点是可以组件透传，redux 的特点是单向数据流，修改数据只能用 dispatch。</p>
+<p>说干就干，我们来实现一个 connect</p>
+<p>connect 设计思想</p>
+<ul>
+<li><p>是一个高阶组件</p>
+</li>
+<li><p>将 store 的 state 和 dispatch 注入到 mapStateToProps 和 mapDispatchToProps 中</p>
+</li>
+<li><p>返回一个 props 里面有处理过的 state 和 dispach</p>
+</li>
+<li><p>有个 mapStateToProps 参数告诉 store 需要哪些数据（不可能把 state 的全部取出来吧）<strong>读数据</strong></p>
+<p>我们设计一下 mapStateToProps</p>
+<ul>
+<li>它是一个函数</li>
+<li>返回需要在 store 中提取的 state 对象</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const mapStateToProps = (state) =&gt; &#123;</span><br><span class="line">	return &#123;</span><br><span class="line">		a: state.a,</span><br><span class="line">		b: state.b,</span><br><span class="line">		...</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>有个 mapDispatchToProps 参数用于触发 store 的 dispatch，也就是<strong>写数据</strong></p>
+<p>我们设计一下 mapDispatchToProps </p>
+<ul>
+<li>它是个函数</li>
+<li>返回一个需要在 store 中调用 dispatch 的对象</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const mapDispatchToProps = (dispatch) =&gt; &#123;</span><br><span class="line">	return &#123;</span><br><span class="line">		a: (value) =&gt; dispatch(&#123; type: &#x27;UPDATE&#x27;, value &#125;)</span><br><span class="line">		...</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">import &#123; MyContext &#125; from &#x27;./provider&#x27;</span><br><span class="line">export connect = (mapStateToProps, mapDispatchToProps) =&gt; (WrappedComponent) =&gt; &#123;</span><br><span class="line">	class Connect extends Component &#123;</span><br><span class="line">		constructor() &#123;</span><br><span class="line">			super()</span><br><span class="line">			this.state = &#123;</span><br><span class="line">				allProps: &#123;&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		componentWillMount() &#123;</span><br><span class="line">			this._updateProps()</span><br><span class="line">			this.context.store.subscribe(() =&gt; this._updateProps())</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		_updateProps() &#123;</span><br><span class="line">			let statePorps = mapStateToProps</span><br><span class="line">				? mapStateToProps(this.context.store.getState())</span><br><span class="line">        		: &#123;&#125; // 防止 mapStateToProps 没有传入</span><br><span class="line">        	let dispatchProps = mapDispatchToProps</span><br><span class="line">                ? mapDispatchToProps(this.context.store.dispatch, this.props)</span><br><span class="line">                : &#123;&#125; // 防止 mapDispatchToProps 没有传入</span><br><span class="line">            this.setState(&#123;</span><br><span class="line">                allProps: &#123;</span><br><span class="line">                  ...stateProps,</span><br><span class="line">                  ...dispatchProps</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;)</span><br><span class="line">		&#125;</span><br><span class="line">		render() &#123;</span><br><span class="line">			return &lt;WrappedComponent &#123;...this.state.allProps&#125;/&gt;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	Connect.contextType = MyContext</span><br><span class="line">	return Connect</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<p>探究完 connect 我们再看看 <code>Provider </code> 是怎么实现的</p>
+<h2 id="Provider-原理"><a href="#Provider-原理" class="headerlink" title="Provider 原理"></a>Provider 原理</h2><p>要用 context 就是因为要把 <code>store</code> 存放到里面，好让子组件 <code>connect</code> 的时候能够取到 <code>store</code>。我们可以额外构建一个组件来做这种事情，然后让这个组件成为组件树的根节点，那么它的子组件都可以获取到 context 了。</p>
+<p>我们把这个组件叫 <code>Provider</code>，它提供（provide）了 <code>store</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">export const MyContext = React.createContext(&#123;&#125;) </span><br><span class="line">export class Provider extends Component &#123;</span><br><span class="line">	render() &#123;</span><br><span class="line">		return (</span><br><span class="line">			&lt;MyContext.Provider value=&#123;this.props.store&#125;&gt;</span><br><span class="line">				&#123;this.props.children&#125;</span><br><span class="line">			&lt;/MyContext.Provider&gt;</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>./store.js</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">...  // redecers 代码就不写了，一个 action 一个 state 组合 reducers，这里生成 store</span><br><span class="line">export default createStore(reducers)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>./index.js</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import React from &#x27;react&#x27;</span><br><span class="line">import ReactDOM from &#x27;react-dom&#x27;;</span><br><span class="line">import &#123; Provider &#125; from &#x27;react-redux&#x27;</span><br><span class="line">import store from &#x27;store&#x27;</span><br><span class="line"></span><br><span class="line">ReactDOM.render(</span><br><span class="line">  &lt;React.StrictMode&gt;</span><br><span class="line">    &lt;Provider store=&#123;store&#125;&gt; // 使用 Provider 在最顶层注入</span><br><span class="line">      &lt;App /&gt;</span><br><span class="line">    &lt;/Provider&gt;</span><br><span class="line">  &lt;/React.StrictMode&gt;,</span><br><span class="line">  document.getElementById(&#x27;root&#x27;)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+
+
+<p>./children.js</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">import React from &#x27;react&#x27;</span><br><span class="line">import &#123; connect &#125; from &#x27;react-redux&#x27;</span><br><span class="line">class Child extends React.Component &#123;</span><br><span class="line">    render() &#123;</span><br><span class="line">        console.log(this.props.data, &#x27;我拿到 store 里面数据了&#x27;)</span><br><span class="line">        return (</span><br><span class="line">            &lt;div&gt;</span><br><span class="line">               Hello world</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">const mapStateToProps = (state) =&gt; &#123;</span><br><span class="line">    return &#123;</span><br><span class="line">        data: state</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">export default connect(mapStateToProps)(Chlid)</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章推荐</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\06\01\frontEnd\JSX原理\" rel="bookmark">JSX 原理</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2021\02\26\frontEnd\React组件的生命周期\" rel="bookmark">聊一聊，React 组件的生命周期</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\06\01\frontEnd\create-react-app修改webpack(配置项)方法\" rel="bookmark">create-react-app修改webpack(配置项)方法</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2021\04\28\frontEnd\react逻辑复用\" rel="bookmark">React 逻辑复用</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\12\03\frontEnd\说说你对props和state的理解\" rel="bookmark">说说你对 props 和 state 的理解</a></div>
+    </li>
+  </ul>
+
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>ES
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2020/09/26/frontEnd/%E4%BB%8E%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E5%AD%A6%E4%B9%A0react-redux/" title="从底层原理学习 react-redux">http://example.com/2020/09/26/frontEnd/从底层原理学习react-redux/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/react/" rel="tag"><i class="fa fa-tag"></i> react</a>
+              <a href="/tags/redux/" rel="tag"><i class="fa fa-tag"></i> redux</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/08/28/frontEnd/%E6%B0%B4%E5%B9%B3%E5%92%8C%E5%9E%82%E7%9B%B4%E5%B1%85%E4%B8%AD%E7%9A%84N%E7%A7%8D%E6%96%B9%E5%BC%8F/" rel="prev" title="水平和垂直居中的N种方式">
+                  <i class="fa fa-chevron-left"></i> 水平和垂直居中的N种方式
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/10/10/network/http%E5%8D%8F%E8%AE%AE/" rel="next" title="HTTP 协议">
+                  HTTP 协议 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ES</span>
+</div>
+<div class="busuanzi-count">
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

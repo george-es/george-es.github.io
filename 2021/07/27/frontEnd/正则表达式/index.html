@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","version":"8.6.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta property="og:type" content="article">
+<meta property="og:title" content="正则表达式实战">
+<meta property="og:url" content="http://example.com/2021/07/27/frontEnd/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/index.html">
+<meta property="og:site_name" content="George_ES">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/07/27/frontEnd/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/image-20210727164143669.png">
+<meta property="article:published_time" content="2021-07-26T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-07-28T00:36:03.534Z">
+<meta property="article:author" content="ES">
+<meta property="article:tag" content="RegExp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/07/27/frontEnd/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/image-20210727164143669.png">
+
+
+<link rel="canonical" href="http://example.com/2021/07/27/frontEnd/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2021/07/27/frontEnd/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/","path":"2021/07/27/frontEnd/正则表达式/","title":"正则表达式实战"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>正则表达式实战 | George_ES</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"> <!-- 添加看板娘-->
+  </noscript>
+    <script src="/live2d-widget/autoload.js"></script>
+  
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">George_ES</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">少女情怀总是诗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">4</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">48</span></a></li>
+        <li class="menu-item menu-item-knowledge"><a href="/knowledge" rel="section"><i class="fas fa-meteor fa-fw"></i>知识星球</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">28</span></a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>程序猿生</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E5%8F%96"><span class="nav-number">1.</span> <span class="nav-text">提取</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8D%95%E8%8E%B7%E7%BB%84"><span class="nav-number">1.1.</span> <span class="nav-text">捕获组</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E6%8D%95%E8%8E%B7%E7%BB%84"><span class="nav-number">1.1.1.</span> <span class="nav-text">命名捕获组</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E9%87%8C%E9%9D%A2%EF%BC%8C%E6%80%8E%E4%B9%88%E8%AE%A1%E7%AE%97%E6%8D%95%E8%8E%B7%E7%BB%84%E7%9A%84%E4%B8%AA%E6%95%B0"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">正则里面，怎么计算捕获组的个数?</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%9E%E6%8D%95%E8%8E%B7%E7%BB%84"><span class="nav-number">1.2.</span> <span class="nav-text">非捕获组</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95"><span class="nav-number">2.</span> <span class="nav-text">测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%BF%E6%8D%A2"><span class="nav-number">3.</span> <span class="nav-text">替换</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ES"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">ES</p>
+  <div class="site-description" itemprop="description">90后程序猿</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+          </div>
+        </div>
+      </div>
+      
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap" id="tag-cloud">
+          <h3 class="widget-title">标签云</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas height="250" id="resCanvas" style="width=70%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Comet/" rel="tag">Comet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RTK/" rel="tag">RTK</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RegExp/" rel="tag">RegExp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/" rel="tag">css</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/" rel="tag">github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hooks/" rel="tag">hooks</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jsx/" rel="tag">jsx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/" rel="tag">network</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/" rel="tag">npm</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/object/" rel="tag">object</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/promise/" rel="tag">promise</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react/" rel="tag">react</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redux/" rel="tag">redux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rest/" rel="tag">rest</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/token/" rel="tag">token</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/translation/" rel="tag">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typeScript/" rel="tag">typeScript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/" rel="tag">webpack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/websocket/" rel="tag">websocket</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yarn/" rel="tag">yarn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%93%E5%AD%98/" rel="tag">缓存</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AE%E8%AF%A2/" rel="tag">轮询</a><span class="tag-list-count">1</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/george-es" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/27/frontEnd/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="ES">
+      <meta itemprop="description" content="90后程序猿">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="George_ES">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          正则表达式实战
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-07-27 00:00:00" itemprop="dateCreated datePublished" datetime="2021-07-27T00:00:00+08:00">2021-07-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>7.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>13 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="/2021/07/27/frontEnd/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/image-20210727164143669.png" alt="image-20210727164143669"></p>
+<span id="more"></span>
+
+
+
+<p><strong>写正则表达式第一步，要先匹配，匹配的出来，再去执行的提取，替换，搜索等操作</strong></p>
+<p>在前端中，正则表达式有几种表现形式</p>
+<p>对于 string 而言，提供了 match，matchAll，search，replace，split</p>
+<p>对于 regExp 而言，提供了exec，test，</p>
+<p>正则表达式在工作中有几种使用场景，提取，测试，替换，搜索</p>
+<h2 id="提取"><a href="#提取" class="headerlink" title="提取"></a>提取</h2><blockquote>
+<p>指在一个字符串中，提取用户想要的数据，譬如说，<code>abcde12345</code> 中提取英文字母 <code>abcde</code></p>
+</blockquote>
+<p>提取涉及的方法是 match 和 exec，提取是对标志位敏感的，也就是 <code>g</code></p>
+<p><strong>返回值</strong></p>
+<ul>
+<li><p>如果使用g标志，则将返回与完整正则表达式匹配的所有结果，但不会返回<strong>捕获组</strong>。</p>
+</li>
+<li><p>如果未使用g标志，则仅返回第一个完整匹配及其相关的捕获组（<code>Array</code>）。 在这种情况下，返回的项目将具有如下所述的其他属性。</p>
+</li>
+<li><p>其他属性</p>
+<ul>
+<li><code>groups</code>: 一个捕获组数组 或 <code>undefined</code>（如果没有定义命名捕获组）</li>
+<li><code>index</code>: 匹配的结果的开始位置</li>
+<li><code>input</code>: 搜索的字符串</li>
+</ul>
+</li>
+</ul>
+<p>一个 <code>Array</code>，其内容取决于global（<code>g</code>）标志的存在与否，如果未找到匹配则为 <code>null</code></p>
+<p>正则表达式分组分为捕获组和非捕获组</p>
+<h3 id="捕获组"><a href="#捕获组" class="headerlink" title="捕获组"></a>捕获组</h3><p>正则里面是用成对的小括号来表示<strong>分组（捕获组）</strong>的，如<code>(\d)</code>表示一个分组，<code>(\d)(\d)</code>表示有两个分组，<code>(\d)(\d)(\d)</code>表示有三个分组，有几对小括号元字符组成，就表示有几个分组，以此类推。</p>
+<p><strong>想提取信息，要用捕获组，也就是<code>()</code>，由于要用到捕获组，这里不能带 g</strong></p>
+<p>分组的意义在于：</p>
+<ul>
+<li><p>提取数据，或者说用于拆分匹配到的数据，也就是说，匹配到的数据可能很多，不好拆，这时候，就可以用捕获组了。</p>
+<p>不使用捕获组情况，我们想提取数字，但它返回的是一个整体，达不到我们的预期</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; &#x27;abcde12345a12312312&#x27;.match(/[a-z]+\d+[a-z]+\d+/)</span><br><span class="line">&lt; [&quot;abcde12345a12312312&quot;, index: 0, input: &quot;abcde12345a12312312&quot;, groups: undefined]</span><br></pre></td></tr></table></figure>
+
+<p>捕获组的数据从返回数组的第二个下标开始</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; &#x27;abcde12345a12312312&#x27;.match(/[a-z]+(\d+)[a-z]+(\d+)/)</span><br><span class="line">&lt; [&quot;abcde12345a12312312&quot;, &quot;12345&quot;, &quot;12312312&quot;, index: 0, input: &quot;abcde12345a12312312&quot;, groups: undefined]</span><br></pre></td></tr></table></figure></li>
+<li><p>简写重复模式</p>
+<blockquote>
+<p>也就是说，重复的你不必要写多次，这里的重复是指强重复，不只是格式要相等，值也必须相等。</p>
+</blockquote>
+<p>譬如说重复数字</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; &#x27;1212aa1212&#x27;.match(/(\d&#123;4&#125;aa\1)/)</span><br><span class="line">&lt; [&quot;1212aa&quot;, &quot;1212aa&quot;, index: 0, input: &quot;1212aa1212&quot;, groups: undefined]</span><br><span class="line">// 前面捕获了1212，因此 \1 代表识别的 1212，也就是说他是用于相同值的</span><br><span class="line"></span><br><span class="line">&gt; &#x27;1212aa1313&#x27;.match(/(\d&#123;4&#125;)aa\1/)</span><br><span class="line">&lt; null</span><br><span class="line">// 因为 1313 不等于 1212，虽然格式还有类型都一样，但是也不行，反向引用可以理解为全匹配</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>正则里面，引用捕获组的语法是这样的number，其中number是大于等于1的正整数（PS：，group0表示整个正则表达式匹配到的内容，而捕获组的编号是从1开始的，也就是1，大多数正则引擎最大支持99个捕获组，也就是99）。我们知道，正则表达式是从字符串的左边开始往右匹配的，且一般都是消耗掉已经被匹配的字符串的（环视语法不需要消耗字符串）。因此，当前面已经出现了捕获组1、2、3等等的捕获组，我们就可以在后面的正则里面用1、2、3等来进行相应的引用了。</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="命名捕获组"><a href="#命名捕获组" class="headerlink" title="命名捕获组"></a>命名捕获组</h4><p>捕获组分为编号捕获组和命名捕获组，上面的例子是编号捕获组，默认也是指编号捕获组。</p>
+<p>命名捕获组的语法如下</p>
+<blockquote>
+<p><code>(?&lt;name&gt;group)</code> 或 <code>(?&#39;name&#39;group)</code>，其中<code>name</code>表示捕获组的名称，<code>group</code>表示捕获组里面的正则。</p>
+</blockquote>
+<p>命名捕获租和编号捕获组的区别在于前者更加直观，就好比域名和 IP 地址的关系一样，可以用名称描述捕获到的内容的含义。</p>
+<p>譬如年月日</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 编号捕获组</span><br><span class="line">(\d&#123;4&#125;)-(\d&#123;2&#125;)-(\d&#123;2&#125;)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 命名捕获组</span><br><span class="line">(?&#x27;year&#x27;\d&#123;4&#125;)-(?&#x27;month&#x27;\d&#123;2&#125;)-(?&#x27;day&#x27;\d&#123;2&#125;)</span><br><span class="line">或</span><br><span class="line">(?&lt;year&gt;\d&#123;4&#125;)-(?&lt;month&gt;\d&#123;2&#125;)-(?&lt;day&gt;\d&#123;2&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>例</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&gt; &#x27;1992-01-01&#x27;.match(/(?&lt;year&gt;\d&#123;4&#125;)-(?&lt;month&gt;\d&#123;2&#125;)-(?&lt;day&gt;\d&#123;2&#125;)/)</span><br><span class="line">&lt; [&quot;1992-01-01&quot;, &quot;1992&quot;, &quot;01&quot;, &quot;01&quot;,</span><br><span class="line">  	groups: &#123;</span><br><span class="line">     year: &quot;1992&quot;,</span><br><span class="line">     month: &quot;01&quot;,</span><br><span class="line">     day: &quot;01&quot;</span><br><span class="line">  &#125;]</span><br><span class="line">  </span><br><span class="line">&gt; &#x27;1992-01-01&#x27;.match(/(\d&#123;4&#125;)-(\d&#123;2&#125;)-(\d&#123;2&#125;)/)</span><br><span class="line">&lt; [&quot;1992-01-01&quot;, &quot;1992&quot;, &quot;01&quot;, &quot;01&quot;, groups: undefined]</span><br></pre></td></tr></table></figure>
+
+<p>可以看出，用了命名捕获组，groups 里面才有值</p>
+<blockquote>
+<p>Q：命名捕获组能用?:改为非捕获组吗？</p>
+<p>A：不行的，原因很简单，命名捕获组的作用本来就是为了更明确地给捕获组捕获到的内容命名的，如果能用?:改为非捕获组，那就失去了它本来的价值了。</p>
+</blockquote>
+<blockquote>
+<p>Q：命名捕获组是怎么反向引用的？</p>
+<p>A：可以用<code>\k&lt;name&gt;</code> 或 <code>\k&#39;name&#39;</code>的形式来对前面的命名捕获组捕获到的值进行引用。</p>
+<p>​    <code>(\d&#123;2&#125;)\1</code><br>​    可以改写为<br>​    <code>(?&lt;key&gt;\d&#123;2&#125;)\k&lt;key&gt;</code><br>​    其中，<code>key</code>是我们对捕获组的命名，而<code>\k&lt;key&gt;</code>是对<code>key</code>这个分组捕获到的内容进行引用，所谓的引用，就是利用它前面匹配到的字符串的值</p>
+</blockquote>
+<h5 id="正则里面，怎么计算捕获组的个数"><a href="#正则里面，怎么计算捕获组的个数" class="headerlink" title="正则里面，怎么计算捕获组的个数?"></a>正则里面，怎么计算捕获组的个数?</h5><p>从左到右，计算 <code>(</code> 的个数，有几个 <code>(</code> 就有几个捕获组，编号的顺序也是按出现的先后顺序去排序的，但是有几个情况除外</p>
+<ul>
+<li><code>\(</code> 被转义过的括号不算</li>
+<li><code>(?:)</code> 非捕获组不算</li>
+<li><code>[(]</code> 放在方括号中的也不算，因为在方括号中也表示转义过，方括号表示<code>或</code>。</li>
+</ul>
+<p>该正则表达式有几个捕获组呢？</p>
+<ul>
+<li><p><code>(\d&#123;4&#125;)-(\d&#123;2&#125;)-(\d&#123;2&#125;)</code> </p>
+<p>从左到右，可以发现有三个<code>(</code>，且没有除外的情况，因此有三个捕获组</p>
+</li>
+<li><p><code>(?:\d&#123;4&#125;)-(\d&#123;2&#125;)-(\d&#123;1,2&#125;)</code></p>
+<p>从左到右，有三个 <code>(</code>，第一个 <code>(</code> 是非捕获组，在除外情况中，因此，有两个捕获组</p>
+</li>
+<li><p> <code>(\d)|(\d)</code></p>
+</li>
+</ul>
+<p>  这个情况呢？中间有个 <code>|</code> 表示或，也就是说前面那个正则匹配了，就不匹配后面，否则，就匹配后面的</p>
+<p>  按照之前的讨论，从左到右，有两个 <code>(</code> ，且没有除外的情况，因此有两个捕获组，这时候小伙伴就问了，只捕获了一个呀，是的，只捕获了一个，不过捕获组还是两个，另外一个不参与匹配罢了。</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; &#x27;1992-01&#x27;.match(/(?&lt;month&gt;\d&#123;2&#125;)|(?&lt;day&gt;\d&#123;2&#125;)/)</span><br><span class="line">&lt; [&quot;19&quot;, &quot;19&quot;, undefined,</span><br><span class="line">		groups: &#123;</span><br><span class="line">			month: &quot;19&quot;,</span><br><span class="line">			day: undefined</span><br><span class="line">		&#125;</span><br><span class="line">	]</span><br></pre></td></tr></table></figure>
+
+<p>  从打印信息可以看出，<code>month</code> 已经满足匹配条件了，因此 <code>day</code> 就不用参与匹配了 </p>
+<h3 id="非捕获组"><a href="#非捕获组" class="headerlink" title="非捕获组"></a>非捕获组</h3><blockquote>
+<p>非捕获组的语法是在捕获组的基础上，在左括号的右侧加上<code>?:</code>就可以了，那就是<code>(?:)</code></p>
+<p>例如，<code>(\d)</code>表示捕获组，而<code>(?:\d)</code>表示非捕获组。</p>
+<p>既然是非捕获组，那它就<strong>不会</strong>把正则匹配到的内容保存到分组里面。</p>
+</blockquote>
+<p>所以<code>(?:\d&#123;4&#125;)-(?:\d&#123;2&#125;)-(?:\d&#123;2&#125;)</code>和<code>\d&#123;4&#125;-\d&#123;2&#125;-\d&#123;2&#125;</code>匹配到的内容其实是一样的。</p>
+<p>什么时候用到非捕获组呢？</p>
+<ul>
+<li><p>不需要用到分组里面的内容的时候，用非捕获组，主要是为了<code>提升效率</code>，因为捕获组多了一步保存数据的步骤，所以一般会多耗费一些时间，虽然时间很短。</p>
+<p><code>(?:\d&#123;4&#125;)-(?:\d&#123;2&#125;)-(?:\d&#123;2&#125;)</code>和<code>\d&#123;4&#125;-\d&#123;2&#125;-\d&#123;2&#125;</code>虽然这两个是一样的，但一般情况下，为了提高些许的性能，还是推荐用非捕获组。</p>
+</li>
+<li><p>用在可选分支的时候，当我们<code>不需要分组里面的数据的时候</code>，也可以用非捕获组，如果需要的话，则用捕获组。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x27;123,234,345,657,789&#x27;.match(/^\d+(?:,\d+)*$/)</span><br></pre></td></tr></table></figure>
+
+<p>通过 <code>^</code> 可以限制<strong>字符串</strong>以数字开头，<code>$</code>限制<strong>字符串</strong>以数字结尾，<code>()</code>用于分组，量词 <code>+</code>，<code>*</code> 用来对它前面的分组进行 0 次或多次的重复匹配。</p>
+<blockquote>
+<p><code>^</code>表示匹配开头位置，而<code>$</code>表示匹配结尾的位置。但我们需要对一个字符串模式进行校验的时候，一般需要在前后加上这两个限制符号，以保证是从开始位置开始匹配的，到某处结尾，不然校验的结果往往是不对的。比如校验手机号码、身份证号码、密码等等，就需要加上 <code>^</code> 和 <code>$</code> ；而如果只是<strong>匹配数据</strong>的话，一般是不需要加上的，因为我们要匹配的数据往往有可能在一大串字文本的任何位置上，加上了反而会适得其反。</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>exec 和 match 用法是一样的，只不过 exec 用在 RegExp 类型中，而 match 用在 string 类型中</strong></p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><blockquote>
+<p>用于校验正则表达式是否符合这一类的字符串</p>
+</blockquote>
+<p>测试涉及到的方法是 <code>test</code>，它对标志位敏感，也就是 <code>g</code></p>
+<p><code>test</code> 比较简单，就是判断字符串中是否包含匹配结果，包含返回 <code>true</code>，不包含返回 <code>false</code>，常用于 <code>if</code> 语句中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/正则表达式/.test(str)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>没有 <code>g</code> 情况</p>
+<p>这也是最常用的，它会根据你的字符串，进行匹配，若存在，就返回 <code>true</code>，否则返回 <code>false</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; /hello/.test(&#x27;hello hello world&#x27;)</span><br><span class="line">&lt; true</span><br></pre></td></tr></table></figure></li>
+<li><p>有 <code>g</code> 情况</p>
+<p>如果设置了全局标志位，<code>test</code> 的执行会改变正则表达式 <code>lastIndex</code> 属性，连续的执行 <code>test</code> 方法，后续的执行会从 <code>lastIndex</code> 处开始匹配字符串。</p>
+<p>是不是很绕，下面用个例子来解释这句话</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt; let reg = /hello/g</span><br><span class="line">	reg.test(&#x27;hello hello world&#x27;) // lastIndex 0</span><br><span class="line">	reg.test(&#x27;hello hello world&#x27;) // lastIndex 1</span><br><span class="line">	reg.test(&#x27;hello hello world&#x27;) // lastIndex 2 第三次从 world 开始匹配，不等于 hello 因此打印 false</span><br><span class="line">	</span><br><span class="line">&lt; true</span><br><span class="line">	true</span><br><span class="line">	false</span><br></pre></td></tr></table></figure>
+
+<p>第三次为什么打印出了 false 呢？</p>
+<p>就是因为这个 <code>g</code>， 它的出现，会将缓存下一次匹配的开始位置，注意，这里的 test 内容是可以动态改变的，但位置不变。也就是说</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&gt; let reg = /hello/g</span><br><span class="line">	reg.test(&#x27;hello&#x27;)</span><br><span class="line">	reg.test(&#x27;hello hello&#x27;)</span><br><span class="line">	reg.test(&#x27;hello hello hello&#x27;)</span><br><span class="line">	...</span><br><span class="line">	</span><br><span class="line">&lt; true</span><br><span class="line">	true</span><br><span class="line">	true</span><br></pre></td></tr></table></figure>
+
+<p>如果每次执行，都在字符串后增加字符，且这个字符满足正则表达式，则会一直匹配下去，永远为 <code>true</code>，<code>lastIndex</code> 只有匹配到 <code>false</code> 后，才会将 <code>lastIndex</code> 置为 <code>0</code>。</p>
+</li>
+</ul>
+<h2 id="替换"><a href="#替换" class="headerlink" title="替换"></a>替换</h2><blockquote>
+<p>将字符串的某一部分替换成另一部分</p>
+</blockquote>
+<p>在 JS 世界中，<code>String</code> 类型提供了 <code>replace</code> 方法，它用于在字符串中用一些字符替换另一些字符，或替换一个与正则表达式匹配的子串。</p>
+<p>它对标志位敏感，也就是 <code>g</code></p>
+<p><code>replace</code> 接受两个参数</p>
+<ul>
+<li><code>pattern</code> 这个参数可以是字符串或是RegExp对象</li>
+<li><code>replacement</code> 替换匹配项的字符串或处理函数的返回值</li>
+</ul>
+<p>返回值</p>
+<ul>
+<li><p>当未找到匹配项时，返回原始字符串</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; &#x27;abcde&#x27;.replace(&#x27;zz&#x27;, &#x27;bb&#x27;)</span><br><span class="line">&lt; &#x27;abcde&#x27;</span><br></pre></td></tr></table></figure></li>
+<li><p>当 <code>pattern</code> 为字符串或者为<strong>非全局</strong>的 <code>RegExp</code> 对象的时候，只替换找到的第一项匹配项。</p>
+<p>为<strong>全局</strong> <code>RegExp</code> 对象的时候，全部替换</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt; &#x27;aaaa&#x27;.replace(&#x27;a&#x27;, &#x27;c&#x27;)</span><br><span class="line">	&#x27;aaaa&#x27;.replace(/\w/, &#x27;c&#x27;)</span><br><span class="line">	&#x27;aaaa&#x27;.replace(/\w&#123;2&#125;/, &#x27;cc&#x27;)  // 这里是因为有两个 \w，替换成两个 cc</span><br><span class="line">	&#x27;aaaa&#x27;.replace(/\w/g, &#x27;c&#x27;)  // 有 g 说明全局 RegExp，全部替换</span><br><span class="line">&lt; &#x27;caaa&#x27;</span><br><span class="line">	&#x27;caaa&#x27;</span><br><span class="line">	&#x27;ccaa&#x27;</span><br><span class="line">	&#x27;cccc&#x27;</span><br></pre></td></tr></table></figure></li>
+<li><p>当 <code>replacement</code> 为函数时</p>
+<blockquote>
+<p>函数的返回值将作为替换字符串</p>
+<p>函数的参数对应匹配项，第一个参数是匹配的值，第二个参数是原字符串中匹配项的 index，第三个参数是输入值</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; &#x27;abcd&#x27;.replace(/\w/g, (v) =&gt; &#123; console.log(v) return &#x27;b&#x27; &#125;)</span><br><span class="line">&lt; </span><br><span class="line">	&#x27;a&#x27;</span><br><span class="line">	&#x27;b&#x27;</span><br><span class="line">	&#x27;c&#x27;</span><br><span class="line">	&#x27;d&#x27;</span><br><span class="line">	&#x27;bbbb&#x27;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt; &#x27;a11bcd&#x27;.replace(/[a-z]/g, (...r) =&gt; &#123;console.log(r); return &#x27;ttt&#x27;&#125;)</span><br><span class="line">&lt; [&#x27;a&#x27;, 0, &#x27;a11bcd&#x27;]</span><br><span class="line">	[&#x27;b&#x27;, 3, &#x27;a11bcd&#x27;]</span><br><span class="line">	[&#x27;c&#x27;, 4, &#x27;a11bcd&#x27;]</span><br><span class="line">	[&#x27;d&#x27;, 5, &#x27;a11bcd&#x27;]</span><br><span class="line">	&#x27;ttt11ttttttttt&#x27;</span><br></pre></td></tr></table></figure></li>
+<li><p>特殊的 <code>$</code></p>
+<p><code>replacement</code> 中的 <code>$</code> 字符具有特定的含义。如下表所示，它说明从模式匹配得到的字符串将用于替换。</p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$1、$2、…、$99</td>
+<td>表示在 <code>regexp</code> 中的第 1 到第 99 个分组</td>
+</tr>
+<tr>
+<td>$&amp;</td>
+<td>与 <code>regexp</code> 相匹配的子串</td>
+</tr>
+<tr>
+<td>$`</td>
+<td>位于匹配子串左侧的文本</td>
+</tr>
+<tr>
+<td>$’</td>
+<td>位于匹配子串右侧的文本</td>
+</tr>
+<tr>
+<td>$$</td>
+<td>直接量符号</td>
+</tr>
+</tbody></table>
+<p><strong>替换的逻辑规则，首先要匹配上，然后才能替换，没有匹配上的保留原样</strong></p>
+<ul>
+<li><p>第一种情况</p>
+<p>分组数据通过 <code>$</code> 表示</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; &#x27;aas11AA&#x27;.replace(/([a-z]+)(\d+)/, &#x27;$1&#x27;);</span><br><span class="line">&lt; &#x27;aasAA&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>正则表达式匹配 <code>aas11</code>，$1 对应的是第一个分组 <code>([a-z]+)</code>，该分组对应的是 <code>aas</code>，因此 <code>aas11</code> 替换为 <code>aas</code></p>
+<p>如果我们将第一个分组取消，同理得到结果是 <code>11AA</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; &#x27;aas11AA&#x27;.replace(/[a-z]+(\d+)/, &#x27;$1&#x27;)</span><br><span class="line">&lt; &#x27;11AA&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>如果 <code>$</code> 溢出怎么办?</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; &#x27;aas11AA&#x27;.replace(/([a-z]+)(\d+)/, &#x27;$9&#x27;)</span><br><span class="line">&lt; &#x27;$9AA&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>在这里 <code>$9</code> 是没有的，溢出了，只有 <code>$1</code> ，<code>$2</code>，那么它会当成普通字符处理</p>
+</li>
+</ul>
+<ul>
+<li><p>第二种情况</p>
+<p><code>$&amp;</code> 就是将识别到的分组，替换，感觉是原封不动输出</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; &#x27;aas11AA11&#x27;.replace(/[a-z]+(\d+)/, &#x27;$&amp;&#x27;)</span><br><span class="line">&lt; &#x27;aas11AA11&#x27;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<ul>
+<li><p>第三种情况</p>
+<p>$` 分组左侧部分替换到分组中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; &#x27;aa11AA&#x27;.replace(/(\d+)/g, &#x27;$`&#x27;);</span><br><span class="line">&lt; &#x27;aaaaAA&#x27;</span><br></pre></td></tr></table></figure></li>
+<li><p>第四种情况</p>
+<p> <code>$&#39;</code> 分组右侧部分替换到分组中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; &#x27;aa11AA&#x27;.replace(/(\d+)/g, &#x27;$`&#x27;);</span><br><span class="line">&lt; &#x27;aaAAAA&#x27;</span><br></pre></td></tr></table></figure></li>
+<li><p>第五种情况</p>
+<p>将分组内容匹配成 <code>$</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; &#x27;aa11AA&#x27;.replace(/(\d+)/g, &#x27;$$&#x27;);</span><br><span class="line">&lt; &#x27;aa$AA&#x27;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+      
+
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>ES
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2021/07/27/frontEnd/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" title="正则表达式实战">http://example.com/2021/07/27/frontEnd/正则表达式/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/RegExp/" rel="tag"><i class="fa fa-tag"></i> RegExp</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/07/22/network/%E7%A9%BA%E4%B8%AD%E7%A2%B0%E6%92%9E/" rel="prev" title="">
+                  <i class="fa fa-chevron-left"></i> 
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/07/28/hooks/useUrlState/" rel="next" title="一天一个hooks - useUrlState">
+                  一天一个hooks - useUrlState <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ES</span>
+</div>
+<div class="busuanzi-count">
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

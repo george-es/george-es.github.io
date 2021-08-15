@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","version":"8.6.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta property="og:type" content="article">
+<meta property="og:title" content="你逗我吧，这叫协商缓存？">
+<meta property="og:url" content="http://example.com/2021/03/03/network/%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%88%91%E8%AF%B4%E5%AE%83%E7%94%A8%E7%9A%84%E6%98%AF%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98/index.html">
+<meta property="og:site_name" content="George_ES">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/03/03/network/%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%88%91%E8%AF%B4%E5%AE%83%E7%94%A8%E7%9A%84%E6%98%AF%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98/image-20210720202108087.png">
+<meta property="og:image" content="http://example.com/2021/03/03/network/%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%88%91%E8%AF%B4%E5%AE%83%E7%94%A8%E7%9A%84%E6%98%AF%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98/wecom-temp-6c95fe83b2c1f29be6f09b0f0b6d517b-6783234.png">
+<meta property="og:image" content="http://example.com/2021/03/03/network/%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%88%91%E8%AF%B4%E5%AE%83%E7%94%A8%E7%9A%84%E6%98%AF%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98/image-20210720214947972.png">
+<meta property="og:image" content="http://example.com/2021/03/03/network/%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%88%91%E8%AF%B4%E5%AE%83%E7%94%A8%E7%9A%84%E6%98%AF%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98/image-20210720204441602.png">
+<meta property="og:image" content="http://example.com/2021/03/03/network/%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%88%91%E8%AF%B4%E5%AE%83%E7%94%A8%E7%9A%84%E6%98%AF%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98/image-20210722172439044.png">
+<meta property="article:published_time" content="2021-03-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-07-24T14:08:25.191Z">
+<meta property="article:author" content="ES">
+<meta property="article:tag" content="network">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/03/03/network/%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%88%91%E8%AF%B4%E5%AE%83%E7%94%A8%E7%9A%84%E6%98%AF%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98/image-20210720202108087.png">
+
+
+<link rel="canonical" href="http://example.com/2021/03/03/network/%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%88%91%E8%AF%B4%E5%AE%83%E7%94%A8%E7%9A%84%E6%98%AF%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2021/03/03/network/%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%88%91%E8%AF%B4%E5%AE%83%E7%94%A8%E7%9A%84%E6%98%AF%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98/","path":"2021/03/03/network/接口和我说它用的是协商缓存/","title":"你逗我吧，这叫协商缓存？"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>你逗我吧，这叫协商缓存？ | George_ES</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"> <!-- 添加看板娘-->
+  </noscript>
+    <script src="/live2d-widget/autoload.js"></script>
+  
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">George_ES</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">少女情怀总是诗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">4</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">48</span></a></li>
+        <li class="menu-item menu-item-knowledge"><a href="/knowledge" rel="section"><i class="fas fa-meteor fa-fw"></i>知识星球</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">28</span></a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>程序猿生</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Cache-Control"><span class="nav-number">1.</span> <span class="nav-text">Cache-Control</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Expires"><span class="nav-number">2.</span> <span class="nav-text">Expires</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Last-Modified"><span class="nav-number">3.</span> <span class="nav-text">Last-Modified</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#If-Modified-Since"><span class="nav-number">4.</span> <span class="nav-text">If-Modified-Since</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ETag"><span class="nav-number">5.</span> <span class="nav-text">ETag</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#If-None-Match"><span class="nav-number">6.</span> <span class="nav-text">If-None-Match</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%BC%93%E5%AD%98%E6%9C%89%E4%BB%80%E4%B9%88%E5%A5%BD%E5%A4%84%E5%91%A2%EF%BC%9F"><span class="nav-number">7.</span> <span class="nav-text">使用缓存有什么好处呢？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Chrome-%E7%9A%84%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82-Size-%E6%83%85%E5%86%B5"><span class="nav-number">8.</span> <span class="nav-text">Chrome 的网络请求 Size 情况</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ES"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">ES</p>
+  <div class="site-description" itemprop="description">90后程序猿</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+          </div>
+        </div>
+      </div>
+      
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap" id="tag-cloud">
+          <h3 class="widget-title">标签云</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas height="250" id="resCanvas" style="width=70%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Comet/" rel="tag">Comet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RTK/" rel="tag">RTK</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RegExp/" rel="tag">RegExp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/" rel="tag">css</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/" rel="tag">github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hooks/" rel="tag">hooks</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jsx/" rel="tag">jsx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/" rel="tag">network</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/" rel="tag">npm</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/object/" rel="tag">object</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/promise/" rel="tag">promise</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react/" rel="tag">react</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redux/" rel="tag">redux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rest/" rel="tag">rest</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/token/" rel="tag">token</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/translation/" rel="tag">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typeScript/" rel="tag">typeScript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/" rel="tag">webpack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/websocket/" rel="tag">websocket</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yarn/" rel="tag">yarn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%93%E5%AD%98/" rel="tag">缓存</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AE%E8%AF%A2/" rel="tag">轮询</a><span class="tag-list-count">1</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/george-es" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/03/network/%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%88%91%E8%AF%B4%E5%AE%83%E7%94%A8%E7%9A%84%E6%98%AF%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="ES">
+      <meta itemprop="description" content="90后程序猿">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="George_ES">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          你逗我吧，这叫协商缓存？
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-03-03 00:00:00" itemprop="dateCreated datePublished" datetime="2021-03-03T00:00:00+08:00">2021-03-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">网络</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="/2021/03/03/network/%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%88%91%E8%AF%B4%E5%AE%83%E7%94%A8%E7%9A%84%E6%98%AF%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98/image-20210720202108087.png" alt="image-20210720202108087"></p>
+<span id="more"></span>
+
+<blockquote>
+<p><strong>前端缓存分两个部分，HTTP 缓存和浏览器缓存，这里介绍的是 HTTP 缓存</strong></p>
+<p>事情是这样的，我们需要接入语言系统，由于缓存的原因，导致在语言库中加入新语言，前端总拿不到，几个回车键后，发现就是缓存搞得鬼，然后我和同事说，这是强缓存，建议改成协商缓存，他说：</p>
+</blockquote>
+<p><img src="/2021/03/03/network/%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%88%91%E8%AF%B4%E5%AE%83%E7%94%A8%E7%9A%84%E6%98%AF%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98/wecom-temp-6c95fe83b2c1f29be6f09b0f0b6d517b-6783234.png" alt="wecom-temp-6c95fe83b2c1f29be6f09b0f0b6d517b"></p>
+<p><img src="/2021/03/03/network/%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%88%91%E8%AF%B4%E5%AE%83%E7%94%A8%E7%9A%84%E6%98%AF%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98/image-20210720214947972.png" alt="image-20210720214947972"></p>
+<p><strong>你逗我吧，这叫协商缓存？</strong></p>
+<p>我们知道，为了减轻服务器压力等众多好处，<code>HTTP</code> 提供了缓存机制，可以不使用缓存，也可以使用缓存，由 <code>header</code> 头中的字段去控制。</p>
+<p>如果不想使用缓存</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Cache-Control: no-store</span><br></pre></td></tr></table></figure>
+
+<p>表示完全不在客户端使用缓存</p>
+<p>如果想使用缓存，针对不同需求又分为两种场景，后端数据变化不大的，如历史订单，商品信息，个人信息等，后端数据变化比较频繁的，如博客中列表，前者可以用强缓存来优化性能，后者可以用协商缓存优化性能。</p>
+<p><strong>强缓存</strong>可以理解为，除非到了约定的时间，否则没人能够让我去访问服务器，它比较懒。</p>
+<p><strong>协商缓存</strong>可以理解为，比较劳心，时不时会去服务器上看看数据有没有变化，如果变化了，我就更新下，它就像勤快的兔子。</p>
+<p>总结一下可以这样说</p>
+<blockquote>
+<p>根据是否要强制向服务器发送请求，我们把缓存分成强缓存和协商缓存</p>
+<p>浏览器第一次请求资源后，再次请求时会有两个步骤，浏览器会根据响应头的 <code>Expires</code> 和 <code>Cache-Control</code> 来判断是否命中强缓存，命中则从缓存中获取，若未命中就会发送请求到服务器，请求会带上 <code>If-Modified-Since</code> 和 <code>If-None-Match</code> ，他们的值分别时第一次请求返回的 <code>Last-Modified</code> 或 <code>Etag</code>，有服务器对比这一字段判断是否命中，若命中服务器，返回 304，并不返回资源，浏览器直接从缓冲获取，否则会返回实践内容，更新 <code>header</code></p>
+</blockquote>
+<p>说白了缓存就是由 header 头上的几个字段控制的，强缓存由 <code>Cache-Control</code>，<code>Expires</code>，协商缓存由<code>If-Modified-Since</code>，<code>If-None-Match</code>，<code>Last-Modified</code>，<code>If-None-Match</code>，强缓存返回状态是 <code>200</code>，<code>Size</code> 中可以看到是 <code>(disk cache)</code>，而协商缓存返回状态是 <code>304</code></p>
+<h3 id="Cache-Control"><a href="#Cache-Control" class="headerlink" title="Cache-Control"></a>Cache-Control</h3><p>强缓存 <code>HTTP/1.1</code> 产物 <code>Cache-Control</code> 用于<strong>响应</strong>首部，除了上述的值外，还有其他的值，它对应的含义也不一样，我们汇总下</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>public</td>
+<td>所有内容都将被缓存(客户端和代理服务器都可缓存)</td>
+</tr>
+<tr>
+<td>private</td>
+<td>内容只缓存到私有缓存中(仅客户端可以缓存，代理服务器不可缓存)</td>
+</tr>
+<tr>
+<td>max-age = xxx (单位: 秒)</td>
+<td>强缓存，缓存的内容将在 xxx 秒后失效，在此之前<strong>直接</strong>使用本地缓存资源，失效后必须向服务器确认资源是否已经改变。（有这个标志一定是强缓存了）</td>
+</tr>
+<tr>
+<td>no-store</td>
+<td>不适用缓存</td>
+</tr>
+<tr>
+<td>no-cache</td>
+<td>不使用强缓存只使用协商缓存</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Cache-Control: public, max-age=7200, must-revalidate</span><br><span class="line">Date: Tue, 2 Feb 2021 12:43:53 GMT</span><br></pre></td></tr></table></figure>
+
+<p>表示 <code>7200</code> 秒后缓存过期，它是 <code>Date</code> 在字段时间后面加上相应的秒数，由于 <code>Date</code> 字段和 <code>Cache-Control</code> 都是 header 头中的，因此不会出现 <code>Expires</code> 时间不准这个问题。</p>
+<p><strong>publish 和 private 有什么区别吗？</strong></p>
+<p>publish 表示谁都可以缓存，private 表示只允许私有缓存，我们知道，一条请求不是简单从从客户端到服务器，中间还可能存在代理服务器，代理服务器有代理缓存，它的好处是可以降低服务器带宽，如果此时设置了 <code>private</code>，代理服务器就不允许缓存资源了，防止资源泄漏，打比方，我们的用户名秘码，当然只能存储在本地的私有缓存中，如果存在代理服务器中，大家都可以拿到了。如果是网站的 logo 此时设置 publish ，反而可以节省带宽，大家都可以共享。</p>
+<p>这时候有个问题了，你说 max-age 如果设为 0 是不是就不使用缓存了呢？</p>
+<a href="#">Post not found: no-cache,max-age=0,no-store一样吗? 点击这里查看这篇文章</a>
+<p>！！！ 待讨论</p>
+<h3 id="Expires"><a href="#Expires" class="headerlink" title="Expires"></a>Expires</h3><p>强缓存 <code>HTTP/1.0</code> 产物，表示缓存有效的绝对时间，用客户端时间和它进行对比，如果超过该时间，缓存失效</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Expires: Wed, 21 Oct 2015 07:28:00 GMT</span><br></pre></td></tr></table></figure>
+
+<p>在浏览器中，它会和 <code>new Date()</code> 进行对比，所以这有个很大的坑，如果用户修改了时间，就可以永远使用缓存数据。</p>
+<p><strong>如果 Cache-Control 和 Expires 同时出现，使用 Cache-Control</strong>，你就想着版本高的会覆盖版本低的。</p>
+<h3 id="Last-Modified"><a href="#Last-Modified" class="headerlink" title="Last-Modified"></a>Last-Modified</h3><p>协商缓存 <code>HTTP/1.0</code> 产物， <code>Last-Modified</code> 用于<strong>响应</strong>首部，它由服务器设定，是个缓存过期时间，这个值会带给下次请求的 <code>If-Modified-Since</code> 字段，它通常被用作一个验证器来判断接收到的或者存储的资源是否彼此一致。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Last-Modified: Wed, 21 Oct 2015 07:28:00 GMT</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="If-Modified-Since"><a href="#If-Modified-Since" class="headerlink" title="If-Modified-Since"></a>If-Modified-Since</h3><p>协商缓存 <code>HTTP/1.0</code> 产物，<code>If-Modified-Since</code> 用于<strong>请求</strong>首部，它会将上个响应头中的 <code>Last-Modified</code>  时间带给服务器，由服务器判断是否过期，如果过期了，会返回新数据和状态码 <code>200</code> ，反之就返回状态码 <code>304</code>。</p>
+<ul>
+<li>用于 <code>Get</code> 或 <code>HEAD</code> 请求中</li>
+<li>当与 <code>If-None-Match</code> 一同出现时，它（<code>If-Modified-Since</code>）会被忽略掉，除非服务器不支持 <code>If-None-Match</code>。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">If-Modified-Since: Wed, 21 Oct 2015 07:28:00 GMT</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>协商缓存的缺点</strong></p>
+<p> <code>If-Modified-Since</code> 和 <code>Last-Modified</code> 的主要缺点就是它只能精确到秒的级别，一旦在一秒的时间里出现了多次修改，那么 <code>Last-Modified</code> / <code>If-Modified-Since</code> 是无法体现的。</p>
+<h3 id="ETag"><a href="#ETag" class="headerlink" title="ETag"></a>ETag</h3><p>协商缓存 <code>HTTP/1.1</code> 产物，<code>ETag</code> 用在<strong>响应</strong>头，它可以让缓存更高效，并节省带宽，因为如果内容没有改变，Web服务器不需要发送完整的响应。而如果内容发生了变化，使用 <code>ETag</code> 有助于防止资源的同时更新相互覆盖（“空中碰撞”）。</p>
+<p><code>ETag</code> 有两种表现形式 <code>W/</code> 和 <code>&lt;etag_value&gt;</code>，前者表示</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ETag: &quot;33a64df551425fcc55e4d42a148795d9f25f89d4&quot;</span><br><span class="line">ETag: W/&quot;0815&quot;</span><br></pre></td></tr></table></figure>
+
+<p>值有两种表现形式</p>
+<ul>
+<li>W/ (大小写敏感)开头，表示使用<strong>弱验证器</strong>。 弱验证器很容易生成，但不利于比较。 强验证器是比较的理想选择，但很难有效地生成。 相同资源的两个弱<code>Etag</code>值可能语义等同，但不是每个字节都相同。</li>
+<li>双引号字符串具体值，实体标签唯一地表示所请求的资源。</li>
+</ul>
+<p><code>ETag</code> 配合不同的头部使用场景不同，譬如说<strong>空中碰撞（状态码: 412）</strong>,<strong>请求范围无法满足（状态码:416）</strong>，这些不在本次讨论范围内，可以移步到<a href>!你又撞机了吧</a></p>
+<p><strong>什么是空中碰撞？</strong></p>
+<p>空中碰撞也叫编辑冲突，指很多人在同一时间编辑同一页上内容, 当我们点击保存的时候, 如果这时候其他人和你一样, 编辑了同一份源文件, 但是比你提前保存了, 此时你编辑的文件相较于服务器却是旧的。 因此, 你在点击保存的时候, 修改的内容就会与最新的内容发生冲突。</p>
+<h3 id="If-None-Match"><a href="#If-None-Match" class="headerlink" title="If-None-Match"></a>If-None-Match</h3><p>协商缓存 <code>HTTP/1.1</code> 产物，<code>If-None-Match</code> 用于<strong>请求</strong>头，它将同个资源上一次响应头中的 <code>ETag</code> 值 <code>copy</code> 下来带到服务器中，由服务器进行校验，若值相同，则返回状态码 <code>304</code> ，若不同，则返回新数据和状态码 <code>200</code> ，并更新 <code>ETag</code> 值用于下次缓存校验。</p>
+<ul>
+<li>用着 <code>Get</code> 或 <code>HEAD</code> 请求中</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">If-None-Match: &quot;bfc13a64729c4290ef5b2c2730249c88ca92d82d&quot;</span><br><span class="line">If-None-Match: W/&quot;67ab43&quot;, &quot;54ed21&quot;, &quot;7892dd&quot;</span><br><span class="line">If-None-Match: *</span><br></pre></td></tr></table></figure>
+
+<p>值有三种表现形式</p>
+<ul>
+<li>字符串的是<strong>唯一</strong>表示所请求资源的实体标签，常用于数据精度很高场景</li>
+<li>包含一个 W/ 前缀，来提示应该采用<strong>弱比较算法</strong>，即两个文件除了每个比特都相同外，内容一致也可以认为是相同的。例如，如果两个页面仅仅在页脚的生成时间有所不同，就可以认为二者是相同的。</li>
+<li>星号是一个特殊值，可以代表任意资源。它只用在进行资源上传时，通常用于 <code>PUT</code>方法，用来检测拥有相同识别ID的资源是否已经上传过了，换另一种说法就是，上传文件时，将这个头设置为 *，判断服务器中是否有这个资源，如果资源存在，返回<strong>状态码 412</strong>，警告，再上传就会将之前的覆盖了，可以用于上传重名提醒之类的。</li>
+</ul>
+<p><strong>和HTTP1.0协商缓存对比优势</strong></p>
+<p><code>ETag</code> / <code>If-None-Match</code> 没有使用时间作为判断标准，而是使用一个特征串。<code>Etag</code> 把 <code>Web</code> 组件的特征串告诉客户端，客户端在下次请求此 <code>Web</code> 组件的时候，会把上次服务端响应的特征串作为 <code>If-None-Match</code> 的值发送给服务端，服务端可以通过这个值来判断是否需要从重新发送，如果不需要，就简单的发送一个 <code>304</code> 状态码，客户端将从缓存里直接读取所需的 <code>Web</code> 组件。</p>
+<p><strong>当 If-None-Match 和 If-Modified-Since 一同使用的时候，If-None-Match 优先级更高（假如服务器支持的话）。</strong></p>
+<h3 id="使用缓存有什么好处呢？"><a href="#使用缓存有什么好处呢？" class="headerlink" title="使用缓存有什么好处呢？"></a>使用缓存有什么好处呢？</h3><ul>
+<li>减少了冗余的数据传输</li>
+<li>缓解了网络瓶颈的问题</li>
+<li>降低了对原始服务器的要求</li>
+<li>降低了距离时延</li>
+</ul>
+<p>最后，我看了看返回状态，<strong>你逗我吧，这叫协商缓存？就算刷新100次都是强缓存</strong></p>
+<p><img src="/2021/03/03/network/%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%88%91%E8%AF%B4%E5%AE%83%E7%94%A8%E7%9A%84%E6%98%AF%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98/image-20210720204441602.png" alt="image-20210720204441602"></p>
+<h3 id="Chrome-的网络请求-Size-情况"><a href="#Chrome-的网络请求-Size-情况" class="headerlink" title="Chrome 的网络请求 Size 情况"></a>Chrome 的网络请求 Size 情况</h3><p><img src="/2021/03/03/network/%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%88%91%E8%AF%B4%E5%AE%83%E7%94%A8%E7%9A%84%E6%98%AF%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98/image-20210722172439044.png" alt="image-20210722172439044"></p>
+<p>Chrome 的网络请求的Size会出现三种情况<code>from disk cache(磁盘缓存)</code>、<code>from memory cache(内存缓存)</code>、和资源大小数值。</p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>200</td>
+<td>from memory cache</td>
+<td>不请求网络资源，资源在内存中，一般脚本，字体，图片会存在内存中</td>
+</tr>
+<tr>
+<td>200</td>
+<td>from disk cache</td>
+<td>不请求网络资源，在磁盘当中，一般非脚本会在内存当中，如 css 等</td>
+</tr>
+<tr>
+<td>200</td>
+<td>资源大小数值</td>
+<td>从服务器下载最新资源</td>
+</tr>
+<tr>
+<td>304</td>
+<td>报文大小</td>
+<td>请求服务器，发现资源没有更新，使用本地资源（协商缓存）</td>
+</tr>
+</tbody></table>
+<p>至于什么时候出现 <code>from disk cache(磁盘缓存)</code> 什么时候出现 <code>from memory cache(内存缓存)</code> 这就要涉及浏览器内核了，每个浏览器还不太一样，Chrome 会有这种区分，Firefox 却没有，Chrome 用的是 Webkit 内核，<a target="_blank" rel="noopener" href="https://developer.chrome.com/docs/extensions/reference/webRequest/">有兴趣同学可以戳这</a>，在 Caching 篇章有说</p>
+<blockquote>
+<p>Chrome employs two caches—an on-disk cache and a very fast in-memory cache. The lifetime of an in-memory cache is attached to the lifetime of a render process, which roughly corresponds to a tab. </p>
+</blockquote>
+<p>大致意思就是，Chrome 有两个缓存存放位置，硬盘(disk) 和内存(memory)，他们的区别在于速度，硬盘是低速的，而内存是高速的，内存缓存会随着进程的释放而释放，关闭 Tab 标签就没有了。所以有个现象是：</p>
+<blockquote>
+<p>访问-&gt; 200 -&gt; 退出浏览器</p>
+<p>再进来-&gt; 200(from disk cache) -&gt; 刷新 -&gt; 200(from memory cache)</p>
+</blockquote>
+<p>当然这也不是固定的，不是说刷新后一定会存在 <code>memory cache</code> 中，还是有些会从 <code>disk cache</code> 中读取，但至少验证了<code>memory cache</code> 存储的短暂性，和读取的即时性（disk cache 读取需要时间，但 memory cache 读取是 0ms），以及使用了缓存，一次进入，一定会从 disk 中读取。</p>
+<p>由此，我们知道强缓存的读取顺序是先检测 **memory cache **能否读取到，读取不到再去 <strong>disk cache</strong> 中取。</p>
+<p>还有个很有意思的现象，刷新多几次浏览器，会发现同个文件，有时候会在 memory cache 中取，有时候会在 disk cache 中取。</p>
+<p>那么什么时候取 memory，什么时候取 disk 呢？关于这点我也没有找到定论😭，根据后面的读取时间，这里大胆做个推测，按照同步和异步思想，<strong>读取文件是并发多线程的，时候如果能立刻，马上，像同步任务一样时，说明从内存中找到了，那就是 from memory，否则就是 from disk</strong></p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章推荐</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\10\10\network\http协议\" rel="bookmark">HTTP 协议</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\06\21\network\maxage=0\" rel="bookmark">no-cache,max-age=0,no-store一样吗?</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\11\28\network\rest思想浅谈\" rel="bookmark">Rest 思想浅谈</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2021\05\18\network\websocket\" rel="bookmark">即时通讯技术 —— webSocket</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\05\01\network\如何设计一个RestfulApi\" rel="bookmark">如何设计一个 Restful Api</a></div>
+    </li>
+  </ul>
+
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>ES
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2021/03/03/network/%E6%8E%A5%E5%8F%A3%E5%92%8C%E6%88%91%E8%AF%B4%E5%AE%83%E7%94%A8%E7%9A%84%E6%98%AF%E5%8D%8F%E5%95%86%E7%BC%93%E5%AD%98/" title="你逗我吧，这叫协商缓存？">http://example.com/2021/03/03/network/接口和我说它用的是协商缓存/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/network/" rel="tag"><i class="fa fa-tag"></i> network</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/02/26/frontEnd/React%E7%BB%84%E4%BB%B6%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" rel="prev" title="聊一聊，React 组件的生命周期">
+                  <i class="fa fa-chevron-left"></i> 聊一聊，React 组件的生命周期
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/04/13/frontEnd/%E9%A1%B5%E9%9D%A2%E4%B8%8A%E9%9A%90%E8%97%8F%E5%85%83%E7%B4%A0%E7%9A%84%E6%96%B9%E6%B3%95%E6%9C%89%E9%82%A3%E4%BA%9B/" rel="next" title="页面上隐藏元素的方法有那些">
+                  页面上隐藏元素的方法有那些 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ES</span>
+</div>
+<div class="busuanzi-count">
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

@@ -1,7 +1,7 @@
 /* global NexT, CONFIG */
 
+const DEFAULT_DURATION = 30
 NexT.motion = {};
-
 NexT.motion.integrator = {
   queue: [],
   init : function() {
@@ -18,7 +18,7 @@ NexT.motion.integrator = {
     if (!CONFIG.motion.async) this.queue = [this.queue];
     this.queue.forEach(sequence => {
       const timeline = window.anime.timeline({
-        duration: 200,
+        duration: DEFAULT_DURATION,
         easing  : 'linear'
       });
       sequence.forEach(item => {
@@ -37,7 +37,7 @@ NexT.motion.middleWares = {
       sequence.push({
         targets,
         scaleX  : [0, 1],
-        duration: 500,
+        duration: DEFAULT_DURATION,
         deltaT  : '-=200'
       });
     }

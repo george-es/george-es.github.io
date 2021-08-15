@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","version":"8.6.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta property="og:type" content="article">
+<meta property="og:title" content="VirtualDOM, Diff算法">
+<meta property="og:url" content="http://example.com/2021/06/22/frontEnd/VirtualDOM,Diff%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="George_ES">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/06/22/frontEnd/VirtualDOM,Diff%E7%AE%97%E6%B3%95/image-20210727205357377.png">
+<meta property="og:image" content="http://example.com/2021/06/22/frontEnd/VirtualDOM,Diff%E7%AE%97%E6%B3%95/104177142-4a3d3780-5443-11eb-87cf-588a7b5606f2.png">
+<meta property="og:image" content="http://example.com/2021/06/22/frontEnd/VirtualDOM,Diff%E7%AE%97%E6%B3%95/104267805-5f5ea880-54cd-11eb-8793-94ce6e09c8bb.png">
+<meta property="og:image" content="http://example.com/2021/06/22/frontEnd/VirtualDOM,Diff%E7%AE%97%E6%B3%95/104269194-a7cb9580-54d0-11eb-8172-db4e6724361a.png">
+<meta property="article:published_time" content="2021-06-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-08T07:18:48.476Z">
+<meta property="article:author" content="ES">
+<meta property="article:tag" content="react">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/06/22/frontEnd/VirtualDOM,Diff%E7%AE%97%E6%B3%95/image-20210727205357377.png">
+
+
+<link rel="canonical" href="http://example.com/2021/06/22/frontEnd/VirtualDOM,Diff%E7%AE%97%E6%B3%95/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2021/06/22/frontEnd/VirtualDOM,Diff%E7%AE%97%E6%B3%95/","path":"2021/06/22/frontEnd/VirtualDOM,Diff算法/","title":"VirtualDOM, Diff算法"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>VirtualDOM, Diff算法 | George_ES</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"> <!-- 添加看板娘-->
+  </noscript>
+    <script src="/live2d-widget/autoload.js"></script>
+  
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">George_ES</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">少女情怀总是诗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">4</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">48</span></a></li>
+        <li class="menu-item menu-item-knowledge"><a href="/knowledge" rel="section"><i class="fas fa-meteor fa-fw"></i>知识星球</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">28</span></a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>程序猿生</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFVirtual-DOM%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">什么是Virtual DOM？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88Virtual-DOM-%E7%9A%84%E6%80%A7%E8%83%BD%E5%BC%80%E9%94%80%E4%BC%9A%E5%B0%8F%E5%91%A2%EF%BC%9F"><span class="nav-number">2.</span> <span class="nav-text">为什么Virtual DOM 的性能开销会小呢？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Virtual-DOM-%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">Virtual DOM 解决了什么问题？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#diff-%E7%AE%97%E6%B3%95%E5%8F%88%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">4.</span> <span class="nav-text">diff 算法又是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Virtual-DOM-%E5%92%8C%E5%8E%9F%E7%94%9F%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E6%80%8E%E4%B9%88%E6%9B%B4%E6%96%B0-DOM%EF%BC%9F"><span class="nav-number">5.</span> <span class="nav-text">Virtual DOM 和原生的区别是什么？怎么更新 DOM？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#diff-%E7%AE%97%E6%B3%95%E6%94%B9%E5%8F%98%E5%8F%B2"><span class="nav-number">6.</span> <span class="nav-text">diff 算法改变史</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Virtual-DOM-%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0"><span class="nav-number">7.</span> <span class="nav-text">Virtual DOM 算法实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%E3%80%81%E7%94%A8-js-%E6%8A%BD%E8%B1%A1%E7%9C%9F%E5%AE%9E-DOM"><span class="nav-number">7.1.</span> <span class="nav-text">1、用 js 抽象真实 DOM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%E3%80%81%E6%AF%94%E8%BE%83%E4%B8%A4%E6%A3%B5%E6%A0%91%E7%9A%84%E5%B7%AE%E5%BC%82-%E2%80%94%E2%80%94-Diff-%E7%AE%97%E6%B3%95"><span class="nav-number">7.2.</span> <span class="nav-text">2、比较两棵树的差异 —— Diff 算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%97%E8%A1%A8%E5%AF%B9%E6%AF%94%E7%AE%97%E6%B3%95"><span class="nav-number">7.2.1.</span> <span class="nav-text">列表对比算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E9%81%8D%E5%8E%86"><span class="nav-number">7.2.2.</span> <span class="nav-text">深度优先遍历</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%E3%80%81%E6%8A%8A%E5%B7%AE%E5%BC%82%E5%BA%94%E7%94%A8%E5%88%B0%E7%9C%9F%E6%AD%A3%E7%9A%84-DOM-%E6%A0%91%E4%B8%8A"><span class="nav-number">7.3.</span> <span class="nav-text">3、把差异应用到真正的 DOM 树上</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">8.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">9.</span> <span class="nav-text">优缺点</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ES"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">ES</p>
+  <div class="site-description" itemprop="description">90后程序猿</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+          </div>
+        </div>
+      </div>
+      
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap" id="tag-cloud">
+          <h3 class="widget-title">标签云</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas height="250" id="resCanvas" style="width=70%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Comet/" rel="tag">Comet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RTK/" rel="tag">RTK</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RegExp/" rel="tag">RegExp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/" rel="tag">css</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/" rel="tag">github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hooks/" rel="tag">hooks</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jsx/" rel="tag">jsx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/" rel="tag">network</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/" rel="tag">npm</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/object/" rel="tag">object</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/promise/" rel="tag">promise</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react/" rel="tag">react</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redux/" rel="tag">redux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rest/" rel="tag">rest</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/token/" rel="tag">token</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/translation/" rel="tag">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typeScript/" rel="tag">typeScript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/" rel="tag">webpack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/websocket/" rel="tag">websocket</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yarn/" rel="tag">yarn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%93%E5%AD%98/" rel="tag">缓存</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AE%E8%AF%A2/" rel="tag">轮询</a><span class="tag-list-count">1</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/george-es" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/06/22/frontEnd/VirtualDOM,Diff%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="ES">
+      <meta itemprop="description" content="90后程序猿">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="George_ES">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          VirtualDOM, Diff算法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-06-22 00:00:00" itemprop="dateCreated datePublished" datetime="2021-06-22T00:00:00+08:00">2021-06-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>16k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>27 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="/2021/06/22/frontEnd/VirtualDOM,Diff%E7%AE%97%E6%B3%95/image-20210727205357377.png" alt="image-20210727205357377"></p>
+<span id="more"></span>
+
+<h2 id="什么是Virtual-DOM？"><a href="#什么是Virtual-DOM？" class="headerlink" title="什么是Virtual DOM？"></a>什么是Virtual DOM？</h2><p>在 vue 和 react 框架中，我们经常会听到一个概念，Virtual DOM，diff 算法，被搞得云里雾里，比较好理解的说法是</p>
+<blockquote>
+<p>Virtual DOM 是相对于真实 DOM 而言的，在Virtual DOM 还没有出来之前，我们要改变页面展示的内容只能通过DOM 操作函数遍历查询 DOM 树的方式找到 DOM 节点，然后修改样式或结构，再通过 <code>innerHTML</code> ，经历了无数次的渲染，来达到更新 ui 的目的，但有了Virtual DOM 以后，就可以通过 js 的方式来修改，最终只渲染一次，效率成倍提高呀</p>
+</blockquote>
+<p>上面的话没理解，没关系，简要概述下就是，<strong>Virtual DOM 是对真实 DOM 的一层抽象，是通过 js 来表述的，操作Virtual DOM 就是操作 js 对象，因此Virtual DOM 在增删改查的操作上都更优于真实 DOM</strong>，渲染上，如果直接操作真实 DOM 要渲染无数次，而操作Virtual DOM 只需要在最后的时候渲染即可。</p>
+<h2 id="为什么Virtual-DOM-的性能开销会小呢？"><a href="#为什么Virtual-DOM-的性能开销会小呢？" class="headerlink" title="为什么Virtual DOM 的性能开销会小呢？"></a>为什么Virtual DOM 的性能开销会小呢？</h2><p>其实最核心的原因不是查找或修改真实 DOM 上面的开销，而是将真实 DOM 转换成 js，再进行数据通信这上面的开销。DOM 树的实现模块和 js 实现模块是两个不同的模块，在不同模块上操作是要增加成本的，就好比为什么汽油车要做到几秒破百需要很高成本，而电动车则轻轻松松，几 W 块的都可以实现。<br><br></p>
+<h2 id="Virtual-DOM-解决了什么问题？"><a href="#Virtual-DOM-解决了什么问题？" class="headerlink" title="Virtual DOM 解决了什么问题？"></a>Virtual DOM 解决了什么问题？</h2><p>无论是 vue 框架还是 react 框架，解决一个问题的思路都是一样的，<strong>避免我们直接去操作 DOM</strong>，而是通过<strong>数据来驱动视图的更新</strong>，一旦状态发生了变化，就用模板引擎渲染整个视图，用新的视图替换调旧的视图。</p>
+<p>通过上述表达，我们知道，每个框架只是用自己方式去解决同样的问题，<strong>维护状态，更新视图</strong>。而Virtual DOM 要解决的就是<strong>避免直接操作 DOM，降低渲染次数</strong>。</p>
+<p>再打个比方，没有Virtual DOM，每一个状态的改变，都会发生真实 DOM 的渲染，这会浪费很多性能，这时候有了Virtual DOM，状态改变了，先修改 js 对象，过段时间发现，状态已经修改完了，再进行渲染。<strong>前者要渲染多次，后者只要渲染一次。</strong><br><br></p>
+<h2 id="diff-算法又是什么？"><a href="#diff-算法又是什么？" class="headerlink" title="diff 算法又是什么？"></a>diff 算法又是什么？</h2><p>diff 算法是用来优化Virtual DOM 操作的，你想想，每次状态改变，都要把整个 js 对象重写一次，再全部重新渲染，工程量太大了，没有变的地方其实不需要渲染的，有没有一种方法，找出修改的地方，只针对局部节点进行渲染呢？就好像 ajax 局部刷新一样。</p>
+<p>没错啦，想到这点，就是 diff 算法的作用了，它就是用来<strong>找不同</strong>的，然后再配合Virtual DOM，对视图进行局部渲染。<br><br></p>
+<h2 id="Virtual-DOM-和原生的区别是什么？怎么更新-DOM？"><a href="#Virtual-DOM-和原生的区别是什么？怎么更新-DOM？" class="headerlink" title="Virtual DOM 和原生的区别是什么？怎么更新 DOM？"></a>Virtual DOM 和原生的区别是什么？怎么更新 DOM？</h2><p><img src="/2021/06/22/frontEnd/VirtualDOM,Diff%E7%AE%97%E6%B3%95/104177142-4a3d3780-5443-11eb-87cf-588a7b5606f2.png" alt="img"></p>
+<p>我们看看一个真实 DOM 携带的属性，仅仅一层就超级庞大了</p>
+<p>我们再看看Virtual DOM 如何描述一个节点的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">var element = &#123;</span><br><span class="line">	tagName: &#x27;div&#x27;, // 节点名称</span><br><span class="line">	props: &#123;</span><br><span class="line">		id: &#x27;box&#x27;</span><br><span class="line">	&#125;</span><br><span class="line">	children: [</span><br><span class="line">		&#123;tagName: &#x27;span&#x27;, props: &#123; class: &#x27;item&#x27; &#125;, children: [&quot;1&quot;]&#125;,</span><br><span class="line">		&#123;tagName: &#x27;span&#x27;, props: &#123; class: &#x27;item&#x27; &#125;, children: [&quot;2&quot;]&#125;,</span><br><span class="line">		&#123;tagName: &#x27;span&#x27;, props: &#123; class: &#x27;item&#x27; &#125;, children: [&quot;3&quot;]&#125;,</span><br><span class="line">	]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面对应的 HTML 写法是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;div&gt;</span><br><span class="line">	&lt;span&gt;1&lt;/span&gt;</span><br><span class="line">	&lt;span&gt;2&lt;/span&gt;</span><br><span class="line">	&lt;span&gt;3&lt;/span&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<p>看吧，用Virtual DOM 表示是不是超级简单。</p>
+<p>这样我们就可以通过 js 来抽象真实 DOM，我们把这个叫做 js 对象树。</p>
+<p><em>好了，万事俱备，我们有了Virtual DOM 和 diff 算法怎么更新 DOM</em></p>
+<p><strong>我们先将真实 DOM 抽象出来，形成一个 js 对象树，状态变化后，生成新的 js 对象树，通过 diff 算法对比新旧树的差异，将不同点记录下来，这就是我们需要对页面真正的 DOM 操作，然后再把它们应用在真正的 DOM 树上，页面就变更了，这样就可以做到，视图的结构确实是整个全新渲染了，但最后操作 DOM 的时候确实只变更有不同的地方。</strong></p>
+<p>这就是Virtual DOM 算法，主体分为三部</p>
+<ul>
+<li>1、用 js 描述新旧树</li>
+<li>2、用 diff 算法对比新旧树，找出修改点，并记录下来</li>
+<li>3、将修改点应用到旧树所构建的真实 DOM 上，进行局部修改，视图就更新了</li>
+</ul>
+<p>Virtual DOM 本质就是在 js 和 真实 DOM 之间做了一层缓存，js 进行快处理，等确定最后数据了，再来修改真实 DOM<br><br></p>
+<h2 id="diff-算法改变史"><a href="#diff-算法改变史" class="headerlink" title="diff 算法改变史"></a>diff 算法改变史</h2><p>计算一棵树形结构转换成另一棵树形结构的最少操作，是一个复杂且值得研究的问题。<strong>传统 diff 算法</strong>通过<strong>循环递归</strong>对节点进行依次对比，效率低下，算法复杂度达到 O(n^3)，其中 n 是树中节点的总数。O(n^3) 到底有多可怕，这意味着如果要展示1000个节点，就要依次执行上十亿次的比较。这种指数型的性能消耗对于前端渲染场景来说代价太高了！CPU 按每秒钟执行大约30亿条指令来计算，即便是最高效的实现，也不可能在一秒内计算出差异情况。</p>
+<p>如果 React 只是单纯的引入 diff 算法而没有任何的优化改进，那么其效率是远远无法满足前端渲染所要求的性能。</p>
+<p>因此，想要将 diff 思想引入 Virtual DOM，就需要设计一种稳定高效的 diff 算法，而 React 做到了！</p>
+<p>React 怎么实现的呢？<br><br></p>
+<h2 id="Virtual-DOM-算法实现"><a href="#Virtual-DOM-算法实现" class="headerlink" title="Virtual DOM 算法实现"></a>Virtual DOM 算法实现</h2><h3 id="1、用-js-抽象真实-DOM"><a href="#1、用-js-抽象真实-DOM" class="headerlink" title="1、用 js 抽象真实 DOM"></a>1、用 js 抽象真实 DOM</h3><p>js 来描述真实 DOM 结构只需要三个属性，tagName，props，children，我们封装一个构造函数来表示</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function Element(tagName, props, children) &#123;</span><br><span class="line">	this.tagName = tagName</span><br><span class="line">	this.props = props</span><br><span class="line">	this.children = children</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p> 渲染函数，用于构建真实 DOM</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Element.prototype.render = function () &#123;</span><br><span class="line">    const el = document.createElement(this.tagName) // 创建 DOM 节点</span><br><span class="line">    const props = this.props</span><br><span class="line"></span><br><span class="line">    for (let propName in props) &#123; // 为节点添加属性</span><br><span class="line">        const propValue = props[propName]</span><br><span class="line">        el.setAttribute(propName, propValue)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    const children = this.children || []</span><br><span class="line">    children.forEach(child =&gt; &#123;</span><br><span class="line">        let childEl = (child instanceof Element) ?</span><br><span class="line">            child.render() : // 通过递归方式构建子节点</span><br><span class="line">            document.createTextNode(child)</span><br><span class="line">        el.appendChild(childEl)</span><br><span class="line">    &#125;)</span><br><span class="line">    return el</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>构建Virtual DOM</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var div = Element(&#x27;div&#x27;, &#123; id: &#x27;box &#x27; &#125;, [</span><br><span class="line">    Element(&#x27;span&#x27;, &#123;class: &#x27;item&#x27;&#125;, [&#x27;Index 1&#x27;]),</span><br><span class="line">    Element(&#x27;span&#x27;, &#123;class: &#x27;item&#x27;&#125;, [&#x27;Index 2&#x27;]),</span><br><span class="line">    Element(&#x27;span&#x27;, &#123;class: &#x27;item&#x27;&#125;, [&#x27;Index 3&#x27;]),</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
+
+<p> 将真实 DOM 挂载到 body 中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var root = div.render()</span><br><span class="line">document.body.appendChild(root)</span><br></pre></td></tr></table></figure>
+
+<p>如果只讲Virtual DOM，那么以上代码就描绘出基本思路了，但是，我们还有个 diff 算法，下面看看我们如何将 <strong>diff 算法</strong>融入到里面</p>
+<h3 id="2、比较两棵树的差异-——-Diff-算法"><a href="#2、比较两棵树的差异-——-Diff-算法" class="headerlink" title="2、比较两棵树的差异 —— Diff 算法"></a>2、比较两棵树的差异 —— Diff 算法</h3><p>diff 算法是用于比较两棵 DOM 树<strong>差异</strong>的，也是Virtual DOM 最核心的算法，两颗树完全的 diff 算法是一个时间复杂度为 O(n ^ 3) 的问题，但是在前端中我们分析了可能存在的场景</p>
+<ul>
+<li>跨层级移动 DOM 元素操作特别少。</li>
+<li>拥有相同类的两个组件将会生成相似的树形结构，拥有不同类的两个组件将会生成不同的树形结构。</li>
+<li>对于同一层级的一组子节点，它们可以通过唯一 id 进行区分。</li>
+</ul>
+<p>因此做了些牺牲，提升了性能，它<strong>只会对同一个层级的元素进行对比</strong>。</p>
+<p><img src="/2021/06/22/frontEnd/VirtualDOM,Diff%E7%AE%97%E6%B3%95/104267805-5f5ea880-54cd-11eb-8793-94ce6e09c8bb.png" alt="img"></p>
+<p>这样上面的 div 只会和同一层级的 div 对比，第二层级的只会跟第二层级对比，这样算法的复杂度就可以达到 O(n)</p>
+<p><strong>差异</strong></p>
+<p>在前端中，对于 DOM 的差异可能会</p>
+<ul>
+<li>替换掉原来的节点，例如把上面的 div 换成 p</li>
+<li>新增，删除，移动子节点</li>
+<li>修改节点属性</li>
+<li>修改文本节点内容</li>
+</ul>
+<p>因此根据差异，我们定义了几种差异类型</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var REPLACE = 0  // 节点替换</span><br><span class="line">var REORDER = 1  // 子节点操作</span><br><span class="line">var PROPS = 2  	 // 属性修改</span><br><span class="line">var TEXT = 3     // 修改文本</span><br></pre></td></tr></table></figure>
+
+<p>对于节点替换，判断新旧节点的 tagName 是不是一样的，如果不一样，说明需要替换</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">patches[0] = [&#123;</span><br><span class="line">	type: REPALCE,</span><br><span class="line">	node: newNode // el(&#x27;section&#x27;, props. children)</span><br><span class="line">&#125;]</span><br></pre></td></tr></table></figure>
+
+<p>给子节点增加新的属性 id，就记录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">patches[0] = [&#123;</span><br><span class="line">	type: REPLACE,</span><br><span class="line">	node: newNode // el(&#x27;selection&#x27;, props, children)</span><br><span class="line">&#125;, &#123;</span><br><span class="line">	type: PROPS,</span><br><span class="line">	props: &#123;</span><br><span class="line">		id: &#x27;container&#x27;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;]</span><br></pre></td></tr></table></figure>
+
+<p>如果是修改了文本节点，就记录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">patches[2] = [&#123;</span><br><span class="line">	type: TEXT,</span><br><span class="line">	content: &#x27;Virtual Dom&#x27;</span><br><span class="line">&#125;]</span><br></pre></td></tr></table></figure>
+
+<p>如果是子节点替换呢？例如 <code>p，span，div</code>  替换成了 <code>div，p，span</code> 该如何对比呢？这就有两种情况了，同层级和非同层级，无论是那种情况，三种节点都会被替换掉，这样是不可取的，因为只是简单的移动就可以达到效果，没必要<strong>全部推倒重来</strong>，这样对 DOM 的开销也会非常的大。下面就会用到<strong>列表对比算法</strong>来优化节点替换操作</p>
+<h4 id="列表对比算法"><a href="#列表对比算法" class="headerlink" title="列表对比算法"></a>列表对比算法</h4><p>假设现在可以英文字母唯一地标识每个子节点</p>
+<p>旧的顺序</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a b c d e f g h i</span><br></pre></td></tr></table></figure>
+
+<p>现在对节点进行删除，插入，移动的操作，新增 j 节点，删除 e 节点，移动 h 节点</p>
+<p>新的顺序</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a b c h d f g i j</span><br></pre></td></tr></table></figure>
+
+<p>现在知道了新旧节点的顺序，求最小的插入、删除操作（移动可以看成是删除和插入操作的结合）。这个问题抽象出来其实是字符串的最小编辑距离问题，最常见的解决算法是通过动态规划求解，时间复杂度为 O(M * N)。但是我们并不需要真的达到最小的操作，我们只需要优化一些比较常见的移动情况，牺牲一定 DOM 操作，让算法时间复杂度达到线性的 O(max(M, N))。</p>
+<p>我们能够获取到某个父节点的子节点的操作，并记录下来</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">patches[0] = [&#123;</span><br><span class="line">	type: REORDER,</span><br><span class="line">	move: [&#123; remove or insert &#125;, &#123; remove or insert &#125;, ...]</span><br><span class="line">&#125;]</span><br></pre></td></tr></table></figure>
+
+<p>但是要注意，因为 tagName 是可重复的，不能用这个来进行对比，所以需要给子节点加上唯一标识 key，列表对比的时候，使用 key 进行对比，这样才能复用老的 DOM 树上的节点。</p>
+<p>这样，我们就可以通过深度优先遍历两棵树，每层的节点进行对比，记录下每个节点的差异了。</p>
+<h4 id="深度优先遍历"><a href="#深度优先遍历" class="headerlink" title="深度优先遍历"></a>深度优先遍历</h4><p>diff 算法采用的是深度遍历，对新旧两棵树进行一个深度优先的遍历，这样每个节点都会有一个唯一的标记</p>
+<p><img src="/2021/06/22/frontEnd/VirtualDOM,Diff%E7%AE%97%E6%B3%95/104269194-a7cb9580-54d0-11eb-8172-db4e6724361a.png" alt="img"></p>
+<p>深度优先遍历的时候，每遍历到一个节点，就把该节点和新的树进行对比，如果有差异的话，就记录到一个对象里面。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">// diff 函数，对比两棵树</span><br><span class="line">function diff(oldTree, newTree) &#123;</span><br><span class="line">	var index = 0 // 当前节点的标志</span><br><span class="line">  	var patches = &#123;&#125; // 用来记录每个节点差异的对象</span><br><span class="line">  	dfsWalk(oldTree, newTree, index, patches)</span><br><span class="line">  	return patches</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 对两棵树进行深度优先遍历</span><br><span class="line">function dfsWalk (oldNode, newNode, index, patches) &#123;</span><br><span class="line">  // 对比oldNode和newNode的不同，记录下来</span><br><span class="line">  patches[index] = [...]</span><br><span class="line"></span><br><span class="line">  diffChildren(oldNode.children, newNode.children, index, patches)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 遍历子节点</span><br><span class="line">function diffChildren (oldChildren, newChildren, index, patches) &#123;</span><br><span class="line">  var leftNode = null</span><br><span class="line">  var currentNodeIndex = index</span><br><span class="line">  oldChildren.forEach(function (child, i) &#123;</span><br><span class="line">    var newChild = newChildren[i]</span><br><span class="line">    currentNodeIndex = (leftNode &amp;&amp; leftNode.count) // 计算节点的标识</span><br><span class="line">      ? currentNodeIndex + leftNode.count + 1</span><br><span class="line">      : currentNodeIndex + 1</span><br><span class="line">    dfsWalk(child, newChild, currentNodeIndex, patches) // 深度遍历子节点</span><br><span class="line">    leftNode = child</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>譬如说上面的旧 div 和新 div 有差异，当前标记为 0，那么：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">patches[0] = [&#123;difference&#125;, &#123;difference&#125;, ...] // 用数组存储新旧节点的不同</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3、把差异应用到真正的-DOM-树上"><a href="#3、把差异应用到真正的-DOM-树上" class="headerlink" title="3、把差异应用到真正的 DOM 树上"></a>3、把差异应用到真正的 DOM 树上</h3><p>对 DOM 树进行深度优先遍历后，通过 diff 算法（步骤2）获取到差异点，然后进行 DOM 操作</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">function patch(node, patches) &#123;</span><br><span class="line">	var walker = &#123;index: 0&#125;</span><br><span class="line">	dfsWalk(node, walker, patches)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function dfsWalk(node, walker, patcher) &#123;</span><br><span class="line">	var currentPatches = patches[walker.index] // 从 patches 拿出当前节点的差异</span><br><span class="line">	var len = node.childNodes ? node.childNodes.length : 0</span><br><span class="line">	for(let i = 0; i &lt; len; i++) &#123;</span><br><span class="line">		var child = node.childNodes[i]</span><br><span class="line">		walker.index ++</span><br><span class="line">		dfsWalk(child, walker, patches)</span><br><span class="line">	&#125;</span><br><span class="line">	if(currentPatches) &#123;</span><br><span class="line">		applyPatches(node, currentPatches) // 对当前节点进行 DOM 操作</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>applyPatches，根据不同类型的差异对当前节点进行 DOM 操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">function applyPatches(node, currentPatches) &#123;</span><br><span class="line">	currentPatches.forEach(function(currentPatch) &#123;</span><br><span class="line">		switch(currentPatch.type) &#123;</span><br><span class="line">			case REPLACE:</span><br><span class="line">				node.parentNode.replaceChild(currentPatch.node.render(), node)</span><br><span class="line">				break;</span><br><span class="line">			case REORDER:</span><br><span class="line">				reorderChildren(node, currentPatch.moves)</span><br><span class="line">				break;</span><br><span class="line">			case PROPS:</span><br><span class="line">				setProps(node, currentPatch.props)</span><br><span class="line">				break;</span><br><span class="line">			case TEXT:</span><br><span class="line">				node.textContent = currentPatch.content</span><br><span class="line">				break;</span><br><span class="line">			default:</span><br><span class="line">				throw new Error(&#x27;Unknown patch type &#x27; + currentPatch.type)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<br>
+
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>Virtual DOM 主要是实现了三个函数，分为 5 个步骤</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">// 1.构建Virtual DOM</span><br><span class="line">var tree = el(&#x27;div&#x27;, &#123;&#x27;id&#x27;: &#x27;container&#x27;&#125;, [</span><br><span class="line">	el(&#x27;h1&#x27;, &#123;style: &#x27;color: blue&#x27;&#125;, [&#x27;simple virtal dom&#x27;]),</span><br><span class="line">	el(&#x27;p&#x27;, [&#x27;Hello, virtual-dom&#x27;]),</span><br><span class="line">	el(&#x27;ul&#x27;, [el(&#x27;li&#x27;)])</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line">// 2.通过Virtual DOM 构建真正的 DOM</span><br><span class="line">var root = tree.render()</span><br><span class="line">document.body.appendChild(root)</span><br><span class="line"></span><br><span class="line">// 3.生成新的Virtual DOM</span><br><span class="line">var newTree = el(&#x27;div&#x27;, &#123;&#x27;id&#x27;:  &#x27;container&#x27;&#125;, [</span><br><span class="line">	el(&#x27;h1&#x27;, &#123; style: &#x27;color: red&#x27; &#125;, [&#x27;simple virtal dom&#x27;]),</span><br><span class="line">	el(&#x27;p&#x27;, [&#x27;Hello, virtual-dom&#x27;]),</span><br><span class="line">	el(&#x27;ul&#x27;, [el(&#x27;li&#x27;), el(&#x27;li&#x27;)])</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line">// 4.比较两颗Virtual DOM 树的不同</span><br><span class="line">var patches = diff(tree, newTree)</span><br><span class="line"></span><br><span class="line">// 5.在真正的 DOM 元素上应用变更</span><br><span class="line">patch(root, patches)</span><br></pre></td></tr></table></figure>
+
+<p>这只是大致的思想，实践使用中还需要加入事件监听等。</p>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><p><strong>优点</strong></p>
+<ul>
+<li>对 DOM 进行集中化操作：无需手动操作 DOM ，虚拟 DOM 的 diff 和 patch 都是在一次更新中自动进行的，在数据改变时先对 Virtual DOM 进行修改，再反应到真实 DOM 中，用最小的代价来更新 DOM，提高效率</li>
+<li>跨平台：可以渲染到 DOM 以外的端，因为虚拟 DOM 本质是 JS 对象，而 DOM 和平台具有强关联，相比之下虚拟 DOM 可以更好的跨平台，比如移动端开发，React VR，服务端渲染等</li>
+<li>保证了性能的下限：虚拟 DOM 可以通过 diff 算法找出最小差异，然后批量进行 patch，比起粗暴的 DOM 来说还说性能还是好很多的</li>
+</ul>
+<p><strong>缺点</strong></p>
+<ul>
+<li>首次渲染大量 DOM 时，由于多了一层虚拟 DOM 的计算，比 innerHTML 插入慢。</li>
+<li>虚拟 DOM 需要在内存中的维护一份 DOM 的副本，多占用了部分内存。</li>
+<li>如果虚拟 DOM 大量更改，这是合适的。但是单一的、频繁的更新的话，虚拟 DOM 将会花费更多的时间处理计算的工作。所以如果你有一个 DOM 节点相对较少页面，用虚拟 DOM，它实际上有可能会更慢，但对于大多数单页面应用，这应该都会更快。</li>
+</ul>
+<blockquote>
+<p>参考 <a target="_blank" rel="noopener" href="https://github.com/livoras/blog/issues/13">深度剖析如何实现一个 Virtual DOM 算法</a></p>
+</blockquote>
+<p>// diff.js 完整算法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><span class="line">var _ = require(&#x27;./util&#x27;)</span><br><span class="line">var patch = require(&#x27;./patch&#x27;)</span><br><span class="line">var listDiff = require(&#x27;list-diff2&#x27;)</span><br><span class="line"></span><br><span class="line">function diff (oldTree, newTree) &#123;</span><br><span class="line">  var index = 0</span><br><span class="line">  var patches = &#123;&#125;</span><br><span class="line">  dfsWalk(oldTree, newTree, index, patches)</span><br><span class="line">  return patches</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function dfsWalk (oldNode, newNode, index, patches) &#123;</span><br><span class="line">  var currentPatch = []</span><br><span class="line"></span><br><span class="line">  // Node is removed.</span><br><span class="line">  if (newNode === null) &#123;</span><br><span class="line">    // Real DOM node will be removed when perform reordering, so has no needs to do anything in here</span><br><span class="line">  // TextNode content replacing</span><br><span class="line">  &#125; else if (_.isString(oldNode) &amp;&amp; _.isString(newNode)) &#123;</span><br><span class="line">    if (newNode !== oldNode) &#123;</span><br><span class="line">      currentPatch.push(&#123; type: patch.TEXT, content: newNode &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  // Nodes are the same, diff old node&#x27;s props and children</span><br><span class="line">  &#125; else if (</span><br><span class="line">      oldNode.tagName === newNode.tagName &amp;&amp;</span><br><span class="line">      oldNode.key === newNode.key</span><br><span class="line">    ) &#123;</span><br><span class="line">    // Diff props</span><br><span class="line">    var propsPatches = diffProps(oldNode, newNode)</span><br><span class="line">    if (propsPatches) &#123;</span><br><span class="line">      currentPatch.push(&#123; type: patch.PROPS, props: propsPatches &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    // Diff children. If the node has a `ignore` property, do not diff children</span><br><span class="line">    if (!isIgnoreChildren(newNode)) &#123;</span><br><span class="line">      diffChildren(</span><br><span class="line">        oldNode.children,</span><br><span class="line">        newNode.children,</span><br><span class="line">        index,</span><br><span class="line">        patches,</span><br><span class="line">        currentPatch</span><br><span class="line">      )</span><br><span class="line">    &#125;</span><br><span class="line">  // Nodes are not the same, replace the old node with new node</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    currentPatch.push(&#123; type: patch.REPLACE, node: newNode &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (currentPatch.length) &#123;</span><br><span class="line">    patches[index] = currentPatch</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function diffChildren (oldChildren, newChildren, index, patches, currentPatch) &#123;</span><br><span class="line">  var diffs = listDiff(oldChildren, newChildren, &#x27;key&#x27;)</span><br><span class="line">  newChildren = diffs.children</span><br><span class="line"></span><br><span class="line">  if (diffs.moves.length) &#123;</span><br><span class="line">    var reorderPatch = &#123; type: patch.REORDER, moves: diffs.moves &#125;</span><br><span class="line">    currentPatch.push(reorderPatch)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  var leftNode = null</span><br><span class="line">  var currentNodeIndex = index</span><br><span class="line">  _.each(oldChildren, function (child, i) &#123;</span><br><span class="line">    var newChild = newChildren[i]</span><br><span class="line">    currentNodeIndex = (leftNode &amp;&amp; leftNode.count)</span><br><span class="line">      ? currentNodeIndex + leftNode.count + 1</span><br><span class="line">      : currentNodeIndex + 1</span><br><span class="line">    dfsWalk(child, newChild, currentNodeIndex, patches)</span><br><span class="line">    leftNode = child</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function diffProps (oldNode, newNode) &#123;</span><br><span class="line">  var count = 0</span><br><span class="line">  var oldProps = oldNode.props</span><br><span class="line">  var newProps = newNode.props</span><br><span class="line"></span><br><span class="line">  var key, value</span><br><span class="line">  var propsPatches = &#123;&#125;</span><br><span class="line"></span><br><span class="line">  // Find out different properties</span><br><span class="line">  for (key in oldProps) &#123;</span><br><span class="line">    value = oldProps[key]</span><br><span class="line">    if (newProps[key] !== value) &#123;</span><br><span class="line">      count++</span><br><span class="line">      propsPatches[key] = newProps[key]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Find out new property</span><br><span class="line">  for (key in newProps) &#123;</span><br><span class="line">    value = newProps[key]</span><br><span class="line">    if (!oldProps.hasOwnProperty(key)) &#123;</span><br><span class="line">      count++</span><br><span class="line">      propsPatches[key] = newProps[key]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // If properties all are identical</span><br><span class="line">  if (count === 0) &#123;</span><br><span class="line">    return null</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return propsPatches</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function isIgnoreChildren (node) &#123;</span><br><span class="line">  return (node.props &amp;&amp; node.props.hasOwnProperty(&#x27;ignore&#x27;))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">module.exports = diff</span><br></pre></td></tr></table></figure>
+
+<p>// element.js</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">@george-es</span><br><span class="line"> </span><br><span class="line">Owner</span><br><span class="line">Author</span><br><span class="line">george-es commented on 12 Jan</span><br><span class="line">// element.js</span><br><span class="line"></span><br><span class="line">var _ = require(&#x27;./util&#x27;)</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Virtual-dom Element.</span><br><span class="line"> * @param &#123;String&#125; tagName</span><br><span class="line"> * @param &#123;Object&#125; props - Element&#x27;s properties,</span><br><span class="line"> *                       - using object to store key-value pair</span><br><span class="line"> * @param &#123;Array&lt;Element|String&gt;&#125; - This element&#x27;s children elements.</span><br><span class="line"> *                                - Can be Element instance or just a piece plain text.</span><br><span class="line"> */</span><br><span class="line">function Element (tagName, props, children) &#123;</span><br><span class="line">  if (!(this instanceof Element)) &#123;</span><br><span class="line">    if (!_.isArray(children) &amp;&amp; children != null) &#123;</span><br><span class="line">      children = _.slice(arguments, 2).filter(_.truthy)</span><br><span class="line">    &#125;</span><br><span class="line">    return new Element(tagName, props, children)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (_.isArray(props)) &#123;</span><br><span class="line">    children = props</span><br><span class="line">    props = &#123;&#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  this.tagName = tagName</span><br><span class="line">  this.props = props || &#123;&#125;</span><br><span class="line">  this.children = children || []</span><br><span class="line">  this.key = props</span><br><span class="line">    ? props.key</span><br><span class="line">    : void 666</span><br><span class="line"></span><br><span class="line">  var count = 0</span><br><span class="line"></span><br><span class="line">  _.each(this.children, function (child, i) &#123;</span><br><span class="line">    if (child instanceof Element) &#123;</span><br><span class="line">      count += child.count</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      children[i] = &#x27;&#x27; + child</span><br><span class="line">    &#125;</span><br><span class="line">    count++</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  this.count = count</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Render the hold element tree.</span><br><span class="line"> */</span><br><span class="line">Element.prototype.render = function () &#123;</span><br><span class="line">  var el = document.createElement(this.tagName)</span><br><span class="line">  var props = this.props</span><br><span class="line"></span><br><span class="line">  for (var propName in props) &#123;</span><br><span class="line">    var propValue = props[propName]</span><br><span class="line">    _.setAttr(el, propName, propValue)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  _.each(this.children, function (child) &#123;</span><br><span class="line">    var childEl = (child instanceof Element)</span><br><span class="line">      ? child.render()</span><br><span class="line">      : document.createTextNode(child)</span><br><span class="line">    el.appendChild(childEl)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  return el</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">module.exports = Element</span><br></pre></td></tr></table></figure>
+
+<p>// patch.js</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line">var _ = require(&#x27;./util&#x27;)</span><br><span class="line"></span><br><span class="line">var REPLACE = 0</span><br><span class="line">var REORDER = 1</span><br><span class="line">var PROPS = 2</span><br><span class="line">var TEXT = 3</span><br><span class="line"></span><br><span class="line">function patch (node, patches) &#123;</span><br><span class="line">  var walker = &#123;index: 0&#125;</span><br><span class="line">  dfsWalk(node, walker, patches)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function dfsWalk (node, walker, patches) &#123;</span><br><span class="line">  var currentPatches = patches[walker.index]</span><br><span class="line"></span><br><span class="line">  var len = node.childNodes</span><br><span class="line">    ? node.childNodes.length</span><br><span class="line">    : 0</span><br><span class="line">  for (var i = 0; i &lt; len; i++) &#123;</span><br><span class="line">    var child = node.childNodes[i]</span><br><span class="line">    walker.index++</span><br><span class="line">    dfsWalk(child, walker, patches)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (currentPatches) &#123;</span><br><span class="line">    applyPatches(node, currentPatches)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function applyPatches (node, currentPatches) &#123;</span><br><span class="line">  _.each(currentPatches, function (currentPatch) &#123;</span><br><span class="line">    switch (currentPatch.type) &#123;</span><br><span class="line">      case REPLACE:</span><br><span class="line">        var newNode = (typeof currentPatch.node === &#x27;string&#x27;)</span><br><span class="line">          ? document.createTextNode(currentPatch.node)</span><br><span class="line">          : currentPatch.node.render()</span><br><span class="line">        node.parentNode.replaceChild(newNode, node)</span><br><span class="line">        break</span><br><span class="line">      case REORDER:</span><br><span class="line">        reorderChildren(node, currentPatch.moves)</span><br><span class="line">        break</span><br><span class="line">      case PROPS:</span><br><span class="line">        setProps(node, currentPatch.props)</span><br><span class="line">        break</span><br><span class="line">      case TEXT:</span><br><span class="line">        if (node.textContent) &#123;</span><br><span class="line">          node.textContent = currentPatch.content</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">          // fuck ie</span><br><span class="line">          node.nodeValue = currentPatch.content</span><br><span class="line">        &#125;</span><br><span class="line">        break</span><br><span class="line">      default:</span><br><span class="line">        throw new Error(&#x27;Unknown patch type &#x27; + currentPatch.type)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function setProps (node, props) &#123;</span><br><span class="line">  for (var key in props) &#123;</span><br><span class="line">    if (props[key] === void 666) &#123;</span><br><span class="line">      node.removeAttribute(key)</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      var value = props[key]</span><br><span class="line">      _.setAttr(node, key, value)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function reorderChildren (node, moves) &#123;</span><br><span class="line">  var staticNodeList = _.toArray(node.childNodes)</span><br><span class="line">  var maps = &#123;&#125;</span><br><span class="line"></span><br><span class="line">  _.each(staticNodeList, function (node) &#123;</span><br><span class="line">    if (node.nodeType === 1) &#123;</span><br><span class="line">      var key = node.getAttribute(&#x27;key&#x27;)</span><br><span class="line">      if (key) &#123;</span><br><span class="line">        maps[key] = node</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  _.each(moves, function (move) &#123;</span><br><span class="line">    var index = move.index</span><br><span class="line">    if (move.type === 0) &#123; // remove item</span><br><span class="line">      if (staticNodeList[index] === node.childNodes[index]) &#123; // maybe have been removed for inserting</span><br><span class="line">        node.removeChild(node.childNodes[index])</span><br><span class="line">      &#125;</span><br><span class="line">      staticNodeList.splice(index, 1)</span><br><span class="line">    &#125; else if (move.type === 1) &#123; // insert item</span><br><span class="line">      var insertNode = maps[move.item.key]</span><br><span class="line">        ? maps[move.item.key].cloneNode(true) // reuse old item</span><br><span class="line">        : (typeof move.item === &#x27;object&#x27;)</span><br><span class="line">            ? move.item.render()</span><br><span class="line">            : document.createTextNode(move.item)</span><br><span class="line">      staticNodeList.splice(index, 0, insertNode)</span><br><span class="line">      node.insertBefore(insertNode, node.childNodes[index] || null)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">patch.REPLACE = REPLACE</span><br><span class="line">patch.REORDER = REORDER</span><br><span class="line">patch.PROPS = PROPS</span><br><span class="line">patch.TEXT = TEXT</span><br><span class="line"></span><br><span class="line">module.exports = patch</span><br></pre></td></tr></table></figure>
+
+<p>// util.js</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">var _ = exports</span><br><span class="line"></span><br><span class="line">_.type = function (obj) &#123;</span><br><span class="line">  return Object.prototype.toString.call(obj).replace(/\[object\s|\]/g, &#x27;&#x27;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">_.isArray = function isArray (list) &#123;</span><br><span class="line">  return _.type(list) === &#x27;Array&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">_.slice = function slice (arrayLike, index) &#123;</span><br><span class="line">  return Array.prototype.slice.call(arrayLike, index)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">_.truthy = function truthy (value) &#123;</span><br><span class="line">  return !!value</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">_.isString = function isString (list) &#123;</span><br><span class="line">  return _.type(list) === &#x27;String&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">_.each = function each (array, fn) &#123;</span><br><span class="line">  for (var i = 0, len = array.length; i &lt; len; i++) &#123;</span><br><span class="line">    fn(array[i], i)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">_.toArray = function toArray (listLike) &#123;</span><br><span class="line">  if (!listLike) &#123;</span><br><span class="line">    return []</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  var list = []</span><br><span class="line"></span><br><span class="line">  for (var i = 0, len = listLike.length; i &lt; len; i++) &#123;</span><br><span class="line">    list.push(listLike[i])</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return list</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">_.setAttr = function setAttr (node, key, value) &#123;</span><br><span class="line">  switch (key) &#123;</span><br><span class="line">    case &#x27;style&#x27;:</span><br><span class="line">      node.style.cssText = value</span><br><span class="line">      break</span><br><span class="line">    case &#x27;value&#x27;:</span><br><span class="line">      var tagName = node.tagName || &#x27;&#x27;</span><br><span class="line">      tagName = tagName.toLowerCase()</span><br><span class="line">      if (</span><br><span class="line">        tagName === &#x27;input&#x27; || tagName === &#x27;textarea&#x27;</span><br><span class="line">      ) &#123;</span><br><span class="line">        node.value = value</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        // if it is not a input or textarea, use `setAttribute` to set</span><br><span class="line">        node.setAttribute(key, value)</span><br><span class="line">      &#125;</span><br><span class="line">      break</span><br><span class="line">    default:</span><br><span class="line">      node.setAttribute(key, value)</span><br><span class="line">      break</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章推荐</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\06\01\frontEnd\JSX原理\" rel="bookmark">JSX 原理</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2021\02\26\frontEnd\React组件的生命周期\" rel="bookmark">聊一聊，React 组件的生命周期</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\06\01\frontEnd\create-react-app修改webpack(配置项)方法\" rel="bookmark">create-react-app修改webpack(配置项)方法</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2021\04\28\frontEnd\react逻辑复用\" rel="bookmark">React 逻辑复用</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\09\26\frontEnd\从底层原理学习react-redux\" rel="bookmark">从底层原理学习 react-redux</a></div>
+    </li>
+  </ul>
+
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>ES
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2021/06/22/frontEnd/VirtualDOM,Diff%E7%AE%97%E6%B3%95/" title="VirtualDOM, Diff算法">http://example.com/2021/06/22/frontEnd/VirtualDOM,Diff算法/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/react/" rel="tag"><i class="fa fa-tag"></i> react</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/05/26/frontEnd/js%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="prev" title="js 设计模式">
+                  <i class="fa fa-chevron-left"></i> js 设计模式
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/07/19/English/technicalTranslator/%5B%E8%AF%91%5D5%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%AD%A5%E9%AA%A4%E5%8E%BB%E7%90%86%E8%A7%A3JSONWebTokens(JWT)/" rel="next" title="[译] 5个简单的步骤去理解 JSON Web Tokens(JWT)">
+                  [译] 5个简单的步骤去理解 JSON Web Tokens(JWT) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ES</span>
+</div>
+<div class="busuanzi-count">
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

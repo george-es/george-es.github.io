@@ -19,3 +19,7 @@ if (CONFIG.comments.storage) {
     localStorage.setItem('comments_active', commentClass);
   });
 }
+
+const tagCloudBlock = document.getElementById('tag-cloud')
+const tagCloud = document.getElementById('resCanvas')
+tagCloud.setAttribute('width', tagCloudBlock.clientWidth)

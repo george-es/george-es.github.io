@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.3/css/all.min.css" integrity="sha256-2H3fkXt6FEmrReK448mDVGKb3WW2ZZw35gI7vqHOE4Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","version":"8.6.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<meta name="description" content="原文地址：13 Noteworthy Points from Google’s JavaScript Style Guide原文作者：Daniel Simmons">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[译] Google JavaScript 风格指南中 13 个值得注意的细节">
+<meta property="og:url" content="http://example.com/2021/07/19/English/technicalTranslator/[%E8%AF%91]GoogleJavaScript%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97%E4%B8%AD13%E4%B8%AA%E5%80%BC%E5%BE%97%E6%B3%A8%E6%84%8F%E7%9A%84%E7%BB%86%E8%8A%82/index.html">
+<meta property="og:site_name" content="George_ES">
+<meta property="og:description" content="原文地址：13 Noteworthy Points from Google’s JavaScript Style Guide原文作者：Daniel Simmons">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/07/19/English/technicalTranslator/[%E8%AF%91]GoogleJavaScript%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97%E4%B8%AD13%E4%B8%AA%E5%80%BC%E5%BE%97%E6%B3%A8%E6%84%8F%E7%9A%84%E7%BB%86%E8%8A%82/1.jpeg">
+<meta property="article:published_time" content="2021-07-19T13:36:51.341Z">
+<meta property="article:modified_time" content="2021-08-15T07:16:47.267Z">
+<meta property="article:author" content="ES">
+<meta property="article:tag" content="javascript">
+<meta property="article:tag" content="translation">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/07/19/English/technicalTranslator/[%E8%AF%91]GoogleJavaScript%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97%E4%B8%AD13%E4%B8%AA%E5%80%BC%E5%BE%97%E6%B3%A8%E6%84%8F%E7%9A%84%E7%BB%86%E8%8A%82/1.jpeg">
+
+
+<link rel="canonical" href="http://example.com/2021/07/19/English/technicalTranslator/[%E8%AF%91]GoogleJavaScript%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97%E4%B8%AD13%E4%B8%AA%E5%80%BC%E5%BE%97%E6%B3%A8%E6%84%8F%E7%9A%84%E7%BB%86%E8%8A%82/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2021/07/19/English/technicalTranslator/[%E8%AF%91]GoogleJavaScript%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97%E4%B8%AD13%E4%B8%AA%E5%80%BC%E5%BE%97%E6%B3%A8%E6%84%8F%E7%9A%84%E7%BB%86%E8%8A%82/","path":"2021/07/19/English/technicalTranslator/[译]GoogleJavaScript风格指南中13个值得注意的细节/","title":"[译] Google JavaScript 风格指南中 13 个值得注意的细节"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>[译] Google JavaScript 风格指南中 13 个值得注意的细节 | George_ES</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"> <!-- 添加看板娘-->
+  </noscript>
+    <script src="/live2d-widget/autoload.js"></script>
+  
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">George_ES</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">少女情怀总是诗</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">4</span></a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">48</span></a></li>
+        <li class="menu-item menu-item-knowledge"><a href="/knowledge" rel="section"><i class="fas fa-meteor fa-fw"></i>知识星球</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">28</span></a></li>
+        <li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>程序猿生</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-overview">
+            <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="ES"
+      src="/images/avatar.jpeg">
+  <p class="site-author-name" itemprop="name">ES</p>
+  <div class="site-description" itemprop="description">90后程序猿</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+          </div>
+        </div>
+      </div>
+      
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap" id="tag-cloud">
+          <h3 class="widget-title">标签云</h3>
+          <div id="myCanvasContainer" class="widget tagcloud">
+              <canvas height="250" id="resCanvas" style="width=70%">
+                  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Comet/" rel="tag">Comet</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RTK/" rel="tag">RTK</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RegExp/" rel="tag">RegExp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blog/" rel="tag">blog</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/" rel="tag">css</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/" rel="tag">git</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/" rel="tag">github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hooks/" rel="tag">hooks</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jsx/" rel="tag">jsx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/" rel="tag">network</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/" rel="tag">npm</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/object/" rel="tag">object</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/promise/" rel="tag">promise</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/react/" rel="tag">react</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redux/" rel="tag">redux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rest/" rel="tag">rest</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/token/" rel="tag">token</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/translation/" rel="tag">translation</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/typeScript/" rel="tag">typeScript</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/" rel="tag">webpack</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/websocket/" rel="tag">websocket</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/yarn/" rel="tag">yarn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%93%E5%AD%98/" rel="tag">缓存</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AE%E8%AF%A2/" rel="tag">轮询</a><span class="tag-list-count">1</span></li></ul>
+              </canvas>
+          </div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/george-es" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/07/19/English/technicalTranslator/[%E8%AF%91]GoogleJavaScript%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97%E4%B8%AD13%E4%B8%AA%E5%80%BC%E5%BE%97%E6%B3%A8%E6%84%8F%E7%9A%84%E7%BB%86%E8%8A%82/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+      <meta itemprop="name" content="ES">
+      <meta itemprop="description" content="90后程序猿">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="George_ES">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          [译] Google JavaScript 风格指南中 13 个值得注意的细节
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-07-19 21:36:51" itemprop="dateCreated datePublished" datetime="2021-07-19T21:36:51+08:00">2021-07-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index"><span itemprop="name">前端</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="/2021/07/19/English/technicalTranslator/[%E8%AF%91]GoogleJavaScript%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97%E4%B8%AD13%E4%B8%AA%E5%80%BC%E5%BE%97%E6%B3%A8%E6%84%8F%E7%9A%84%E7%BB%86%E8%8A%82/1.jpeg" alt="img"></p>
+<blockquote>
+<p>原文地址：<a target="_blank" rel="noopener" href="https://medium.freecodecamp.org/google-publishes-a-javascript-style-guide-here-are-some-key-lessons-1810b8ad050b">13 Noteworthy Points from Google’s JavaScript Style Guide</a><br>原文作者：<a target="_blank" rel="noopener" href="https://medium.freecodecamp.org/@dsimmons_23530">Daniel Simmons</a></p>
+</blockquote>
+<span id="more"></span>
+
+<p>对编码风格不熟悉的人而言，<a target="_blank" rel="noopener" href="https://google.github.io/styleguide/jsguide.html">Google 推出一套用于编写 JavaScript 代码的样式指南</a>， 并指出（谷歌认为）编写清晰易懂的代码最佳风格。</p>
+<p>首先声明一点，以下规则并不是编写 Javascript 代码的硬性要求，仅是为了维持项目代码的一致性，Javascript 是一种灵活而宽松的语言，它允许各种风格。</p>
+<p>Google 和 <a target="_blank" rel="noopener" href="https://github.com/airbnb/javascript">Airbnb</a> 都推出了各自的编码风格指南，且是比较受欢迎的，如果你的项目中需要编写大量的JS代码，我绝对建议你阅读。</p>
+<p>以下列出了在 Google JS 风格指南中我认为比较有趣且实用的 13 条规则</p>
+<p>Google对编码中的每个细节点都进行了争议(标签, 空格,以及分号的使用)还有一些模糊的规范, 无疑, 这套风格肯定会改变我写JS的方式。</p>
+<p>对每一条规则，我都会列出规范的摘要部分，然后是样式指南中的支持引用和详细描述规则，在恰当的情况下，我将举例说明，并与之和不遵循规则的代码进行对比。</p>
+<p><strong>推荐使用空格, 而不是tab键</strong></p>
+<blockquote>
+<p>除了行终止符以外，ASCII 中的水平空格字符 (0x20) 是唯一一个表示空格的空白字符，这意味着 Tab 键并不适用于缩进。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// bad</span><br><span class="line">  function foo() &#123;</span><br><span class="line">  ∙∙∙∙let name;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // bad</span><br><span class="line">  function bar() &#123;</span><br><span class="line">  ∙let name;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // good</span><br><span class="line">  function baz() &#123;</span><br><span class="line">  ∙∙let name;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>推荐使用分号, 而不是将其省略</strong></p>
+<blockquote>
+<p>每条语句结束后必须带有分号，严禁依赖编译器自动插入分号。<br>虽然我无法想象为什么有人会反对这个想法，但是 JS 中一贯使用分号将成为新 “spaces versus tabs” 争论，Google 表示坚持分号的使用。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// bad</span><br><span class="line">let luke = &#123;&#125;</span><br><span class="line">let leia = &#123;&#125;</span><br><span class="line">[luke, leia].forEach(jedi =&gt; jedi.father = &#x27;vader&#x27;)</span><br><span class="line">// good</span><br><span class="line">let luke = &#123;&#125;;</span><br><span class="line">let leia = &#123;&#125;;</span><br><span class="line">[luke, leia].forEach((jedi) =&gt; &#123;</span><br><span class="line">  jedi.father = &#x27;vader&#x27;;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><strong>不要使用 ES6 模块</strong></p>
+<blockquote>
+<p>不要使用 ES6 模块（即 export 和 import 关键词），因为它们的语义尚未最终确定，注意，一旦语义完全标准化，将重新审视这条规则。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// 现在先不要这样用:</span><br><span class="line">//------ lib.js ------</span><br><span class="line">export function square(x) &#123;</span><br><span class="line">    return x * x;</span><br><span class="line">&#125;</span><br><span class="line">export function diag(x, y) &#123;</span><br><span class="line">    return sqrt(square(x) + square(y));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//------ main.js ------</span><br><span class="line">import &#123; square, diag &#125; from &#x27;lib&#x27;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>不推荐水平对齐（但不禁止）</strong></p>
+<blockquote>
+<p>首先水平对齐这种做法是允许的，但是在 Google 风格中并不推荐这种用法。甚至不需要在已使用过的地方保持水平对齐。<br>水平对齐即在代码中添加空格，使每一列对齐。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// bad</span><br><span class="line">&#123;</span><br><span class="line">  tiny:   42,  </span><br><span class="line">  longer: 435, </span><br><span class="line">&#125;;</span><br><span class="line">// good</span><br><span class="line">&#123;</span><br><span class="line">  tiny: 42, </span><br><span class="line">  longer: 435,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>不要再使用var</strong></p>
+<blockquote>
+<p>使用 const 或 let 声明所有局部变量，除非需要重新分配变量，否则默认使用 const，不推荐使用 var 关键词。<br>我仍然看见人们在 StackOverflow 和其他地方使用 var 代码示例。可能有人会为此反对，或者说这是一种旧习惯，要改变，比较困难。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// bad</span><br><span class="line">var example = 42;</span><br><span class="line">// good</span><br><span class="line">let example = 42;</span><br></pre></td></tr></table></figure>
+
+<p><strong>首选箭头函数</strong><br>箭头函数提供一个简洁的句法，并解决了许多困难，首选箭头函数而不是函数关键词，尤其是嵌套函数<br>说句真心话，我认为箭头函数非常棒，因为他们更加简洁，更好看，事实证明，他们也有很重要的作用。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// bad</span><br><span class="line">[1, 2, 3].map(function (x) &#123;</span><br><span class="line">  const y = x + 1;</span><br><span class="line">  return x * y;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">// good</span><br><span class="line">[1, 2, 3].map((x) =&gt; &#123;</span><br><span class="line">  const y = x + 1;</span><br><span class="line">  return x * y;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用模板字符串代替连接符</strong></p>
+<blockquote>
+<p>在复杂字符串上使用模板字符串 （``） 而是不是连接符 （+） ，特别是涉及多个字符串文字的情况下，模板字符串可以跨行</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">// bad</span><br><span class="line">function sayHi(name) &#123;</span><br><span class="line">  return &#x27;How are you, &#x27; + name + &#x27;?&#x27;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// bad</span><br><span class="line">function sayHi(name) &#123;</span><br><span class="line">  return [&#x27;How are you, &#x27;, name, &#x27;?&#x27;].join();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// bad</span><br><span class="line">function sayHi(name) &#123;</span><br><span class="line">  return `How are you, $&#123; name &#125;?`;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// good</span><br><span class="line">function sayHi(name) &#123;</span><br><span class="line">  return `How are you, $&#123;name&#125;?`;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>对长字符串不要使用行连续符</strong></p>
+<blockquote>
+<p>不要在普通字符串或模板字符串中使用行连续（即, 通过反斜杠结束字符串文字内的一行）尽管 ES5 允许这样做，如果有空格尾随在后面，它将会导致棘手的错误，并且对读者来说不那么明显。</p>
+</blockquote>
+<p>有趣的是，Google 和 Airbnb 都不赞同这种做法<a target="_blank" rel="noopener" href="https://github.com/airbnb/javascript#strings--line-length">这又Airbnb规范</a></p>
+<p>谷歌的建议是通过连接符来拆分长字符串（如下所示），而 Airbnb 则建议写成一行，允许出现长字符串（如果需要的话）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// bad (sorry, this doesn&#x27;t show up well on mobile)</span><br><span class="line">const longString = &#x27;This is a very long string that \</span><br><span class="line">    far exceeds the 80 column limit. It unfortunately \</span><br><span class="line">    contains long stretches of spaces due to how the \</span><br><span class="line">    continued lines are indented.&#x27;;</span><br><span class="line">// good</span><br><span class="line">const longString = &#x27;This is a very long string that &#x27; + </span><br><span class="line">    &#x27;far exceeds the 80 column limit. It does not contain &#x27; + </span><br><span class="line">    &#x27;long stretches of spaces since the concatenated &#x27; +</span><br><span class="line">    &#x27;strings are cleaner.&#x27;;</span><br></pre></td></tr></table></figure>
+<p><strong>for…of是for循环首选</strong></p>
+<blockquote>
+<p>ES6 提供了三种不同的 for 循环。三个可用情况下，如果可以， 推荐优先使用 for-of 循环</p>
+</blockquote>
+<p>包括我在内, 也觉得这条规则有点奇怪，但是谷歌认为它作为 for 循环的首选将会非常优雅</p>
+<p>我认为，for…in 循环更适合对象，而 for…of 更适合数组</p>
+<p>虽然 Google 的规范并不一定能和我们想法相吻合, 但是它依旧觉得这种做法相当优雅</p>
+<p><strong>不要使用eval()</strong></p>
+<blockquote>
+<p>不要使用 eval 或 Function(…String) 构造函数（代码加载器除外），这些功能具有潜在风险，并且在 CSP 环境中无法正常工作。</p>
+</blockquote>
+<p>对于 eval() 而言，在 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval">MDN 页面</a>甚至专门有一页去呼吁不要使用 eval()</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// bad</span><br><span class="line">let obj = &#123; a: 20, b: 30 &#125;;</span><br><span class="line">let propName = getPropName();  // returns &quot;a&quot; or &quot;b&quot;</span><br><span class="line">eval( &#x27;var result = obj.&#x27; + propName );</span><br><span class="line">// good</span><br><span class="line">let obj = &#123; a: 20, b: 30 &#125;;</span><br><span class="line">let propName = getPropName();  // returns &quot;a&quot; or &quot;b&quot;</span><br><span class="line">let result = obj[ propName ];  //  obj[ &quot;a&quot; ] is the same as obj.a</span><br></pre></td></tr></table></figure>
+
+<p><strong>常量应该用大写字母和下划线表示</strong></p>
+<blockquote>
+<p>常量名称使用 CONSTANT_CASE: 全部为大写字母，单词用下划线分割。</p>
+</blockquote>
+<p>如果你能确保一个变量不会再改变，你可以通过大写常量的名称来表明这一点，这使得常量的不变性在整个代码的使用中显而易见。</p>
+<p>这个规则有个值得注意的例外是，如果常量是属于函数范围的，在这种情况下，应该将其用驼峰命名法来表示。<br> <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> // bad</span><br><span class="line">const number = 5;</span><br><span class="line">// good</span><br><span class="line">const NUMBER = 5;</span><br></pre></td></tr></table></figure><br><strong>每次只声明一个变量</strong></p>
+<blockquote>
+<p>每个局部声明只声明一个变量，例如 let a = 1, b = 2 是不被允许的。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// bad</span><br><span class="line">let a = 1, b = 2, c = 3;</span><br><span class="line">// good</span><br><span class="line">let a = 1;</span><br><span class="line">let b = 2;</span><br><span class="line">let c = 3;</span><br></pre></td></tr></table></figure>
+<p><strong>使用单引号而不是双引号</strong></p>
+<blockquote>
+<p>普通的字符文本使用单引号（’）来分割，而不是双引号（”）</p>
+<p>Tip: 如果一个字符串文本中包含单引号字符，请考虑使用模板字符串，而避免使用转义符号。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// bad</span><br><span class="line">let directive = &quot;No identification of self or mission.&quot;</span><br><span class="line">// bad</span><br><span class="line">let saying = &#x27;Say it ain\u0027t so.&#x27;;</span><br><span class="line">// good</span><br><span class="line">let directive = &#x27;No identification of self or mission.&#x27;;</span><br><span class="line">// good</span><br><span class="line">let saying = `Say it ain&#x27;t so`;</span><br></pre></td></tr></table></figure>
+
+<p><strong>最后一点</strong><br>正如我一开始说的那样，以上这些规则并不是强制性的，Google 只是众多科技巨头中的一员，这些只是建议。</p>
+<p>也就是说，看看像谷歌这样的公司提出的风格建议很有意思，它聘请了许多精彩的人，他们花了很多时间去编写优秀的代码。</p>
+<p>如果你想遵循 “ Google 标准源码 ” 指南，你可以遵循这些规则，当然，很多人不同意，你可以部分遵循，甚至不遵循也可以。</p>
+<p>我个人认为，很多情况下 Airbnb 比 Google 的规范更具吸引力，无论在何种情况下，一定要牢记，整个项目的编码风格要保持统一。</p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章推荐</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2021\07\19\English\technicalTranslator\[译]5个简单的步骤去理解JSONWebTokens(JWT)\" rel="bookmark">[译] 5个简单的步骤去理解 JSON Web Tokens(JWT)</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\08\26\frontEnd\js7种创建对象模式\" rel="bookmark">js7种创建对象模式</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\06\03\frontEnd\js原型和原型链\" rel="bookmark">js 原型和原型链</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\04\01\frontEnd\js数据类型\" rel="bookmark">js 数据类型</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\04\04\frontEnd\js类型判断\" rel="bookmark">js 类型判断</a></div>
+    </li>
+  </ul>
+
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>ES
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2021/07/19/English/technicalTranslator/[%E8%AF%91]GoogleJavaScript%E9%A3%8E%E6%A0%BC%E6%8C%87%E5%8D%97%E4%B8%AD13%E4%B8%AA%E5%80%BC%E5%BE%97%E6%B3%A8%E6%84%8F%E7%9A%84%E7%BB%86%E8%8A%82/" title="[译] Google JavaScript 风格指南中 13 个值得注意的细节">http://example.com/2021/07/19/English/technicalTranslator/[译]GoogleJavaScript风格指南中13个值得注意的细节/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/javascript/" rel="tag"><i class="fa fa-tag"></i> javascript</a>
+              <a href="/tags/translation/" rel="tag"><i class="fa fa-tag"></i> translation</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2021/07/19/English/technicalTranslator/%5B%E8%AF%91%5D5%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%AD%A5%E9%AA%A4%E5%8E%BB%E7%90%86%E8%A7%A3JSONWebTokens(JWT)/" rel="prev" title="[译] 5个简单的步骤去理解 JSON Web Tokens(JWT)">
+                  <i class="fa fa-chevron-left"></i> [译] 5个简单的步骤去理解 JSON Web Tokens(JWT)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2021/07/20/hexo/HexoNext%E7%BE%8E%E5%8C%96%E6%8C%87%E5%8C%97/" rel="next" title="Hexo Next8.6 美化指北">
+                  Hexo Next8.6 美化指北 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ES</span>
+</div>
+<div class="busuanzi-count">
+</div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
