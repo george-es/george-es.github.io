@@ -1,36 +1,616 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>受控组件和非受控组件</title>
-    <url>/2022/02/26/frontEnd/%E5%8F%97%E6%8E%A7%E7%BB%84%E4%BB%B6%E5%92%8C%E9%9D%9E%E5%8F%97%E6%8E%A7%E7%BB%84%E4%BB%B6/</url>
-    <content><![CDATA[<p><img src="/2022/02/26/frontEnd/%E5%8F%97%E6%8E%A7%E7%BB%84%E4%BB%B6%E5%92%8C%E9%9D%9E%E5%8F%97%E6%8E%A7%E7%BB%84%E4%BB%B6/image-20220226224911608.png" alt="image-20220226224911608"></p>
-<blockquote>
-<p>在前端学习生涯中，你总会绕不开一个概念，受控组件和非受控组件，这到底是什么呢？这一讲，我们来好好聊聊这个话题。</p>
-</blockquote>
+    <title>React 之核心概念</title>
+    <url>/2022/05/08/frontEnd/react%E4%B9%8B%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5/</url>
+    <content><![CDATA[<p>123</p>
 <span id="more"></span>
 
-<p>不要觉得这两概念很高大上，按照字面意思理解就行，顾名思义</p>
-<ul>
-<li>受控组件：受 <code>xxx</code> 控制的组件</li>
-<li>非受控组件，不受 <code>xxx</code> 控制的组件</li>
+<blockquote>
+<p>文章中统一用 <code>JS</code> 表示 <code>JavaScript</code></p>
+</blockquote>
+<h2 id="JSX-简介"><a href="#JSX-简介" class="headerlink" title="JSX 简介"></a>JSX 简介</h2><h3 id="什么是-JSX"><a href="#什么是-JSX" class="headerlink" title="什么是 JSX"></a>什么是 JSX</h3><p><code>JSX</code> 是一个 <code>JS</code> 的语法扩展。它可以很好地描述 <code>UI</code> 应该呈现出它应有交互的本质形式。</p>
+<h3 id="为什么使用-JSX"><a href="#为什么使用-JSX" class="headerlink" title="为什么使用 JSX"></a>为什么使用 JSX</h3><ul>
+<li><code>React</code> 认为渲染逻辑本质上与其他 <code>UI</code> 逻辑内在耦合</li>
+<li><code>React</code> 并没有采用将标记与逻辑进行分离到不同文件这种人为地分离方式，而是通过将二者共同存放在称之为“组件”的松散耦合单元之中，来实现关注点分离。</li>
 </ul>
-<p>我们现在只要了解 <code>xxx</code> 是谁就行了</p>
-<p>带着这个疑问，我们猜一下，<code>xxx</code> 能是谁呢？凭借你们朴素的情感，和明锐的逻辑，那个更合理呢？代码、用户、状态。</p>
-<p>很明显，<strong>状态</strong>更加合理，毕竟 <code>vue</code> 和 <code>react</code> 框架都有一个词，<code>state</code> 。</p>
-<p>好，我们现在知道了，<strong>受控组件，就是受状态控制的组件，非受控组件，就是不受状态控制的组件</strong>。在基础组件中，有个值叫 <code>value</code>， 通过它可以控制组件的状态。</p>
-<p>举个例子</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">const Comp = () =&gt; &#123;</span><br><span class="line">	const [state, setState] = useState(&#x27;张三&#x27;)</span><br><span class="line">	return (</span><br><span class="line">		&lt;&gt;</span><br><span class="line">			&lt;input value=&#123;state&#125; /&gt; // 这就是受控组件</span><br><span class="line">			&lt;input /&gt; // 这是非受控组件</span><br><span class="line">		&lt;/&gt;</span><br><span class="line">	)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="JSX-中嵌套表达式"><a href="#JSX-中嵌套表达式" class="headerlink" title="JSX 中嵌套表达式"></a>JSX 中嵌套表达式</h3><p>在 <code>JSX</code> 语法中，你可以在大括号内放置任何有效的 <code>JS</code> 表达式</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">const name = &#x27;george&#x27;</span><br><span class="line">const el = &lt;div&gt;&#123;name&#125;&lt;/div&gt;</span><br></pre></td></tr></table></figure>
 
-<p>对于前者，无论我们输入任何东西，都不会改变输入框的内容，它用于是”张三“，因为被控制了，对于后者，我们可以输入任意的值。</p>
-<p><strong>状态</strong></p>
-<p>这里要说明下，有内部状态和外部状态，在 <code>HTML</code> 表单元素中，内部会维护一套 <code>state</code> 状态，拿 <code>&lt;input /&gt;</code> 组件为例，值的改变会导致状态的改变，从而触发各种事件，<code>onChange</code> 呀之类的，而元素中有个属性叫 <code>value</code>，它能够接收外部的状态，从而控制内部的状态，因此受控组件和非受控组件，也可以理解为<strong>受外部状态控制的组件叫受控组件，不受外部状态控制的组件叫非受控组件。</strong></p>
-<p>没错，概念已经结束了，我们了解了什么是受控组件什么是非受控组件，剩下的就是如何正确的在不同场景下使用不同的组件了。如果是场景简单，只是提交，非受控组件是可以的，打比方，内容搜索，如果是场景复杂多变，又要发起第三方请求，又要校验，还是老老实实用受控组件吧。</p>
+
+
+<h3 id="JSX-也是一个表达式"><a href="#JSX-也是一个表达式" class="headerlink" title="JSX 也是一个表达式"></a>JSX 也是一个表达式</h3><p>编译之后，<code>JSX</code>  表达式会被转为普通 <code>JS</code> 函数调用，并且对其取值后得到 <code>JS</code> 对象。</p>
+<p>也就是说，可以将 <code>JSX</code> 赋值给变量，把 <code>JSX</code> 当作参数传入，以及从函数中返回 <code>JSX</code>。</p>
+<h3 id="JSX-特定属性"><a href="#JSX-特定属性" class="headerlink" title="JSX 特定属性"></a>JSX 特定属性</h3><p>在 <code>JSX</code> 中可以使用引号来指定字符串（<code>string</code>）类型，也可以使用大括号在属性值中插入一个 <code>JS</code> 表达式。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">const el = &lt;img src=&#x27;http://www.george.com&#x27; /&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">const url = &#x27;http://www.george.com&#x27;</span><br><span class="line">const el = &lt;img src=&#123;url&#125; /&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="JSX-防止注入攻击"><a href="#JSX-防止注入攻击" class="headerlink" title="JSX 防止注入攻击"></a>JSX 防止注入攻击</h3><p><code>React DOM</code> 在渲染所有输入内容之前，默认会进行转义，它可以确保你的应用中，永远不会注入那些并非自己明确编写的内容。所有的内容在渲染之前都被转换成了字符串，这样可以有效防止 <code>XSS(跨站脚本)</code>攻击。</p>
+<h3 id="JSX-表示对象"><a href="#JSX-表示对象" class="headerlink" title="JSX 表示对象"></a>JSX 表示对象</h3><p><code>Babel</code> 会把 <code>JSX</code> 转译成一名为 <code>React.createElement()</code> 函数调用。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">const el = (</span><br><span class="line">	&lt;div className=&#x27;greeting&#x27;&gt;</span><br><span class="line">		Hello world!</span><br><span class="line">	&lt;/div&gt;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">// 被塞入 createElement 后</span><br><span class="line">const el = React.createElement(</span><br><span class="line">	&#x27;h1&#x27;,</span><br><span class="line">	&#123;className: &#x27;greeting&#x27;&#125;,</span><br><span class="line">	&#x27;Hello world!&#x27;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>最后会被转换成</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">const el = &#123;</span><br><span class="line">	type: &#x27;h1&#x27;,</span><br><span class="line">	props: &#123;</span><br><span class="line">		className: &#x27;greeting&#x27;,</span><br><span class="line">		children: &#x27;Hello world!&#x27;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="元素渲染"><a href="#元素渲染" class="headerlink" title="元素渲染"></a>元素渲染</h2><h3 id="什么是元素渲染"><a href="#什么是元素渲染" class="headerlink" title="什么是元素渲染"></a>什么是元素渲染</h3><p>元素是构成 <code>React</code> 应用的最小砖块，它描述了你在屏幕上想看到的内容。</p>
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">const el = &lt;div&gt;Hello world!&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="将一个元素渲染为-DOM"><a href="#将一个元素渲染为-DOM" class="headerlink" title="将一个元素渲染为 DOM"></a>将一个元素渲染为 DOM</h3><p>通过 <code>ReactDOM.createRoot()</code> 可以将一个 <code>React</code> 元素渲染到根 <code>DOM</code> 节点</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;div id=&#x27;root&#x27; /&gt;</span><br><span class="line">const root = ReactDOM.createRoot(document.getElementById(&#x27;root&#x27;))</span><br><span class="line">root.render()</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="更新已渲染的元素"><a href="#更新已渲染的元素" class="headerlink" title="更新已渲染的元素"></a>更新已渲染的元素</h3><p><code>React</code> 元素是不可变对象。一旦被创建，你就无法更改它的子元素或属性。</p>
+<h3 id="React-只更新它需要更新的部分"><a href="#React-只更新它需要更新的部分" class="headerlink" title="React 只更新它需要更新的部分"></a>React 只更新它需要更新的部分</h3><p><code>React DOM</code> 会将元素和它的子元素与她们之前的状态进行比较，只会进行局部更新。</p>
+<h2 id="组件-amp-Props"><a href="#组件-amp-Props" class="headerlink" title="组件 &amp; Props"></a>组件 &amp; Props</h2><p>组件允许你将 <code>UI</code> 拆分为独立可复用的代码片段，并对每个片段进行独立构思。</p>
+<h3 id="函数组件与-class-组件"><a href="#函数组件与-class-组件" class="headerlink" title="函数组件与 class 组件"></a>函数组件与 class 组件</h3><p>定义组件最简单的方式就是编写 JS 函数</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">function Hi() &#123;</span><br><span class="line">	return &lt;h1&gt;Hello&lt;/h1&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该函数是一个有效的 <code>React</code> 组件，因为它接收唯一带有数据的 <code>props</code> 对象并返回一个<code>React</code> 元素。这类组件被称为“函数组件”，因为它本质上就是 <code>javascript</code> 函数。</p>
+<h3 id="渲染组件"><a href="#渲染组件" class="headerlink" title="渲染组件"></a>渲染组件</h3><p><code>React</code> 既可是 <code>DOM</code> 标签，也可是用户自定义组件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// DOM 标签</span><br><span class="line">const el = &lt;div /&gt;</span><br><span class="line"></span><br><span class="line">// 自定义组件</span><br><span class="line">const el = &lt;Hi name=&#x27;george&#x27; /&gt;</span><br></pre></td></tr></table></figure>
+
+<p>当 <code>React</code> 元素为用户自定义组件时，它会将 <code>JSX</code> 所接收的属性，以及子组件，转换为单个对象传递给组件，这个对象称之为 <code>props</code>。</p>
+<h3 id="组合组件"><a href="#组合组件" class="headerlink" title="组合组件"></a>组合组件</h3><p>组件可以在其输出中引用其他组件，这就可以让我们用同一组件抽象出任意层次的细节。</p>
+<p>通常来说，每个新的 <code>React</code> 应用程序的顶层组件都是 <code>App</code> 组件.</p>
+<h3 id="提取组件"><a href="#提取组件" class="headerlink" title="提取组件"></a>提取组件</h3><p>将组件拆分为更小的组件。虽然提取组件是一件繁重的工作，但是在大型应用中，构建可复用组件库是完全值得的。</p>
+<p>根据经验来看，如果 <code>UI</code> 中有一部分被多次使用，或者组件本身就足够复杂，那么它就是一个可复用组件的候选项。</p>
+<h3 id="Props-的只读性"><a href="#Props-的只读性" class="headerlink" title="Props 的只读性"></a>Props 的只读性</h3><p>组件无论是函数组件还是类（<code>class</code>）组件，都不能修改自身的 <code>props</code>。</p>
+<p><code>React</code> 虽然非常灵活，但它有个严格的规则：<strong>所有 React 组件都必须像纯函数一样保护它们的 props 不被更改</strong>。</p>
+<h2 id="State-amp-生命周期"><a href="#State-amp-生命周期" class="headerlink" title="State &amp; 生命周期"></a>State &amp; 生命周期</h2><h3 id="State"><a href="#State" class="headerlink" title="State"></a>State</h3><p><code>state</code> 可以理解为组件内部维护的状态。和 <code>props</code> 很相似，只不过 <code>props</code> 是改变不了的，<code>state</code> 可以被改变。</p>
+<h3 id="State-的更新可能是异步的"><a href="#State-的更新可能是异步的" class="headerlink" title="State 的更新可能是异步的"></a>State 的更新可能是异步的</h3><p>出于性能考虑，<code>React</code> 可能会把多个 <code>setState</code> 调用合并成一个调用。<strong>因为 <code>this.props</code> 和 <code>this.state</code> 可能会异步更新，所以你不要依赖他们的值来更新下一个状态。</strong></p>
+<p>要解决 <code>setState</code> 异步问题，可以让 <code>setState</code> 接收一个函数而不是一个对象。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">this.setState((state, props) =&gt; (&#123;</span><br><span class="line">	test: state.test + props.test</span><br><span class="line">&#125;))</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="State-的更新会被合并"><a href="#State-的更新会被合并" class="headerlink" title="State 的更新会被合并"></a>State 的更新会被合并</h3><p>当你调用 <code>setState</code> 的时候，<code>React</code> 会把你提供的对象合并到当前的 <code>state</code>。</p>
+<p>这是 <code>state</code> 中的数据</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">constructor(props) &#123;</span><br><span class="line">	super(props)</span><br><span class="line">	this.state = &#123;</span><br><span class="line">		test1:[],</span><br><span class="line">		test2:[],</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>单独更新 <code>test1</code>，并不会影响 <code>test2</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">this.setState(&#123;</span><br><span class="line">	test1:[1, 2, 3]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>你可以理解为 <code>setState</code> 实际上是执行了 <code>Object.assign(原始 data, 更新 data)</code> 操作</p>
+<h3 id="数据是向下流动的"><a href="#数据是向下流动的" class="headerlink" title="数据是向下流动的"></a>数据是向下流动的</h3><p>不管是父组件或是子组件都无法知道某个组件是有状态还是无状态的，并且它们也并不关心它是函数组件还是 <code>class</code> 组件。</p>
+<p>这就是为什么称 <code>state</code> 为局部的或是封装的的原因。除了拥有并设置了它的组件，其他组件都无法访问。</p>
+<h2 id="事件处理"><a href="#事件处理" class="headerlink" title="事件处理"></a>事件处理</h2><ul>
+<li><p><code>React</code> 事件的命名采用小驼峰式（<code>camelCase</code>），而不是纯小写 </p>
+</li>
+<li><p>使用 <code>JSX</code> 语法时你需要传入一个函数作为事件处理函数，而不是一个字符串</p>
+</li>
+<li></li>
+</ul>
 ]]></content>
       <categories>
         <category>前端</category>
       </categories>
       <tags>
         <tag>react</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>没有目的的旅行</title>
+    <url>/2022/05/04/pages/%E6%B2%A1%E6%9C%89%E7%9B%AE%E7%9A%84%E7%9A%84%E6%97%85%E8%A1%8C/</url>
+    <content><![CDATA[<p>故事开始前，想问问，在场的所有人，有多少人经历过一场没有目的的旅行，就是那种我不知道要去哪里，也不知道要干什么，只知道在路上，享受其中的过程。<br>加了两天班，没什么出行计划，醒来后一个想法冒出来，为啥旅行要有目的，一个包，装上几件衣服，说走就走。<br>没有目的，自然也不会走错路，也就不用导航，只知道向着太阳升起的方向走，没有了时间的紧迫感，一路上，能让则让，遇上堵车，也不会像以前一样变的烦躁，肚子饿了就去找吃的，困了就小歇一下，躺在草地上，望着天空，感叹这世界之大，我们之小，让旅行的意义从对远方具象的期待，变成了身边近处的风景。<br>或许不知道从什么时候开始，我们的生活被一个个目标所捆绑，上小学，老师告诉我们要以100分为目标，高考时，我们要以985、211为目标，工作时，我们要以全球前100企业为目标，这种思维定式，无形的渗透到了我们的生活中，仿佛失去了目标，就失去了生活的意义。沿途的风景变的不再令我们陶醉，我们憧憬的，是那些远方的风景。<br>于是乎大家在出门前，都会下意识的做攻略，仿佛要做到不虚此行，到了景区发现人满为患，心情直接down到了谷底，遇到了下雨天，又会焦躁不安，回到酒店反问自己，这趟旅行，来了个寂寞。<br>没有目的的旅行，最大的挑战，不是路上发生的一切，而是自己，在此过程中你会经历其他过程中完全不会经历的剧烈的情绪起伏，在最初可能是剧烈的欢乐，新鲜感，惊奇，到后面可能是剧烈的孤独，无助，迷茫，安全感缺失，但无论发生什么情况，你都依旧要保持乐观。这种不确定性，就好比恋爱时，你完全不知道女朋友何时，为啥事会生气，但只要生气了，你再不开心也要先保持乐观去陪伴她。<br>没有目的的旅行，才是人生的常态，一开始那个问题，其实大家都有经历过，从呱呱坠地那一刻，上帝就赋予我们拥有在任意环境中，创造属于自己的天地的能力，越长大，这种能力消失的越快，你们可能会好奇，这能力到底是什么？它就是少年感，永远年轻，永远热泪盈眶，永远相信梦想。<br>最后，我开到了一个海边，看着潮起潮落，浪花一次次的拍打在礁石上，突然好像懂了杨绛先生说的那句话：“我们曾经如此渴望命运的波澜，到最后才发现，人生最曼妙的风景，竟是内心淡定和从容。”<br>旅行，不止于此，故事，也不“只”于此。</p>
+]]></content>
+      <categories>
+        <category>碎碎念</category>
+      </categories>
+      <tags>
+        <tag>碎碎念</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>nestjs 之数据库操作</title>
+    <url>/2022/03/21/rearEnd/nestjs%E4%B9%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[<blockquote>
+<p>后端大概率是绕不开数据库的，这里记录在后端学习过程中的数据库操作</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="对数据库的理解"><a href="#对数据库的理解" class="headerlink" title="对数据库的理解"></a>对数据库的理解</h2><p>数据库，顾名思义是用来存储数据的，它有自己的语句，对于开发者而言，很多语言都提供了 <code>typeorm</code> 库来实现对数据库的操作，这些库封装了数据库语句，简化了开发成本，对于简单的操控，可以用库提供的方法实现，对于复杂的操作，还是需要用数据库语句的。</p>
+<h2 id="mysql-的安装和基本操作"><a href="#mysql-的安装和基本操作" class="headerlink" title="mysql 的安装和基本操作"></a>mysql 的安装和基本操作</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install --save @nestjs/typeorm typeorm mysql</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="mysql配置文件"><a href="#mysql配置文件" class="headerlink" title="mysql配置文件"></a>mysql配置文件</h3><p>这里介绍两种配置方法</p>
+<h4 id="通过-json-文件配置"><a href="#通过-json-文件配置" class="headerlink" title="通过 json 文件配置"></a>通过 json 文件配置</h4><p>在根目录下创建一个 <code>ormconfig.json</code> 文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	type: &#x27;mysql&#x27;,</span><br><span class="line">	host: &#x27;127.0.0.1&#x27;,</span><br><span class="line">	port: &#x27;3306&#x27;,</span><br><span class="line">	username: &#x27;root&#x27;,</span><br><span class="line">  password: &#x27;12345678&#x27;,</span><br><span class="line">  database: &#x27;test&#x27;,</span><br><span class="line">	migrations: [&#x27;migration/*.ts&#x27;],</span><br><span class="line">	timezone: &#x27;UTC&#x27;,</span><br><span class="line">	charset: &#x27;uft8mb4&#x27;,</span><br><span class="line">	multipleStatements: true,</span><br><span class="line">	dropSchema: false,</span><br><span class="line">	synchronize: true, // 是否自动将实体类同步到数据库</span><br><span class="line">	logging: true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在 <code>app.module.ts</code> 文件中使用数据库配置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import &#123; Module &#125; from &#x27;@nestjs/common&#x27;</span><br><span class="line">// 引入数据库配置文件</span><br><span class="line">import &#123; TypeOrmModule, TypeOrmModuleOptions &#125; from &#x27;@nestjs/typeorm&#x27;</span><br><span class="line"></span><br><span class="line">@Module(&#123;</span><br><span class="line">	import: [</span><br><span class="line">		TypeOrmModule.forRoot(), // 数据库的</span><br><span class="line">	]</span><br><span class="line">&#125;)</span><br><span class="line">export class AppModule &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="直接在-forRoot-中配置"><a href="#直接在-forRoot-中配置" class="headerlink" title="直接在 forRoot 中配置"></a>直接在 forRoot 中配置</h4><p>当然你还有另外一种方法去配置数据库文件，将配置数据写在 <code>TypeOrmModule.forRoot()</code>里</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import &#123; Module &#125; from &#x27;@nestjs/common&#x27;;</span><br><span class="line">import &#123; TypeOrmModule &#125; from &#x27;@nestjs/typeorm&#x27;;</span><br><span class="line">import &#123; AppController &#125; from &#x27;./app.controller&#x27;;</span><br><span class="line">import &#123; AppService &#125; from &#x27;./app.service&#x27;;</span><br><span class="line"></span><br><span class="line">@Module(&#123;</span><br><span class="line">  imports: [</span><br><span class="line">    TypeOrmModule.forRoot(&#123;</span><br><span class="line">      type: &#x27;mysql&#x27;,</span><br><span class="line">      host: &#x27;127.0.0.1&#x27;,</span><br><span class="line">      port: 3306,</span><br><span class="line">      username: &#x27;root&#x27;,</span><br><span class="line">      password: &#x27;12345678&#x27;,</span><br><span class="line">      database: &#x27;test&#x27;,</span><br><span class="line">      // entities: [&#x27;dist/**/*.entity&#123;.ts,.js&#125;&#x27;], </span><br><span class="line">      autoLoadEntities: true,</span><br><span class="line">      synchronize: true,</span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">  controllers: [AppController],</span><br><span class="line">  providers: [AppService],</span><br><span class="line">&#125;)</span><br><span class="line">export class AppModule &#123;&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><code>TypeOrmModule.forRoot()</code> 是干嘛的呢？它提供了所有的配置参数给 <code>TypeORM</code> 包的<code>createConnection</code> 方法</p>
+<p>基本属性</p>
+<ul>
+<li><p>type：数据库类型</p>
+</li>
+<li><p>host：数据库 <code>ip</code> 地址</p>
+</li>
+<li><p>port：端口</p>
+</li>
+<li><p>username：登录名</p>
+</li>
+<li><p>password：密码</p>
+</li>
+<li><p>database：数据库名称</p>
+</li>
+<li><p>entities：扫描本项目中 <code>.entity.ts</code> 或者 <code>.entity.js</code> 的文件</p>
+</li>
+<li><p>synchronize：定义数据库表结构与实体类字段同步（这里一旦数据库少了字段就会自动加入，根据需要来使用）</p>
+</li>
+<li><p>timezone：时区（+08：00）表示东八区</p>
+</li>
+<li><p>retryAttempts：默认10，尝试连接数据库的次数</p>
+</li>
+<li><p>retryDelay：默认3000，尝试连接数据库延迟时间</p>
+</li>
+<li><p>autoLoadEntities：默认false，如果为true，entities将会被自动加载</p>
+</li>
+<li><p>keepConnectionAlive：默认false，如果为true，连接在应用被关闭时不会关闭</p>
+</li>
+</ul>
+<p><strong>在连接数据库的时候，我们配置了synchronize: true这个属性，我们的实体就能与数据表进行对应。即只要我们创建了实体之后，哪怕我们不去创建数据表，当项目启动时候，数据库也会自动生成对应的数据表。</strong></p>
+<h3 id="构建表"><a href="#构建表" class="headerlink" title="构建表"></a>构建表</h3><p><code>mysql</code> 数据库中的表好比一个个 <code>excel</code>，我们可以通过 <code>DBeaver</code> 数据库工具在里面手动创建，也可以通过代码去创建。</p>
+<p><code>typeorm</code> 提供配置<strong>实体</strong>的方式去创建表，那么什么是实体呢？</p>
+<blockquote>
+<p>实体是一个映射到数据库表的类，你可以通过定义一个新类来创建一个实体，并用 @Entity() 来标记。</p>
+</blockquote>
+<p>也就是说，实体就是一张数据表，在 <code>typeorm</code> 中我们不需要对数据库的表使用相关工具进行创建与关联，而只需要创建一个实体，并将实体中的数据内容设置好，项目启动后，就会自动生成对应的表，并且将表与表直接的关系给创建好。</p>
+<p>新建一个目录叫 <code>entities</code> 用于存放实体</p>
+<p><code>./entities/user.entity.ts</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import &#123; Column, Entity, PrimaryGeneratedColumn, BaseEntity &#125; from &#x27;typeorm&#x27;</span><br><span class="line"></span><br><span class="line">/* 表结构 */</span><br><span class="line">@Entity()</span><br><span class="line">export class User entends BaseEntity &#123;</span><br><span class="line">	@PrimaryGeneratedColumn() // 每个实体必须至少有一个主列</span><br><span class="line">	id: number;</span><br><span class="line">	</span><br><span class="line">	@Column(&#x27;text&#x27;, &#123; name: &#x27;name&#x27;/*这里对应是数据库中字段*/ &#125;) // 通过 Column 创建列</span><br><span class="line">	name: string; // 接口返回给客户端字段</span><br><span class="line">	</span><br><span class="line">	@Column(&#x27;int&#x27;, &#123; name: &#x27;age&#x27; &#125;)</span><br><span class="line">	age: number;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在数据库中我们就可以看到</p>
+<p><img src="/2022/03/21/rearEnd/nestjs%E4%B9%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C/image-20220319170502140.png" alt="image-20220319170502140"></p>
+<p>一个 <code>User</code> 类名称对应一张名叫 <code>user</code> 的表名称，它的数据类型，字段名，是否为 <code>null</code>，默认值，都可以在实体 <code>@Column</code> 装饰器进行配置。</p>
+<p>更多信息参考如下：</p>
+<ul>
+<li><p><a href="https://typeorm.biunav.com/zh/entities.html#%E5%AE%9E%E4%BD%93%E5%88%97">主列@PrimaryGeneratedColumn()</a></p>
+</li>
+<li><p><a href="https://typeorm.biunav.com/zh/entities.html#%E5%88%97%E9%80%89%E9%A1%B9">@Column()</a></p>
+</li>
+</ul>
+<h3 id="注册实体类"><a href="#注册实体类" class="headerlink" title="注册实体类"></a>注册实体类</h3><p>配置完实体还要注册才能使用</p>
+<p><code>user.module.ts</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import &#123; TypeOrmModule &#125; from &#x27;@nestjs/typeorm&#x27;</span><br><span class="line">import &#123; User &#125; from &#x27;./entities/user.entity.ts&#x27;</span><br><span class="line">@Module(&#123;</span><br><span class="line">	imports: [TypeOrmModule.forFeature([User])</span><br><span class="line">&#125;)</span><br><span class="line">export class UserModule &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="实体注入服务层"><a href="#实体注入服务层" class="headerlink" title="实体注入服务层"></a>实体注入服务层</h3><p>将实体注入服务层（<code>service</code>）后，就可以在服务层调用 <code>Repository</code> 提供的方法，来操作数据库了</p>
+<p><code>user.service.ts</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import &#123; Repository &#125; from &#x27;typeorm&#x27;</span><br><span class="line">import &#123; InjectRepository &#125; from &#x27;@nestjs/typeorm&#x27;</span><br><span class="line">import &#123; UserEntity &#125; from &#x27;./entities/user.entity&#x27;</span><br><span class="line"></span><br><span class="line">export class UserService &#123;</span><br><span class="line">	constructor (</span><br><span class="line">		@InjectRepository(UserEntity)</span><br><span class="line">		private readonly userRepository: Repository&lt;UserEntity&gt;,</span><br><span class="line">	)&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="增删改查"><a href="#增删改查" class="headerlink" title="增删改查"></a>增删改查</h3><h4 id="增"><a href="#增" class="headerlink" title="增"></a>增</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import &#123; Repository &#125; from &#x27;typeorm&#x27;</span><br><span class="line">import &#123; InjectRepository &#125; from &#x27;@nestjs/typeorm&#x27;</span><br><span class="line">import &#123; UserEntity &#125; from &#x27;./entities/user.entity&#x27;</span><br><span class="line"></span><br><span class="line">export class UserService &#123;</span><br><span class="line">	constructor (</span><br><span class="line">		@InjectRepository(UserEntity)</span><br><span class="line">		private readonly userRepository: Repository&lt;UserEntity&gt;,</span><br><span class="line">	)&#123;&#125;</span><br><span class="line">	async create(data: UserEntity): Promise&lt;string&gt; &#123;</span><br><span class="line">		const isSuccess = await this.userRepository.insert(data)</span><br><span class="line">		if (isSuccess) &#123;</span><br><span class="line">			return &#x27;新增成功&#x27;</span><br><span class="line">		&#125; else &#123;</span><br><span class="line">			return &#x27;新增失败&#x27;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="删"><a href="#删" class="headerlink" title="删"></a>删</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import &#123; Repository &#125; from &#x27;typeorm&#x27;</span><br><span class="line">import &#123; InjectRepository &#125; from &#x27;@nestjs/typeorm&#x27;</span><br><span class="line">import &#123; UserEntity &#125; from &#x27;./entities/user.entity&#x27;</span><br><span class="line"></span><br><span class="line">export class UserService &#123;</span><br><span class="line">	constructor (</span><br><span class="line">		@InjectRepository(UserEntity)</span><br><span class="line">		private readonly userRepository: Repository&lt;UserEntity&gt;,</span><br><span class="line">	)&#123;&#125;</span><br><span class="line">	async remove(id: number): Promise&lt;void&gt; &#123;</span><br><span class="line">		await this.userRepository.delete(id)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="改"><a href="#改" class="headerlink" title="改"></a>改</h4><h4 id="查"><a href="#查" class="headerlink" title="查"></a>查</h4><p>查找有两种方式，一种是通过 <code>Repository</code> 提供的方法查找，简单快捷</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import &#123; Repository &#125; from &#x27;typeorm&#x27;</span><br><span class="line">import &#123; InjectRepository &#125; from &#x27;@nestjs/typeorm&#x27;</span><br><span class="line">import &#123; UserEntity &#125; from &#x27;./entities/user.entity&#x27;</span><br><span class="line"></span><br><span class="line">export class UserService &#123;</span><br><span class="line">	constructor (</span><br><span class="line">		@InjectRepository(UserEntity)</span><br><span class="line">		private readonly userRepository: Repository&lt;UserEntity&gt;,</span><br><span class="line">	)&#123;&#125;</span><br><span class="line">	findAll(): Promise&lt;UserEntity[]&gt; &#123;</span><br><span class="line">		const lists = this.userRepository.find()</span><br><span class="line">		return lists</span><br><span class="line">	&#125;</span><br><span class="line">	findOne(id: number): Promise&lt;UserEntity&gt; &#123;</span><br><span class="line">		const list = this.userRepository.findOne(id)</span><br><span class="line">		return list</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>另一种是通过 <code>SQL</code> 语句，功能强大，推荐第二种</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import &#123; InjectRepository &#125; from &#x27;@nestjs/typeorm&#x27;;</span><br><span class="line">import &#123; Repository, getRepository &#125; from &#x27;typeorm&#x27;;</span><br><span class="line"></span><br><span class="line">export class UserService &#123;</span><br><span class="line">	constructor (</span><br><span class="line">		@InjectRepository(UserEntity)</span><br><span class="line">	) &#123;&#125;</span><br><span class="line">	async find(id): Promise&lt;UserEntity[]&gt; &#123;</span><br><span class="line">		const list = await getRepository(UserEntity)</span><br><span class="line">			.createQueryBuilder(&#x27;user&#x27;)</span><br><span class="line">			.where(&#x27;user.id = :id&#x27;, &#123; id ))</span><br><span class="line">			.getMany();</span><br><span class="line">		return list</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面语句解析为，在数据库中查找符合 <code>id</code> 的数据值，并返回。</p>
+<p>更多操作参考<a href="https://typeorm.biunav.com/zh/">TypeORM 中文文档</a></p>
+]]></content>
+      <categories>
+        <category>后端</category>
+      </categories>
+      <tags>
+        <tag>nestjs</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Rxjs 基础</title>
+    <url>/2022/03/21/rearEnd/rxjs%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<p><img src="/2022/03/21/rearEnd/rxjs%E5%9F%BA%E7%A1%80/image-20220321213146392.png" alt="image-20220321213146392"></p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>什么是 rxjs？</p>
+<p>一组可用来处理非同步或事件的 <code>javascript</code> 函数库，也就是说，通过 <code>rxjs</code> 可以按照我们的意愿，有序的控制和管理异步。</p>
+<p>打个比方，有序发出 <code>5</code> 个 <code>ajax</code>，返回的结果未必会按照 <code>1,2,3,4,5</code> 的顺序返回，可能是 <code>1,3,2,5,4</code> ，异步请求返回时间会受多方面的影响，我们想要异步结果按照一定的顺序返回时，<code>rxjs</code> 可以帮助我们解决这个问题。</p>
+<span id="more"></span>
+
+
+
+<p>什么是非同步？</p>
+<ul>
+<li><p>ajax / XHR（XMLHttpRequest） / fetch API</p>
+</li>
+<li><p>Service Worker / Node Stream</p>
+</li>
+<li><p>setTimeout / setInterval</p>
+</li>
+<li><p>Promise</p>
+</li>
+</ul>
+<p>什么是事件</p>
+<ul>
+<li>各式 <code>DOM</code> 事件（<code>click</code>，<code>dblclick</code>，<code>keyup</code>，<code>mousemove</code>）</li>
+<li><code>CSS</code> 动画事件（<code>CSS3 transitionEnd event</code>）</li>
+<li><code>HTML5 Geolication</code> / <code>WebSockets</code> / <code>Server Send Event</code></li>
+</ul>
+<h2 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h2><ul>
+<li><p><strong>Observable（可观测的对象）</strong></p>
+<p>代表一组未来即将产生的事件资料（被观察的物件）。</p>
+<p>什么叫被观察，打比方 <code>click</code> 事件，当它触发后，是会发出一些信号的，被观察事件可以理解为具有发射源，它总会朝外发出某些信号。</p>
+</li>
+<li><p><strong>Observer（观察者对象）</strong></p>
+<p>是个函数，代表一个用来接受<strong>观察结果</strong>的物件（收到的就是事件信息），<code>Observer</code> 就是一个物件包含 <code>3</code> 个含有回调函数的属性（next，error，complete）</p>
+<p>观察者对象是用来干什么呢？它是用于接受 <code>Observable</code> 信号的，<code>Observable</code> 发出信号后，总有个东西去接受这些信号才可以。</p>
+<p><strong><code>Rxjs</code> 最核心的就是上述这两个概念，一个发出，一个接受</strong></p>
+</li>
+<li><p><strong>Subscription（订阅物件）</strong></p>
+<p>代表正在执行 <code>Observable / Observer</code> 的执行个体（可用来取消订阅）</p>
+<p>我们通过 <code>Observer</code> 去观察 <code>Observable</code> 的结果，它的结果基本上就是丢事件信号出来。这整件事的过程可以理解为订阅的行为，通过 <code>Observer</code> 去订 <code>Observable</code>，这整件事，我们称之为一个 <code>Subscription</code></p>
+</li>
+<li><p><strong>Operators（操作符）</strong></p>
+<p>必须拥有函数编程中纯函数（没有副作用）的特性，主要用来处理一些列的事件资料集合，常见的操作符包含<code>map</code>，<code>filter</code>，<code>concat</code>，<code>flatMap</code>，<code>switchMap</code></p>
+<p>通过 <code>Observable</code> 产生一个可观测的环境，让 <code>Observer</code> 去观察它，这整件事变成一个 <code>Subscription</code>，那么，从 <code>Observable</code> 发出的事件，到 <code>Observer</code> 观察前的这段时间，我们可以通过 <code>Operators</code> 操作符去处理，转换 <code>Observable</code> 产生的信号，使其增强，过滤，融合等操作去调整他们，并把最后结果给到 <code>Observer</code></p>
+</li>
+<li><p><strong>Subject（主体）</strong></p>
+<p>和 <code>EventEmitter</code> 一样，主要用来广播收到的事件资料给多位 <code>Observer</code></p>
+<p>也就是说，<code>Observable</code> 发出事件后，可以通过 <code>Subject</code> 先接收起来，然后再转发给多个 <code>Observer</code>去拿到这个事件，从原本的一个发生，一个接受，变成了多个发生，多个接受，你可以把 <code>Subject</code> 理解为代理。</p>
+<p>为什么要有 <code>Subject</code> 这是因为 <code>Observable</code> 需要靠 <code>Observer</code> 去运作，如果没有 <code>Observer</code> 去订阅 <code>Observable</code> 的变化，就算 <code>Observable</code> 有值，它也没有意义，没人去接受它。有种场景，需要两个 <code>Observable</code> 发出信号，如果订阅两次，这可能会出现问题，打比方有两个 <code>click</code> 事件，当有一个 <code>click</code> 发生以后，它就会把事件产生 <code>2</code> 遍，然后送给两个 <code>Observer</code>，这就等于做了两遍 <code>click</code>，而实际上只有一遍。</p>
+<p>也就是说<strong>订阅几次，Observable 就会发出（触发）几次信号</strong>。</p>
+</li>
+<li><p><strong>Schedulers(调度器)</strong></p>
+<p>用来管理和调度多个事件</p>
+<p>当 <code>Observable</code> 种类很多的时候，你又要在一段时间内，同时并发，这复杂度就会变的很高，<code>Schedulers</code> 用来调控这些事件如何去管理，在什么时间点才去发出信号。</p>
+</li>
+</ul>
+<h2 id="公式详解"><a href="#公式详解" class="headerlink" title="公式详解"></a>公式详解</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">rxjs.interval(500).pipe(rxjs.operators.take(4)).subscribe(console.log)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>rxjs.interval(500)：建立一个 <code>Observable</code>，这个步骤也称为<strong>建立（creation）</strong>，每 <code>500</code> 毫秒会发出一个信号。</li>
+<li>pipe(rxjs.operators.take(4))：是个水管，称为<strong>过滤（Filtering）</strong>，在里面可以执行 <code>Operators</code> 操作符，该操作符意思是取前 <code>4</code> 个信号。</li>
+<li>subscribe(console.log)：是订阅并与 <code>Observable</code> 建立联系，称为<strong>观察（Observer）</strong>，<code>console.log</code> 是 <code>Observer</code>，用于观察由 <code>Observable</code> 送出来的信息。<strong>Observer 通常是一个 function</strong></li>
+<li>上述代码的结果会返回一个 <code>Subscription</code>，拿到这个 <code>Subscription</code> 我们可以用来取消订阅它。</li>
+</ul>
+<h2 id="rxjs-编写方式"><a href="#rxjs-编写方式" class="headerlink" title="rxjs 编写方式"></a>rxjs 编写方式</h2><h3 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h3><ul>
+<li><p>建立可观察的 <code>Observable</code> 对象</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var clicks$ = rxjs.fromEvent(document, &#x27;click&#x27;)</span><br></pre></td></tr></table></figure></li>
+<li><p>建立观察者对象 <code>Observer</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var observer = &#123; next: (x) =&gt; console.log(x) &#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>建立订阅关系（订阅 Observable 对象，并传入 Observer 观察者对象）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var sub$ = clicks$.subscribe(observer)</span><br></pre></td></tr></table></figure></li>
+<li><p>取消订阅 <code>Subscription</code> 对象</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">subs$.unsubscribe() </span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="过滤"><a href="#过滤" class="headerlink" title="过滤"></a>过滤</h3><ul>
+<li><p>建立可观察的  <code>Observable</code> 对象</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var clicks$ = rxjs.fromEvent(document, &#x27;click&#x27;)</span><br></pre></td></tr></table></figure></li>
+<li><p>套用 <code>filter</code> 操作符</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">clicks$ = clicks$.pipe(filter(x =&gt; x.clientX &lt; 100))</span><br></pre></td></tr></table></figure>
+
+<p><code>pipe</code> 参数可以有多个，用逗号隔开</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">clicks$ = clicks$.pipe(</span><br><span class="line">	filter(x =&gt; x.clientX &lt; 100),</span><br><span class="line">	take(4)</span><br><span class="line">)</span><br></pre></td></tr></table></figure></li>
+<li><p>建立订阅关系（订阅 Observable 对象，并传入 Observer 观察者对象）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var subs$ = clicks$.subscribe(console.log)</span><br></pre></td></tr></table></figure></li>
+<li><p>取消订阅 <code>Subscription</code> 对象</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">subs$.unsubscribe()</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="主体-Subject-用法"><a href="#主体-Subject-用法" class="headerlink" title="主体 Subject 用法"></a>主体 Subject 用法</h3><ul>
+<li><p>建立主体（<code>Subject</code>）(之后要靠这个主体物件进行广播)</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var subject = new rxjs.Subject()</span><br></pre></td></tr></table></figure></li>
+<li><p>建立可观察的 <code>Observable</code> 对象</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var clicks$ = rxjs.fromEvent(document, &#x27;click&#x27;)</span><br></pre></td></tr></table></figure></li>
+<li><p> 设置过滤条件，最多取两次，<code>Observable</code> 就结束</p>
+</li>
+</ul>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">clicks$ = clicks$.pipe(take(2))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>设置将 <code>clicks$</code> 全部交由 <code>subject</code> 主体进行广播</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">clicks$.subscribe(subject)</span><br></pre></td></tr></table></figure>
+
+<p><code>subject</code> 对 <code>Observable</code>  只是一次的订阅，因此 ``Observable` 就不会发两次出来</p>
+</li>
+<li><p>最后再由 <code>subject</code> 去建立 <code>Observer</code> 观察者对象</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var subs1$ = subject.subscribe(console.log)</span><br><span class="line">var subs2$ = subject.subscribe(console.log)</span><br></pre></td></tr></table></figure></li>
+<li><p>取消订阅 <code>Subscription</code> 对象</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">subs1$.unsubscribe()</span><br><span class="line">subs2$.unsubscribe()</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="弹珠图-运算符"><a href="#弹珠图-运算符" class="headerlink" title="弹珠图(运算符)"></a>弹珠图(运算符)</h2><p><a href="https://reactive.how/rxjs/map">Rxjs Explorer</a></p>
+<p><a href="https://rxjs.dev/">Rxjs 官网</a></p>
+<h3 id="创建运算符"><a href="#创建运算符" class="headerlink" title="创建运算符"></a>创建运算符</h3><p>负责建立一个 <code>Observable</code> 物件</p>
+<ul>
+<li> 常用运算符</li>
+<li>from将 promise 转成 Observable</li>
+<li>fromEvent</li>
+<li>fromEventPattern</li>
+<li>interval</li>
+<li>of</li>
+<li>range</li>
+<li>throwError</li>
+<li>timer当 timer 结束时发出一个值<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 1秒后发出0，然后结束，因为没有提供第二个参数</span><br><span class="line">const source = timer(1000);</span><br><span class="line">// 输出: 0</span><br><span class="line">const subscribe = source.subscribe(val =&gt; console.log(val));</span><br></pre></td></tr></table></figure></li>
+<li>其他运算符<ul>
+<li>ajax</li>
+<li>bindCallback</li>
+<li>bindNodeCallback</li>
+<li>defer</li>
+<li>generate</li>
+<li>iif</li>
+</ul>
+</li>
+</ul>
+<h3 id="组合创建运算符"><a href="#组合创建运算符" class="headerlink" title="组合创建运算符"></a>组合创建运算符</h3><p>可将多个 <code>Observable</code> 对象，合并成一个 <code>Observable</code> 对象</p>
+<ul>
+<li>常用运算符<ul>
+<li><p>combineLatest</p>
+</li>
+<li><p>concat</p>
+<p>解释：用来连接多个 observable。并顺序依次执行</p>
+<p>特点：按照顺序，前一个 observable 完成了再订阅下一个 observable 并发出值</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">source : ----0----1----2|</span><br><span class="line">source2: (3)|</span><br><span class="line">source3: (456)|</span><br><span class="line">            concat()</span><br><span class="line">example: ----0----1----2(3456)|</span><br></pre></td></tr></table></figure></li>
+<li><p>forkJoin</p>
+</li>
+<li><p>merge</p>
+<p>特点：merge 把多个 observable <strong>同时</strong>处理，这跟 concat 一次处理一个 observable 是完全不一样的，由于是同时处理行为会变得较为复杂。 merge 的逻辑有点像是 OR(||)，就是当两个 observable 其中一个被触发时都可以被处理，这很常用在一个以上的按钮具有部分相同的行为。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">source : ----0----1----2|</span><br><span class="line">source2: --0--1--2--3--4--5|</span><br><span class="line">            merge()</span><br><span class="line">example: --0-01--21-3--(24)--5|</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li>其他运算符<ul>
+<li><p>race</p>
+</li>
+<li><p>zip</p>
+<p>在所有 observables 发出后，将它们的值作为数组发出，操作符会订阅所有内部 observables，然后等待每个发出一个值。一旦发生这种情况，将发出具有相应索引的所有值。这会持续进行，直到至少一个内部 observable 完成。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">const sourceOne = of(&#x27;Hello&#x27;);</span><br><span class="line">const sourceTwo = of(&#x27;World!&#x27;);</span><br><span class="line">const sourceThree = of(&#x27;Goodbye&#x27;);</span><br><span class="line">const sourceFour = of(&#x27;World!&#x27;);</span><br><span class="line">// 一直等到所有 observables 都发出一个值，才将所有值作为数组发出</span><br><span class="line">const example = zip(</span><br><span class="line">  sourceOne,</span><br><span class="line">  sourceTwo.pipe(delay(1000)),</span><br><span class="line">  sourceThree.pipe(delay(2000)),</span><br><span class="line">  sourceFour.pipe(delay(3000))</span><br><span class="line">);</span><br><span class="line">// 输出: [&quot;Hello&quot;, &quot;World!&quot;, &quot;Goodbye&quot;, &quot;World!&quot;]</span><br><span class="line">const subscribe = example.subscribe(val =&gt; console.log(val));</span><br></pre></td></tr></table></figure></li>
+<li><p>partition</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="转换运算符"><a href="#转换运算符" class="headerlink" title="转换运算符"></a>转换运算符</h3><p>负责将 Observable 传入的信息转换成另一种格式</p>
+<ul>
+<li><p>常用运算符</p>
+<ul>
+<li><p>concatMap</p>
+<p>将值映射成内部 observable，并按顺序订阅和发出。</p>
+</li>
+<li><p>concatMapTo</p>
+</li>
+<li><p>map</p>
+</li>
+<li><p>mapTo</p>
+<p>将每个发出值映射成常量。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 每2秒发出值</span><br><span class="line">const source = interval(2000);</span><br><span class="line">// 将所有发出值映射成同一个值</span><br><span class="line">const example = source.pipe(mapTo(&#x27;HELLO WORLD!&#x27;));</span><br><span class="line">// 输出: &#x27;HELLO WORLD!&#x27;...&#x27;HELLO WORLD!&#x27;...&#x27;HELLO WORLD!&#x27;...</span><br><span class="line">const subscribe = example.subscribe(val =&gt; console.log(val));</span><br></pre></td></tr></table></figure></li>
+<li><p>mergeMap</p>
+<p>将值转换成 observable 并发出值，无序的。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 发出 &#x27;Hello&#x27;</span><br><span class="line">const source = of(&#x27;Hello&#x27;);</span><br><span class="line">// 映射成 observable 并将其打平</span><br><span class="line">const example = source.pipe(mergeMap(val =&gt; of(`$&#123;val&#125; World!`)));</span><br><span class="line">// 输出: &#x27;Hello World!&#x27;</span><br><span class="line">const subscribe = example.subscribe(val =&gt; console.log(val));</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 发出 &#x27;Hello&#x27;</span><br><span class="line">const source = of(&#x27;Hello&#x27;);</span><br><span class="line">// mergeMap 还会发出 promise 的结果</span><br><span class="line">const myPromise = val =&gt;</span><br><span class="line">  new Promise(resolve =&gt; resolve(`$&#123;val&#125; World From Promise!`));</span><br><span class="line">// 映射成 promise 并发出结果</span><br><span class="line">const example = source.pipe(mergeMap(val =&gt; myPromise(val)));</span><br><span class="line">// 输出: &#x27;Hello World From Promise&#x27;</span><br><span class="line">const subscribe = example.subscribe(val =&gt; console.log(val));</span><br></pre></td></tr></table></figure></li>
+<li><p>mergeMapTo</p>
+</li>
+<li><p>switchMap</p>
+</li>
+<li><p>switchMapTo</p>
+</li>
+<li><p>pluck</p>
+</li>
+</ul>
+</li>
+<li><p>其他运算符</p>
+<ul>
+<li>buffer</li>
+<li>bufferCount</li>
+<li>bufferTime</li>
+<li>bufferToggle</li>
+<li>bufferWhen</li>
+<li>exhaust</li>
+<li>exhaustMap</li>
+<li>expand</li>
+<li>groupBy</li>
+<li>mergeScan</li>
+<li>pairwise</li>
+<li>scan</li>
+<li>window</li>
+<li>windowCount</li>
+</ul>
+</li>
+</ul>
+<h3 id="过滤运算符"><a href="#过滤运算符" class="headerlink" title="过滤运算符"></a>过滤运算符</h3><p>负责将 <code>Observable</code> 传入的信息过滤、筛选掉</p>
+<ul>
+<li>常用运算符<ul>
+<li>debounce</li>
+<li>debounceTime</li>
+<li>distinct</li>
+<li>filter</li>
+<li>first/last</li>
+<li>skip/take</li>
+<li>throttle</li>
+<li>throttleTime</li>
+</ul>
+</li>
+<li>其他运算符<ul>
+<li>audit</li>
+<li>auditTime</li>
+<li>distinctUntilChanged</li>
+<li>distinctKey</li>
+<li>distinctUnitlKeyCHnage</li>
+</ul>
+</li>
+</ul>
+<h3 id="组合运算符"><a href="#组合运算符" class="headerlink" title="组合运算符"></a>组合运算符</h3><p>负责组合多个 <code>Observable</code></p>
+<ul>
+<li>常用运算符<ul>
+<li><p>combineAll</p>
+</li>
+<li><p>concatAll</p>
+<p>有时我们的 Observable 送出的元素又是一个 observable，就像是二维数组，数组里面的元素是数组，这时我们就可以用 concatAll 把它摊平成一维数组，大家也可以直接把 concatAll 想成把所有元素 concat 起来。 </p>
+<p>特点：摊平 Observable</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">fromEvent(document.body, &#x27;click&#x27;)</span><br><span class="line">	.pipe(</span><br><span class="line">	// 内部发出值是 observable 类型</span><br><span class="line">		map(e =&gt; of(1,2,3)),</span><br><span class="line">		// 取 observable 的值</span><br><span class="line">		concatAll(),</span><br><span class="line">	)</span><br><span class="line">	.subscribe(val =&gt;</span><br><span class="line">		console.log(val)</span><br><span class="line">	);</span><br></pre></td></tr></table></figure></li>
+<li><p>mergeAll</p>
+</li>
+<li><p>startWith</p>
+</li>
+</ul>
+</li>
+<li>其他运算符<ul>
+<li>exhaust</li>
+<li>withLatestFrom</li>
+</ul>
+</li>
+</ul>
+<h3 id="多播运算符"><a href="#多播运算符" class="headerlink" title="多播运算符"></a>多播运算符</h3><p>负责将 <code>Observable</code> 广播给多位观察者（<code>Observer</code>）</p>
+<ul>
+<li>常见运算符<ul>
+<li>publish</li>
+<li>publishReplay</li>
+<li>share</li>
+</ul>
+</li>
+<li>其他运算符<ul>
+<li>multicast</li>
+<li>publishBehavior</li>
+<li>publishLast</li>
+</ul>
+</li>
+</ul>
+<h3 id="错误处理运算符"><a href="#错误处理运算符" class="headerlink" title="错误处理运算符"></a>错误处理运算符</h3><p>负责处理 <code>Observable</code> 观察过程中出现的额外错误</p>
+<ul>
+<li>常用运算符<ul>
+<li>catchError</li>
+<li>retry</li>
+<li>retryWhen</li>
+</ul>
+</li>
+</ul>
+<h3 id="工具函数运算符"><a href="#工具函数运算符" class="headerlink" title="工具函数运算符"></a>工具函数运算符</h3><p>负责提供 <code>Observable</code> 执行过程的工具函数</p>
+<ul>
+<li>常用运算符<ul>
+<li>tap</li>
+<li>delay</li>
+<li>materialize</li>
+<li>timeout</li>
+<li>timeoutWith</li>
+<li>toArray</li>
+</ul>
+</li>
+<li>其他运算符<ul>
+<li>delayWhen</li>
+<li>dematerialize</li>
+<li>observeOn</li>
+<li>subscribeOn</li>
+<li>timeInterval</li>
+<li>times tamp</li>
+</ul>
+</li>
+</ul>
+<h3 id="条件式布尔运算符"><a href="#条件式布尔运算符" class="headerlink" title="条件式布尔运算符"></a>条件式布尔运算符</h3><p>负责计算特定条件并回传布尔值的运算符</p>
+<ul>
+<li>常用运算符<ul>
+<li>defaultEmpty</li>
+<li>every</li>
+<li>find</li>
+<li>findIndex</li>
+<li>isEmpty</li>
+</ul>
+</li>
+</ul>
+<h3 id="汇总运算符"><a href="#汇总运算符" class="headerlink" title="汇总运算符"></a>汇总运算符</h3><p>负责将 <code>Observable</code> 传来的信息进行数学汇总运算</p>
+<ul>
+<li>常用运算符<ul>
+<li>count</li>
+<li>max</li>
+<li>min</li>
+</ul>
+</li>
+<li>其他运算符<ul>
+<li>reduce</li>
+</ul>
+</li>
+</ul>
+<h2 id="Q-amp-A"><a href="#Q-amp-A" class="headerlink" title="Q &amp; A"></a>Q &amp; A</h2><ul>
+<li><p>Q: <a href="https://stackoverflow.com/questions/64349628/what-is-injectable-in-nestjs">What is Injectable in NestJS?</a></p>
+<p>A: </p>
+</li>
+</ul>
+<h2 id="资料"><a href="#资料" class="headerlink" title="资料"></a>资料</h2><ul>
+<li><a href="https://rxjs.dev/">rxjs 官网</a></li>
+<li><a href="https://rxmarbles.com/">弹珠图</a></li>
+<li><a href="https://rxjs-cn.github.io/learn-rxjs-operators/">操作符</a></li>
+<li><a href="http://rx.js.cool/">rxjs 入门到精通</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>后端</category>
+      </categories>
+      <tags>
+        <tag>rxjs</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Nestjs 返回给前端数据格式封装</title>
+    <url>/2022/03/19/rearEnd/nestjs%E8%BF%94%E5%9B%9E%E7%BB%99%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F%E5%B0%81%E8%A3%85/</url>
+    <content><![CDATA[<blockquote>
+<p>最近在学 node，用的是 nestjs 框架，今天在前后端联调时，发现返回的数据并不是预想中的，因此记录下封装过程。</p>
+</blockquote>
+<span id="more"></span>
+
+<h3 id="为什么要对数据进行封装"><a href="#为什么要对数据进行封装" class="headerlink" title="为什么要对数据进行封装"></a>为什么要对数据进行封装</h3><p>接口写完后，皆大欢喜，前端请求发现拿到的数据是这样的</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[&#123;&quot;id&quot;:4321,&quot;createdTime&quot;:&quot;2022-02-28T16:00:00.000Z&quot;,&quot;sprintName&quot;:&quot;第一次迭代&quot;,&quot;describe&quot;:&quot;第一次迭代呀&quot;,&quot;devOwner&quot;:&quot;es&quot;,&quot;testOwner&quot;:&quot;test&quot;,&quot;status&quot;:&quot;未开始&quot;&#125;]</span><br></pre></td></tr></table></figure>
+
+<p>咦，感觉有点不太一样，印象中后端返回的数据有 <code>data</code>，<code>code</code>，<code>message</code> 字段的，问了后端的同事，才知道，原来返回给前端的数据要封装的</p>
+<p>我们预期的是酱紫的</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;&quot;data&quot;:[&#123;&quot;id&quot;:4321,&quot;createdTime&quot;:&quot;2022-02-28T16:00:00.000Z&quot;,&quot;sprintName&quot;:&quot;第一次迭代&quot;,&quot;describe&quot;:&quot;第一次迭代呀&quot;,&quot;devOwner&quot;:&quot;es&quot;,&quot;testOwner&quot;:&quot;test&quot;,&quot;status&quot;:&quot;未开始&quot;&#125;],&quot;code&quot;:0,&quot;message&quot;:&quot;请求成功&quot;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>带着疑问，在 <code>nest</code> 中能够对原本 <code>request</code>/<code>response</code> 加工的有过滤器（filter）拦截器（interceptors）以及中间件（middleware）</p>
+<h3 id="interceptor，filter，middleware-的区别"><a href="#interceptor，filter，middleware-的区别" class="headerlink" title="interceptor，filter，middleware 的区别"></a>interceptor，filter，middleware 的区别</h3><h4 id="interceptor"><a href="#interceptor" class="headerlink" title="interceptor"></a>interceptor</h4><p><code>nest.js</code> 提供 <code>interceptor</code> 可以对于程式要进入 <code>method</code> 之前与之后，执行一段程式或是对输入输出讯息做处理，称之 <code>Aspect-Oriented Programming(AOP)</code>。</p>
+<p><strong>条件：<code>interceptor</code> 必须拥有 <code>NestInterceptor</code> 接口</strong></p>
+<p><code>interceptor</code> 方法传入两个引数 <code>ExecutionContext</code></p>
+<ul>
+<li>ExecutionContext: 可以取得controller、及http相关信息(http context)</li>
+<li><code>call$</code>: 这部分比较抽象，简单来说，<code>call$ </code>就是回传到 <code>client</code> 的 <code>response stream</code>，如果<code>interceptor</code> 没有回传 <code>call$</code>，则等于是 <code>controller</code> 处理完后不会丢回 <code>response</code>。</li>
+</ul>
+<h4 id="filter-Exception-Filters-异常过滤器"><a href="#filter-Exception-Filters-异常过滤器" class="headerlink" title="filter(Exception Filters)异常过滤器"></a>filter(Exception Filters)异常过滤器</h4><p>当接口错误，就属于异常了，它会被 <code>throw</code> 抛出异常，因此这个时候，我们需要用到异常过滤器（filter）来获取到其异常内容，然后可以自定义修改返回给前端。</p>
+<p><strong>异常过滤器在路由处理程序和拦截器之后调用。它们是在响应消失之前最后进行更改的地方。</strong></p>
+<p>通过命令创建一个过滤器</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nest g f filters/httpException</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="middleware"><a href="#middleware" class="headerlink" title="middleware"></a>middleware</h4><p>仅在调用路由处理程序之前调用中间件。您可以访问响应对象，但没有路由处理程序的结果。它们基本上是表达的中间件功能。</p>
+<h3 id="成功数据统一封装"><a href="#成功数据统一封装" class="headerlink" title="成功数据统一封装"></a>成功数据统一封装</h3><p>成功请求不属于异常，因此通过 <code>interceptor</code> 封装请求</p>
+<p>在根目录新建 <code>src/interceptor/transform.interceptor.ts</code> 文件</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import &#123;</span><br><span class="line">  Injectable,</span><br><span class="line">  NestInterceptor,</span><br><span class="line">  CallHandler,</span><br><span class="line">  ExecutionContext,</span><br><span class="line">&#125; from &#x27;@nestjs/common&#x27;;</span><br><span class="line"></span><br><span class="line">import &#123; map &#125; from &#x27;rxjs/operators&#x27;;</span><br><span class="line">import &#123; Observable &#125; from &#x27;rxjs&#x27;;</span><br><span class="line">interface Response&lt;T&gt; &#123;</span><br><span class="line">  data: T;</span><br><span class="line">&#125;</span><br><span class="line">@Injectable()</span><br><span class="line">export class TransformInterceptor&lt;T&gt;</span><br><span class="line">  implements NestInterceptor&lt;T, Response&lt;T&gt;&gt;</span><br><span class="line">&#123;</span><br><span class="line">  intercept(</span><br><span class="line">    context: ExecutionContext,</span><br><span class="line">    next: CallHandler&lt;T&gt;,</span><br><span class="line">  ): Observable&lt;Response&lt;T&gt;&gt; &#123;</span><br><span class="line">    return next.handle().pipe(</span><br><span class="line">      map((data) =&gt; &#123;</span><br><span class="line">        return &#123;</span><br><span class="line">          data,</span><br><span class="line">          // 一般来说成功请求码为 0 或 1000</span><br><span class="line">          code: 0,</span><br><span class="line">          message: &#x27;请求成功&#x27;,</span><br><span class="line">        &#125;;</span><br><span class="line">      &#125;),</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>全局注册</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import &#123; TransformInterceptor &#125; from &#x27;./interceptor/transform.interceptor&#x27;;</span><br><span class="line">sync function bootstrap() &#123;</span><br><span class="line">	...</span><br><span class="line">	// 全局注册拦截器</span><br><span class="line">	app.useGlobalInterceptors(new TransformInterceptor());</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br><span class="line">bootstrap()</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="拦截全部错误请求"><a href="#拦截全部错误请求" class="headerlink" title="拦截全部错误请求"></a>拦截全部错误请求</h3><p>请求任何一个地方失败了，都会被异常过滤器捕获</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import &#123;</span><br><span class="line">  ArgumentsHost,</span><br><span class="line">  Catch,</span><br><span class="line">  ExceptionFilter,</span><br><span class="line">  HttpException,</span><br><span class="line">  HttpStatus,</span><br><span class="line">  Logger,</span><br><span class="line">&#125; from &#x27;@nestjs/common&#x27;;</span><br><span class="line"></span><br><span class="line">@Catch(HttpException)</span><br><span class="line">export class HttpExceptionFilter implements ExceptionFilter &#123;</span><br><span class="line">  catch(exception: HttpException, host: ArgumentsHost) &#123;</span><br><span class="line">    const ctx = host.switchToHttp();</span><br><span class="line">    const response = ctx.getResponse();</span><br><span class="line">    const request = ctx.getRequest();</span><br><span class="line"></span><br><span class="line">    const message = exception.message;</span><br><span class="line">    Logger.log(&#x27;error&#x27;, message);</span><br><span class="line">    const errorResponse = &#123;</span><br><span class="line">    	// 这里没写，失败请求码自定义，根据业务场景定</span><br><span class="line">      data: &#123;</span><br><span class="line">        error: message,</span><br><span class="line">      &#125;,</span><br><span class="line">      message: &#x27;请求失败&#x27;,</span><br><span class="line">    &#125;;</span><br><span class="line">    const status =</span><br><span class="line">      exception instanceof HttpException</span><br><span class="line">        ? exception.getStatus()</span><br><span class="line">        : HttpStatus.INTERNAL_SERVER_ERROR;</span><br><span class="line"></span><br><span class="line">    response.status(status);</span><br><span class="line">    response.header(&#x27;Content-Type&#x27;, &#x27;application/json; charset=utf-8&#x27;);</span><br><span class="line">    response.send(errorResponse);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="请求从客户端到服务器经历的步骤"><a href="#请求从客户端到服务器经历的步骤" class="headerlink" title="请求从客户端到服务器经历的步骤"></a>请求从客户端到服务器经历的步骤</h3><p>从客户端发送一个 <code>post</code> 请求，路径为：/user/login，请求参数为：{ use: ‘xx’, psd: ‘xx’ }，到服务器接收请求内容，触发绑定的函数并且执行相关逻辑完毕，然后返回内容给客户端的整个过程大体上要经过如下几个步骤：</p>
+<p><img src="/2022/03/19/rearEnd/nestjs%E8%BF%94%E5%9B%9E%E7%BB%99%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F%E5%B0%81%E8%A3%85/image-20220318194756876.png" alt="image-20220318194756876"></p>
+]]></content>
+      <categories>
+        <category>后端</category>
+      </categories>
+      <tags>
+        <tag>nestjs</tag>
       </tags>
   </entry>
   <entry>
@@ -663,10 +1243,37 @@
       </tags>
   </entry>
   <entry>
-    <title></title>
-    <url>/2022/02/24/writing/202203/</url>
-    <content><![CDATA[<p>- </p>
+    <title>受控组件和非受控组件</title>
+    <url>/2022/02/26/frontEnd/%E5%8F%97%E6%8E%A7%E7%BB%84%E4%BB%B6%E5%92%8C%E9%9D%9E%E5%8F%97%E6%8E%A7%E7%BB%84%E4%BB%B6/</url>
+    <content><![CDATA[<p><img src="/2022/02/26/frontEnd/%E5%8F%97%E6%8E%A7%E7%BB%84%E4%BB%B6%E5%92%8C%E9%9D%9E%E5%8F%97%E6%8E%A7%E7%BB%84%E4%BB%B6/image-20220226224911608.png" alt="image-20220226224911608"></p>
+<blockquote>
+<p>在前端学习生涯中，你总会绕不开一个概念，受控组件和非受控组件，这到底是什么呢？这一讲，我们来好好聊聊这个话题。</p>
+</blockquote>
+<span id="more"></span>
+
+<p>不要觉得这两概念很高大上，按照字面意思理解就行，顾名思义</p>
+<ul>
+<li>受控组件：受 <code>xxx</code> 控制的组件</li>
+<li>非受控组件，不受 <code>xxx</code> 控制的组件</li>
+</ul>
+<p>我们现在只要了解 <code>xxx</code> 是谁就行了</p>
+<p>带着这个疑问，我们猜一下，<code>xxx</code> 能是谁呢？凭借你们朴素的情感，和明锐的逻辑，那个更合理呢？代码、用户、状态。</p>
+<p>很明显，<strong>状态</strong>更加合理，毕竟 <code>vue</code> 和 <code>react</code> 框架都有一个词，<code>state</code> 。</p>
+<p>好，我们现在知道了，<strong>受控组件，就是受状态控制的组件，非受控组件，就是不受状态控制的组件</strong>。在基础组件中，有个值叫 <code>value</code>， 通过它可以控制组件的状态。</p>
+<p>举个例子</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">const Comp = () =&gt; &#123;</span><br><span class="line">	const [state, setState] = useState(&#x27;张三&#x27;)</span><br><span class="line">	return (</span><br><span class="line">		&lt;&gt;</span><br><span class="line">			&lt;input value=&#123;state&#125; /&gt; // 这就是受控组件</span><br><span class="line">			&lt;input /&gt; // 这是非受控组件</span><br><span class="line">		&lt;/&gt;</span><br><span class="line">	)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于前者，无论我们输入任何东西，都不会改变输入框的内容，它用于是”张三“，因为被控制了，对于后者，我们可以输入任意的值。</p>
+<p><strong>状态</strong></p>
+<p>这里要说明下，有内部状态和外部状态，在 <code>HTML</code> 表单元素中，内部会维护一套 <code>state</code> 状态，拿 <code>&lt;input /&gt;</code> 组件为例，值的改变会导致状态的改变，从而触发各种事件，<code>onChange</code> 呀之类的，而元素中有个属性叫 <code>value</code>，它能够接收外部的状态，从而控制内部的状态，因此受控组件和非受控组件，也可以理解为<strong>受外部状态控制的组件叫受控组件，不受外部状态控制的组件叫非受控组件。</strong></p>
+<p>没错，概念已经结束了，我们了解了什么是受控组件什么是非受控组件，剩下的就是如何正确的在不同场景下使用不同的组件了。如果是场景简单，只是提交，非受控组件是可以的，打比方，内容搜索，如果是场景复杂多变，又要发起第三方请求，又要校验，还是老老实实用受控组件吧。</p>
 ]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>react</tag>
+      </tags>
   </entry>
   <entry>
     <title>表单解决方案react-hook-form</title>
@@ -1038,32 +1645,6 @@
       </tags>
   </entry>
   <entry>
-    <title>仁者神医</title>
-    <url>/2021/09/12/writing/%E4%BB%81%E8%80%85%E7%A5%9E%E5%8C%BB/</url>
-    <content><![CDATA[<blockquote>
-<p>记录下平时小毛小病的应对方法</p>
-</blockquote>
-<span id="more"></span>
-
-<h2 id="咽喉类"><a href="#咽喉类" class="headerlink" title="咽喉类"></a>咽喉类</h2><h3 id="气管炎"><a href="#气管炎" class="headerlink" title="气管炎"></a>气管炎</h3><p>症状：喉咙痛，痒，一吹冷风就咳嗽，有痰，干咳</p>
-<p>分析：冷咳不能吃凉的，像罗汉果那些就太凉了，不能吃</p>
-<p>用药：</p>
-<ul>
-<li>咳速停糖浆</li>
-<li>咳特灵胶囊</li>
-<li>乙酰螺旋霉素片</li>
-<li>黄连上清片</li>
-<li>头孢拉定胶囊</li>
-</ul>
-]]></content>
-      <categories>
-        <category>碎碎念</category>
-      </categories>
-      <tags>
-        <tag>医学</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>useState和setState</title>
     <url>/2021/09/05/frontEnd/useState%E5%92%8CsetState/</url>
     <content><![CDATA[<p><img src="/2021/09/05/frontEnd/useState%E5%92%8CsetState/image-20210817215151351.png" alt="image-20210817215151351"></p>
@@ -1145,6 +1726,37 @@
       </categories>
       <tags>
         <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>TypeScript 指北</title>
+    <url>/2021/08/04/frontEnd/TypeScript%E6%8C%87%E5%8C%97/</url>
+    <content><![CDATA[<p><img src="/2021/08/04/frontEnd/TypeScript%E6%8C%87%E5%8C%97/image-20210912235606551.png" alt="image-20210912235606551"></p>
+<span id="more"></span>
+
+<h3 id="交叉类型"><a href="#交叉类型" class="headerlink" title="交叉类型"></a>交叉类型</h3><blockquote>
+<p>交叉类型可以理解为类型合并，将多个类型合并为一个类型，它包含了所需所有类型的特性</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">interface A &#123;</span><br><span class="line">	a: string</span><br><span class="line">	b: number</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">interface B &#123;</span><br><span class="line">	c: boolean</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type TAAndB = A &amp; B</span><br><span class="line">// TAAndB 为</span><br><span class="line">&#123;</span><br><span class="line">	a: string</span><br><span class="line">	b: number</span><br><span class="line">	c: boolean</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="ReturnType"><a href="#ReturnType" class="headerlink" title="ReturnType"></a>ReturnType</h3><blockquote>
+</blockquote>
+<h3 id="Omit"><a href="#Omit" class="headerlink" title="Omit"></a>Omit</h3><blockquote>
+<p>Omit&lt;K,T&gt; 可以让我们从另一个对象类型中剔除某些属性，创建一个新的对象类型，K：是对象类型名称，T：是剔除K类型中的属性名称</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">type User = &#123;</span><br><span class="line">	name: string</span><br><span class="line">	age: number</span><br><span class="line">	address: string</span><br><span class="line">&#125;</span><br><span class="line">type UserOmit = Omit&lt;User, &#x27;address&#x27;&gt;</span><br><span class="line">// 等价于</span><br><span class="line">type UserOmit = &#123;</span><br><span class="line">	name: string</span><br><span class="line">	age: number</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>剔除多个</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">type User = &#123;</span><br><span class="line">	name: string</span><br><span class="line">	age: number</span><br><span class="line">	address: string</span><br><span class="line">&#125;</span><br><span class="line">type UserOmit = Omit&lt;User, &#x27;name&#x27;|&#x27;age&#x27;&gt;</span><br><span class="line">// 等价于</span><br><span class="line">type UserOmit = &#123;</span><br><span class="line">	address: string</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>typeScript</tag>
       </tags>
   </entry>
   <entry>
@@ -1259,37 +1871,6 @@
       <tags>
         <tag>redux</tag>
         <tag>RTK</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>TypeScript 指北</title>
-    <url>/2021/08/04/frontEnd/TypeScript%E6%8C%87%E5%8C%97/</url>
-    <content><![CDATA[<p><img src="/2021/08/04/frontEnd/TypeScript%E6%8C%87%E5%8C%97/image-20210912235606551.png" alt="image-20210912235606551"></p>
-<span id="more"></span>
-
-<h3 id="交叉类型"><a href="#交叉类型" class="headerlink" title="交叉类型"></a>交叉类型</h3><blockquote>
-<p>交叉类型可以理解为类型合并，将多个类型合并为一个类型，它包含了所需所有类型的特性</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">interface A &#123;</span><br><span class="line">	a: string</span><br><span class="line">	b: number</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">interface B &#123;</span><br><span class="line">	c: boolean</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type TAAndB = A &amp; B</span><br><span class="line">// TAAndB 为</span><br><span class="line">&#123;</span><br><span class="line">	a: string</span><br><span class="line">	b: number</span><br><span class="line">	c: boolean</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="ReturnType"><a href="#ReturnType" class="headerlink" title="ReturnType"></a>ReturnType</h3><blockquote>
-</blockquote>
-<h3 id="Omit"><a href="#Omit" class="headerlink" title="Omit"></a>Omit</h3><blockquote>
-<p>Omit&lt;K,T&gt; 可以让我们从另一个对象类型中剔除某些属性，创建一个新的对象类型，K：是对象类型名称，T：是剔除K类型中的属性名称</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">type User = &#123;</span><br><span class="line">	name: string</span><br><span class="line">	age: number</span><br><span class="line">	address: string</span><br><span class="line">&#125;</span><br><span class="line">type UserOmit = Omit&lt;User, &#x27;address&#x27;&gt;</span><br><span class="line">// 等价于</span><br><span class="line">type UserOmit = &#123;</span><br><span class="line">	name: string</span><br><span class="line">	age: number</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>剔除多个</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">type User = &#123;</span><br><span class="line">	name: string</span><br><span class="line">	age: number</span><br><span class="line">	address: string</span><br><span class="line">&#125;</span><br><span class="line">type UserOmit = Omit&lt;User, &#x27;name&#x27;|&#x27;age&#x27;&gt;</span><br><span class="line">// 等价于</span><br><span class="line">type UserOmit = &#123;</span><br><span class="line">	address: string</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>typeScript</tag>
       </tags>
   </entry>
   <entry>
@@ -1734,43 +2315,6 @@
       <tags>
         <tag>RegExp</tag>
       </tags>
-  </entry>
-  <entry>
-    <title></title>
-    <url>/2021/07/22/network/%E7%A9%BA%E4%B8%AD%E7%A2%B0%E6%92%9E/</url>
-    <content><![CDATA[<blockquote>
-<p>空中碰撞也叫编辑冲突，指很多人在同一时间编辑同一页上内容, 当我们点击保存的时候, 如果这时候其他人和你一样, 编辑了同一份源文件, 但是比你提前保存了, 此时你编辑的文件相较于服务器却是旧的。 因此, 你在点击保存的时候, 修改的内容就会与最新的内容发生冲突。</p>
-</blockquote>
-<p>空中碰撞讲的是一类场景，这里谈谈解决思路。</p>
-<p>举两个空中碰撞场景——多人编辑和文件上传</p>
-<h3 id="多人编辑下的空中碰撞解决方法"><a href="#多人编辑下的空中碰撞解决方法" class="headerlink" title="多人编辑下的空中碰撞解决方法"></a>多人编辑下的空中碰撞解决方法</h3><p>正如开头的故事所描述的，解决的关键点，在于如何正确识别客户端和服务器的资源是否相同，我们要怎么识别呢？</p>
-<p>编辑冲突有两种情况</p>
-<ul>
-<li><p>文件不存在，创建</p>
-<ul>
-<li><p>文件不存在，一切都顺顺利利</p>
-<p>我们在处理这种有可能会产生多人编辑情况下，点击 submit 按钮后，在 PUT 方法前，要先发 HEAD 方法对文件的存在性进行校验，<strong>HEAD 方法只返回 header 头信息</strong>，</p>
-<p>若 response 返回状态码为 404，说明文件不存在，可以提交。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">HTTP/1.1 404 Not Found.</span><br></pre></td></tr></table></figure>
-
-<p>我们再执行 PUT 方法</p>
-<p>注意，要在 request 的头部要带上这个，<code>If-None-Match: *</code>可以检测文件是否存在，如果存在，返回状态码 412(Precondition Failed)</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">If-None-Match: *</span><br></pre></td></tr></table></figure>
-
-<p>反之返回状态码 201 Created.</p>
-</li>
-<li><p>我们在网页上新建一篇文章，花了一个小时完成，提交后准备下班了，想着新建嘛，列表上也没看到类似标题，肯定没问题啦，没想到页面上突然弹出，该名字已经有了，纳尼！原来前两分钟，有个哥们不按常规出牌，写了标题就提交了，传说中的占着茅坑不拉屎。</p>
-<p>同理，我们在 PUT 方法前，也要发 HEAD 方法对文件进行校验，若返回状态码 200，说明文件存在，不能提交，具体怎么操作要交给用户去选择</p>
-</li>
-</ul>
-</li>
-<li><p>文件存在，编辑</p>
-<ul>
-<li>我们在网页上对文章进行编辑，改了点内容后，点提交，此时页面弹出，你的文章不是最新的，请刷新后重新编辑，纳尼！原来前三分钟，那个哥们又过来跟你作对，你们打开的是同一篇文章，他比你先提交了。</li>
-</ul>
-</li>
-</ul>
-]]></content>
   </entry>
   <entry>
     <title>Hexo Next8.6 美化指北</title>
@@ -2349,6 +2893,52 @@ Host: example.com
       <tags>
         <tag>network</tag>
         <tag>websocket</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>空中碰撞</title>
+    <url>/2021/05/02/network/%E7%A9%BA%E4%B8%AD%E7%A2%B0%E6%92%9E/</url>
+    <content><![CDATA[<blockquote>
+<p>空中碰撞也叫编辑冲突，指很多人在同一时间编辑同一页上内容, 当我们点击保存的时候, 如果这时候其他人和你一样, 编辑了同一份源文件, 但是比你提前保存了, 此时你编辑的文件相较于服务器却是旧的。 因此, 你在点击保存的时候, 修改的内容就会与最新的内容发生冲突。</p>
+</blockquote>
+<p>空中碰撞讲的是一类场景，这里谈谈解决思路。</p>
+<p>举两个空中碰撞场景——多人编辑和文件上传</p>
+<span id="more"></span>
+
+
+<h3 id="多人编辑下的空中碰撞解决方法"><a href="#多人编辑下的空中碰撞解决方法" class="headerlink" title="多人编辑下的空中碰撞解决方法"></a>多人编辑下的空中碰撞解决方法</h3><p>正如开头的故事所描述的，解决的关键点，在于如何正确识别客户端和服务器的资源是否相同，我们要怎么识别呢？</p>
+<p>编辑冲突有两种情况</p>
+<ul>
+<li><p>文件不存在，创建</p>
+<ul>
+<li><p>文件不存在，一切都顺顺利利</p>
+<p>我们在处理这种有可能会产生多人编辑情况下，点击 submit 按钮后，在 PUT 方法前，要先发 HEAD 方法对文件的存在性进行校验，<strong>HEAD 方法只返回 header 头信息</strong>，</p>
+<p>若 response 返回状态码为 404，说明文件不存在，可以提交。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">HTTP/1.1 404 Not Found.</span><br></pre></td></tr></table></figure>
+
+<p>我们再执行 PUT 方法</p>
+<p>注意，要在 request 的头部要带上这个，<code>If-None-Match: *</code>可以检测文件是否存在，如果存在，返回状态码 412(Precondition Failed)</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">If-None-Match: *</span><br></pre></td></tr></table></figure>
+
+<p>反之返回状态码 201 Created.</p>
+</li>
+<li><p>我们在网页上新建一篇文章，花了一个小时完成，提交后准备下班了，想着新建嘛，列表上也没看到类似标题，肯定没问题啦，没想到页面上突然弹出，该名字已经有了，纳尼！原来前两分钟，有个哥们不按常规出牌，写了标题就提交了，传说中的占着茅坑不拉屎。</p>
+<p>同理，我们在 PUT 方法前，也要发 HEAD 方法对文件进行校验，若返回状态码 200，说明文件存在，不能提交，具体怎么操作要交给用户去选择</p>
+</li>
+</ul>
+</li>
+<li><p>文件存在，编辑</p>
+<ul>
+<li>我们在网页上对文章进行编辑，改了点内容后，点提交，此时页面弹出，你的文章不是最新的，请刷新后重新编辑，纳尼！原来前三分钟，那个哥们又过来跟你作对，你们打开的是同一篇文章，他比你先提交了。</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>网络</category>
+      </categories>
+      <tags>
+        <tag>network</tag>
       </tags>
   </entry>
   <entry>
@@ -3628,53 +4218,6 @@ Host: example.com
       </tags>
   </entry>
   <entry>
-    <title>我与异步有个约会</title>
-    <url>/2019/12/05/frontEnd/%E6%88%91%E4%B8%8E%E5%BC%82%E6%AD%A5%E6%9C%89%E4%B8%AA%E7%BA%A6%E4%BC%9A/</url>
-    <content><![CDATA[<p><img src="/2019/12/05/frontEnd/%E6%88%91%E4%B8%8E%E5%BC%82%E6%AD%A5%E6%9C%89%E4%B8%AA%E7%BA%A6%E4%BC%9A/image-20210905211344152.png" alt="image-20210905211344152"></p>
-<span id="more"></span>
-
-<blockquote>
-<p>异步异步，只用记住两句话</p>
-<ul>
-<li>同一时刻执行不同的事情，等事件有结果了，把结果返回过来。</li>
-<li>某个事件的异步，并不会影响函数本身的执行进度，Generator 除外。</li>
-</ul>
-</blockquote>
-<p>由于 <code>javascript</code> 单线程的特性，异步操作是工作中绕不过的话题，目前的异步解决方案有以下几种</p>
-<ul>
-<li><p>callback</p>
-</li>
-<li><p>addEventListener</p>
-</li>
-<li><p>Genarator</p>
-</li>
-<li><p>Promise</p>
-</li>
-<li><p>async / await</p>
-</li>
-</ul>
-<h3 id="callback"><a href="#callback" class="headerlink" title="callback"></a>callback</h3><p>这是最简单，最实用的异步解决方案了，在异步处理中，当你无从下手时，应该想到它，但也是最无奈的，因为会产生回调地狱。</p>
-<h3 id="addEventListener"><a href="#addEventListener" class="headerlink" title="addEventListener"></a>addEventListener</h3><p>事件监听可以理解为观察者模式，某个事件触发后，才会触发里面的执行逻辑，更多用在 DOM 中，如果通过一个 Event Bus 去管理，会大大增加我们的可维护难度。</p>
-<h3 id="Generator"><a href="#Generator" class="headerlink" title="Generator"></a>Generator</h3><p>这个叫生成器</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">function a() &#123;</span><br><span class="line">  return &#x27;a&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function b() &#123;</span><br><span class="line">  return &#x27;b&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function c() &#123;</span><br><span class="line">  return &#x27;c&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function* generator() &#123;</span><br><span class="line">  yield a()</span><br><span class="line">  console.log(1)</span><br><span class="line">  yield b()</span><br><span class="line"> 	console.log(2)</span><br><span class="line">  yield c()</span><br><span class="line">  console.log(3)</span><br><span class="line">  return &#x27;d&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const g = generator()</span><br><span class="line">console.log(g.next())</span><br><span class="line">console.log(g.next())</span><br><span class="line">console.log(g.next())</span><br><span class="line">console.log(g.next())</span><br><span class="line">console.log(g.next())</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="promise"><a href="#promise" class="headerlink" title="promise"></a>promise</h3><p>这个是 ES6 提出的，它有三个状态，pending(进行中)、fulfilled(已成功) 和 rejected(已失败)，和两个回调结果，resolve（成功时的回调），reject（失败时的回调）</p>
-<p>状态是不可逆的，要么成功，要么失败。</p>
-<p>它的核心逻辑就是当你要返回时候调用 resolve</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">new Promise((resolve) =&gt; &#123;</span><br><span class="line">	setTimeout(() =&gt; &#123;</span><br><span class="line">		resolve(&#x27;timeout&#x27;)</span><br><span class="line">	&#125;, 10000)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<p>这段代码表明 10s 后返回 promise 的回调，然后你拿到了这个回调可以继续执行业务。</p>
-]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>react</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>别再问我 React 组件怎么写了</title>
     <url>/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/</url>
     <content><![CDATA[<p><img src="/2019/12/05/frontEnd/%E5%88%AB%E5%86%8D%E9%97%AE%E6%88%91React%E7%BB%84%E4%BB%B6%E6%80%8E%E4%B9%88%E5%86%99%E4%BA%86/image-20210716221604377.png" alt="image-20210716221604377"></p>
@@ -3882,6 +4425,53 @@ Host: example.com
 <div style="visibility: hidden">[从生产到消费，基于物料的前端开发链路](https://developer.aliyun.com/article/772938)</div>
 
 
+]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>react</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>我与异步有个约会</title>
+    <url>/2019/12/05/frontEnd/%E6%88%91%E4%B8%8E%E5%BC%82%E6%AD%A5%E6%9C%89%E4%B8%AA%E7%BA%A6%E4%BC%9A/</url>
+    <content><![CDATA[<p><img src="/2019/12/05/frontEnd/%E6%88%91%E4%B8%8E%E5%BC%82%E6%AD%A5%E6%9C%89%E4%B8%AA%E7%BA%A6%E4%BC%9A/image-20210905211344152.png" alt="image-20210905211344152"></p>
+<span id="more"></span>
+
+<blockquote>
+<p>异步异步，只用记住两句话</p>
+<ul>
+<li>同一时刻执行不同的事情，等事件有结果了，把结果返回过来。</li>
+<li>某个事件的异步，并不会影响函数本身的执行进度，Generator 除外。</li>
+</ul>
+</blockquote>
+<p>由于 <code>javascript</code> 单线程的特性，异步操作是工作中绕不过的话题，目前的异步解决方案有以下几种</p>
+<ul>
+<li><p>callback</p>
+</li>
+<li><p>addEventListener</p>
+</li>
+<li><p>Genarator</p>
+</li>
+<li><p>Promise</p>
+</li>
+<li><p>async / await</p>
+</li>
+</ul>
+<h3 id="callback"><a href="#callback" class="headerlink" title="callback"></a>callback</h3><p>这是最简单，最实用的异步解决方案了，在异步处理中，当你无从下手时，应该想到它，但也是最无奈的，因为会产生回调地狱。</p>
+<h3 id="addEventListener"><a href="#addEventListener" class="headerlink" title="addEventListener"></a>addEventListener</h3><p>事件监听可以理解为观察者模式，某个事件触发后，才会触发里面的执行逻辑，更多用在 DOM 中，如果通过一个 Event Bus 去管理，会大大增加我们的可维护难度。</p>
+<h3 id="Generator"><a href="#Generator" class="headerlink" title="Generator"></a>Generator</h3><p>这个叫生成器</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">function a() &#123;</span><br><span class="line">  return &#x27;a&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function b() &#123;</span><br><span class="line">  return &#x27;b&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function c() &#123;</span><br><span class="line">  return &#x27;c&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function* generator() &#123;</span><br><span class="line">  yield a()</span><br><span class="line">  console.log(1)</span><br><span class="line">  yield b()</span><br><span class="line"> 	console.log(2)</span><br><span class="line">  yield c()</span><br><span class="line">  console.log(3)</span><br><span class="line">  return &#x27;d&#x27;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const g = generator()</span><br><span class="line">console.log(g.next())</span><br><span class="line">console.log(g.next())</span><br><span class="line">console.log(g.next())</span><br><span class="line">console.log(g.next())</span><br><span class="line">console.log(g.next())</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="promise"><a href="#promise" class="headerlink" title="promise"></a>promise</h3><p>这个是 ES6 提出的，它有三个状态，pending(进行中)、fulfilled(已成功) 和 rejected(已失败)，和两个回调结果，resolve（成功时的回调），reject（失败时的回调）</p>
+<p>状态是不可逆的，要么成功，要么失败。</p>
+<p>它的核心逻辑就是当你要返回时候调用 resolve</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">new Promise((resolve) =&gt; &#123;</span><br><span class="line">	setTimeout(() =&gt; &#123;</span><br><span class="line">		resolve(&#x27;timeout&#x27;)</span><br><span class="line">	&#125;, 10000)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>这段代码表明 10s 后返回 promise 的回调，然后你拿到了这个回调可以继续执行业务。</p>
 ]]></content>
       <categories>
         <category>前端</category>
