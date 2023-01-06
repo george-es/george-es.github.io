@@ -1729,37 +1729,6 @@
       </tags>
   </entry>
   <entry>
-    <title>TypeScript 指北</title>
-    <url>/2021/08/04/frontEnd/TypeScript%E6%8C%87%E5%8C%97/</url>
-    <content><![CDATA[<p><img src="/2021/08/04/frontEnd/TypeScript%E6%8C%87%E5%8C%97/image-20210912235606551.png" alt="image-20210912235606551"></p>
-<span id="more"></span>
-
-<h3 id="交叉类型"><a href="#交叉类型" class="headerlink" title="交叉类型"></a>交叉类型</h3><blockquote>
-<p>交叉类型可以理解为类型合并，将多个类型合并为一个类型，它包含了所需所有类型的特性</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">interface A &#123;</span><br><span class="line">	a: string</span><br><span class="line">	b: number</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">interface B &#123;</span><br><span class="line">	c: boolean</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type TAAndB = A &amp; B</span><br><span class="line">// TAAndB 为</span><br><span class="line">&#123;</span><br><span class="line">	a: string</span><br><span class="line">	b: number</span><br><span class="line">	c: boolean</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="ReturnType"><a href="#ReturnType" class="headerlink" title="ReturnType"></a>ReturnType</h3><blockquote>
-</blockquote>
-<h3 id="Omit"><a href="#Omit" class="headerlink" title="Omit"></a>Omit</h3><blockquote>
-<p>Omit&lt;K,T&gt; 可以让我们从另一个对象类型中剔除某些属性，创建一个新的对象类型，K：是对象类型名称，T：是剔除K类型中的属性名称</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">type User = &#123;</span><br><span class="line">	name: string</span><br><span class="line">	age: number</span><br><span class="line">	address: string</span><br><span class="line">&#125;</span><br><span class="line">type UserOmit = Omit&lt;User, &#x27;address&#x27;&gt;</span><br><span class="line">// 等价于</span><br><span class="line">type UserOmit = &#123;</span><br><span class="line">	name: string</span><br><span class="line">	age: number</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>剔除多个</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">type User = &#123;</span><br><span class="line">	name: string</span><br><span class="line">	age: number</span><br><span class="line">	address: string</span><br><span class="line">&#125;</span><br><span class="line">type UserOmit = Omit&lt;User, &#x27;name&#x27;|&#x27;age&#x27;&gt;</span><br><span class="line">// 等价于</span><br><span class="line">type UserOmit = &#123;</span><br><span class="line">	address: string</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>typeScript</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Redux ToolKit 改造项目</title>
     <url>/2021/08/04/frontEnd/ReduxToolKit%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/</url>
     <content><![CDATA[<p><img src="/2021/08/04/frontEnd/ReduxToolKit%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/image-20210808153827937.png" alt="image-20210808153827937"></p>
@@ -1871,6 +1840,37 @@
       <tags>
         <tag>redux</tag>
         <tag>RTK</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>TypeScript 指北</title>
+    <url>/2021/08/04/frontEnd/TypeScript%E6%8C%87%E5%8C%97/</url>
+    <content><![CDATA[<p><img src="/2021/08/04/frontEnd/TypeScript%E6%8C%87%E5%8C%97/image-20210912235606551.png" alt="image-20210912235606551"></p>
+<span id="more"></span>
+
+<h3 id="交叉类型"><a href="#交叉类型" class="headerlink" title="交叉类型"></a>交叉类型</h3><blockquote>
+<p>交叉类型可以理解为类型合并，将多个类型合并为一个类型，它包含了所需所有类型的特性</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">interface A &#123;</span><br><span class="line">	a: string</span><br><span class="line">	b: number</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">interface B &#123;</span><br><span class="line">	c: boolean</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type TAAndB = A &amp; B</span><br><span class="line">// TAAndB 为</span><br><span class="line">&#123;</span><br><span class="line">	a: string</span><br><span class="line">	b: number</span><br><span class="line">	c: boolean</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="ReturnType"><a href="#ReturnType" class="headerlink" title="ReturnType"></a>ReturnType</h3><blockquote>
+</blockquote>
+<h3 id="Omit"><a href="#Omit" class="headerlink" title="Omit"></a>Omit</h3><blockquote>
+<p>Omit&lt;K,T&gt; 可以让我们从另一个对象类型中剔除某些属性，创建一个新的对象类型，K：是对象类型名称，T：是剔除K类型中的属性名称</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">type User = &#123;</span><br><span class="line">	name: string</span><br><span class="line">	age: number</span><br><span class="line">	address: string</span><br><span class="line">&#125;</span><br><span class="line">type UserOmit = Omit&lt;User, &#x27;address&#x27;&gt;</span><br><span class="line">// 等价于</span><br><span class="line">type UserOmit = &#123;</span><br><span class="line">	name: string</span><br><span class="line">	age: number</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>剔除多个</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">type User = &#123;</span><br><span class="line">	name: string</span><br><span class="line">	age: number</span><br><span class="line">	address: string</span><br><span class="line">&#125;</span><br><span class="line">type UserOmit = Omit&lt;User, &#x27;name&#x27;|&#x27;age&#x27;&gt;</span><br><span class="line">// 等价于</span><br><span class="line">type UserOmit = &#123;</span><br><span class="line">	address: string</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>typeScript</tag>
       </tags>
   </entry>
   <entry>
