@@ -2034,6 +2034,21 @@
       </tags>
   </entry>
   <entry>
+    <title>一天一个hooks - useUrlState</title>
+    <url>/2021/07/28/hooks/useUrlState/</url>
+    <content><![CDATA[<blockquote>
+<p>React 逐步使用 Hooks</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>react</tag>
+        <tag>hooks</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>一天一个hooks - useToggle</title>
     <url>/2021/07/28/hooks/useToggle/</url>
     <content><![CDATA[<p><img src="/2021/07/28/hooks/useToggle/image-20210730102915516.png" alt="image-20210730102915516"></p>
@@ -2050,21 +2065,6 @@
 
 <h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">export default () =&gt; &#123;</span><br><span class="line">  const [state, &#123; toggle, setTrue, setFalse &#125;] = useToggle();</span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;p&gt;Effects：&#123;`$&#123;state&#125;`&#125;&lt;/p&gt;</span><br><span class="line">      &lt;p&gt;</span><br><span class="line">        &lt;button type=&quot;button&quot; onClick=&#123;() =&gt; toggle()&#125;&gt;</span><br><span class="line">          Toggle</span><br><span class="line">        &lt;/button&gt;</span><br><span class="line">        &lt;button type=&quot;button&quot; onClick=&#123;() =&gt; setTrue()&#125;&gt;</span><br><span class="line">          setTrue</span><br><span class="line">        &lt;/button&gt;</span><br><span class="line">        &lt;button type=&quot;button&quot; onClick=&#123;() =&gt; setFalse()&#125;&gt;</span><br><span class="line">          setFalse</span><br><span class="line">        &lt;/button&gt;</span><br><span class="line">      &lt;/p&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>react</tag>
-        <tag>hooks</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>一天一个hooks - useUrlState</title>
-    <url>/2021/07/28/hooks/useUrlState/</url>
-    <content><![CDATA[<blockquote>
-<p>React 逐步使用 Hooks</p>
-</blockquote>
 ]]></content>
       <categories>
         <category>前端</category>
